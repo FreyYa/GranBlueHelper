@@ -1,0 +1,193 @@
+﻿<Window x:Class="GranBlueHelper.Views.MainWindow"
+		xmlns:Controls="clr-namespace:Grabacr07.Desktop.Metro.Controls;assembly=Desktop.Metro"  
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+		xmlns:metro2="clr-namespace:Grabacr07.Desktop.Metro.Controls;assembly=Desktop.Metro"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+		xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:views="clr-namespace:GranBlueHelper.Views"
+		xmlns:livet="http://schemas.livet-mvvm.net/2011/wpf"
+		xmlns:viewmodels="clr-namespace:GranBlueHelper.ViewModels"
+		xmlns:models="clr-namespace:GranBlueHelper.Models"
+        mc:Ignorable="d"
+        Title="{Binding Title}" 
+		Height="540" Width="1041"
+				   FontSize="12"
+				   SnapsToDevicePixels="True"
+				   TextOptions.TextFormattingMode="Display"
+				   UseLayoutRounding="True">
+
+	<Window.DataContext>
+		<viewmodels:MainWindowViewModel/>
+	</Window.DataContext>
+	<Grid  Margin="8">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="240"/>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<StackPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom">
+			<metro2:CallMethodButton Content="스크린샷 찍기 (F10)"
+									 HorizontalAlignment="Center"
+									 Padding="20,5"
+									 Margin="8"
+									 MethodName="ScreenShotButton"/>
+		</StackPanel>
+		<Grid Grid.Row="3" Background="Gray" Grid.ColumnSpan="3">
+			<TextBlock Text="{Binding AppStatus}"
+					   Foreground="White"
+					   Padding="5"
+					   Margin="10,0,0,0"
+					   HorizontalAlignment="Left">
+			</TextBlock>
+		</Grid>
+		<StackPanel Grid.Column="0">
+			<TextBlock Margin="0,0,0,8" TextWrapping="Wrap">
+				<Run FontSize="15" FontWeight="Bold" Text="사용법"/>
+				<LineBreak/>
+				<Run Text="※시나리오/장비목록 조회시 자동갱신됩니다."/>
+				<LineBreak/>
+				<Run Text="　예)페이트,메인 시나리오/편성,리스트,강화"/>
+				<LineBreak/>
+				<Run Text="※설정에 따라 표시법이 변경됩니다"/>
+				<LineBreak/>
+				<Run Text="※번역기 기본값은 구글입니다"/>
+				<LineBreak/>
+				<Run Text="※번역기 변경은 다음 번역부터 적용됩니다."/>
+				<LineBreak/>
+				<Run Text="※무기목록 번역의 경우 번역기번역은 현재 발동스킬만 해당됩니다."/>
+				<LineBreak/>
+				<LineBreak/>
+				<metro:PromptComboBox Prompt="번역기를 선택하세요"
+									  MinWidth="50"
+									  HorizontalAlignment="Left"
+									  ItemsSource="{Binding TranslatorLists}"
+									  SelectedValue="{Binding SelectedSite, Mode=TwoWay}"
+									  IsReadOnly="True"
+									  />
+			</TextBlock>
+
+		</StackPanel>
+		<Rectangle Grid.Column="1" Width="20"/>
+		<TabControl Grid.Column="2">
+			<TabItem x:Name="Start" IsSelected="{Binding Default}">
+				<TabItem.Header>
+					<TextBlock Text="소개" Width="70" Height="25" FontSize="16" TextAlignment="Center" FontWeight="Bold"/>
+				</TabItem.Header>
+				<StackPanel Margin="5">
+					<TextBlock/>
+					<TextBlock TextWrapping="Wrap">
+				<Run Text="해당 어플리케이션은 그랑블루를 좀 더 편하게 하기 위해서 만들어졌습니다."/>
+					</TextBlock>
+
+					<Rectangle Width="Auto" Height="1" Fill="Gray" Margin="3,8,3,8"/>
+					<TextBlock TextWrapping="Wrap">
+				<Run Text="통신내역을 캡처해서 무기목록, 시나리오등을 읽어내고 자동으로 그에 맞는 행동을 시행합니다."/>
+				<LineBreak/><LineBreak/>
+				<Run Text="모든 계산은 어플리케이션 내부에서 이루어지며 통신정보의 전송 및 변조등은 하지않습니다."/>
+				<LineBreak/><LineBreak/>
+				<Run Text="해당 어플리케이션을 사용시 발생할수있는 불이익에 대해서는 일절 책임지지않습니다."/>
+				<LineBreak/><LineBreak/>
+				<Run Text="코드의 경우, 기반은 KanColleViewer를 많이 따르고있으나 세세한 부분이나 라이브러리 채택등의 일부 구성은 다르게 되어있습니다."/> 
+				<LineBreak/>
+				<LineBreak/>
+				<LineBreak/>
+				<TextBlock Text="Build With" Width="Auto" HorizontalAlignment="Left"/>
+			<metro:BindableTextBlock TextSource="{Binding Libraries}"
+									 TextWrapping="Wrap">
+				<metro:BindableTextBlock.TextTemplates>
+					<DataTemplate DataType="{x:Type viewmodels:HyperlinkViewModel}">
+						<metro:InlineHolder>
+							<metro2:HyperlinkEx Uri="{Binding Uri}">
+								<Run Text="{Binding Text, Mode=OneWay}" />
+							</metro2:HyperlinkEx>
+						</metro:InlineHolder>
+					</DataTemplate>
+					<DataTemplate DataType="{x:Type viewmodels:BindableTextViewModel}">
+						<metro:InlineHolder>
+							<Run Text="{Binding Text, Mode=OneWay}"
+								 Foreground="{DynamicResource ActiveForegroundBrushKey}" />
+						</metro:InlineHolder>
+					</DataTemplate>
+				</metro:BindableTextBlock.TextTemplates>
+			</metro:BindableTextBlock>
+			</TextBlock>
+				</StackPanel>
+			</TabItem>
+			<TabItem x:Name="Scenario">
+				<TabItem.Header>
+					<TextBlock Text="시나리오" Width="70" Height="25" FontSize="16" TextAlignment="Center" FontWeight="Bold"/>
+				</TabItem.Header>
+				<Grid>
+					<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+						<Grid>
+							<StackPanel>
+								<ItemsControl ItemsSource="{Binding ScenarioList}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<StackPanel>
+												<Grid>
+													<Grid.RowDefinitions>
+														<RowDefinition/>
+														<RowDefinition/>
+													</Grid.RowDefinitions>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition SharedSizeGroup="Name" Width="100"/>
+														<ColumnDefinition SharedSizeGroup="Detail"/>
+													</Grid.ColumnDefinitions>
+													<TextBox Text="{Binding Name}" Padding="2" BorderThickness="0"/>
+													<TextBox Grid.Column="1" Text="{Binding context}" Padding="2" BorderThickness="0"/>
+													<TextBox Grid.Row="1" Text="{Binding TrName}" Padding="2" BorderThickness="0"/>
+													<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding TrContext}" Padding="2" BorderThickness="0"/>
+												</Grid>
+												<Rectangle Width="Auto" Height="2" Fill="Gray" Margin="0,8"/>
+											</StackPanel>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</StackPanel>
+						</Grid>
+					</ScrollViewer>
+					<Grid Background="#7FFFFFFF" Panel.ZIndex="99" Visibility="{Binding LoadingScreen}">
+						<Border BorderBrush="Gray" Background="White" BorderThickness="2" 
+								HorizontalAlignment="Center" 
+								VerticalAlignment="Center"
+								Padding="6">
+							<TextBlock   TextAlignment="Center"  >
+							<Run FontSize="20" Text="현재 일본어 텍스트를 번역하고있습니다. 잠시 기다려주세요"/>
+							<LineBreak/>
+							<LineBreak/>
+							<Run Text="{Binding Progress,Mode=OneWay}" FontSize="17"/>
+							</TextBlock>
+						</Border>
+					</Grid>
+				</Grid>
+			</TabItem>
+			<TabItem x:Name="Weapons">
+				<TabItem.Header>
+					<TextBlock Text="무기목록" Width="70" Height="25" FontSize="16" TextAlignment="Center" FontWeight="Bold"/>
+				</TabItem.Header>
+				<views:WeaponList/>
+			</TabItem>
+			<TabItem x:Name="Messages">
+				<TabItem.Header>
+					<TextBlock Text="메시지" Width="70" Height="25" FontSize="16" TextAlignment="Center" FontWeight="Bold"/>
+				</TabItem.Header>
+				<views:MessageView/>
+			</TabItem>
+			<TabItem x:Name="Settings" IsSelected="{Binding HassanSettings}">
+				<TabItem.Header>
+					<TextBlock Text="설정" Width="70" Height="25" FontSize="16" TextAlignment="Center" FontWeight="Bold"/>
+				</TabItem.Header>
+				<views:Settings/>
+			</TabItem>
+		</TabControl>
+	</Grid>
+</Window>

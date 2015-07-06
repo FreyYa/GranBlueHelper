@@ -1,0 +1,496 @@
+﻿<UserControl x:Class="GranBlueHelper.Views.WeaponList"
+             xmlns:Controls="clr-namespace:Grabacr07.Desktop.Metro.Controls;assembly=Desktop.Metro"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+			 xmlns:metro2="clr-namespace:Grabacr07.Desktop.Metro.Controls;assembly=Desktop.Metro"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:views="clr-namespace:GranBlueHelper.Views"
+			 xmlns:livet="http://schemas.livet-mvvm.net/2011/wpf"
+			 xmlns:viewmodels="clr-namespace:GranBlueHelper.ViewModels"
+			 xmlns:models="clr-namespace:GranBlueHelper.Models"
+			 mc:Ignorable="d">
+	<UserControl.DataContext>
+		<viewmodels:WeaponListViewModel/>
+	</UserControl.DataContext>
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ObjectDataProvider
+			xmlns:sys="clr-namespace:System;assembly=mscorlib"
+			xmlns:linq="clr-namespace:System.Linq;assembly=System.Core"
+			x:Key="SkillLv"
+			ObjectType="{x:Type linq:Enumerable}" MethodName="Range">
+				<ObjectDataProvider.MethodParameters>
+					<sys:Int32>1</sys:Int32>
+					<sys:Int32>10</sys:Int32>
+				</ObjectDataProvider.MethodParameters>
+			</ObjectDataProvider>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid>
+		<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+			<Grid>
+				<ItemsControl x:Name="ListWeapon" ItemsSource="{Binding WeaponList}"  Visibility="{Binding ListWeapon}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<UniformGrid Columns="4" />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<StackPanel>
+								<Border BorderBrush="Gray" BorderThickness="0,0,1,1" Margin="10,10,0,0">
+									<StackPanel HorizontalAlignment="Left"
+												VerticalAlignment="Center"
+												Margin="0,0,0,10">
+										<!--<TextBlock HorizontalAlignment="Left" Padding="3">
+											<TextBlock.Style>
+												<Style TargetType="TextBlock">
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding is_used}"
+																	 Value="True">
+															<Setter Property="FontWeight" Value="Bold"/>
+															<Setter Property="Foreground" Value="#FFCB3200"/>
+															<Setter Property="Text" Value="착용중"/>
+														</DataTrigger>
+														<DataTrigger Binding="{Binding is_used}"
+																	 Value="False">
+															<Setter Property="Foreground" Value="White"/>
+															<Setter Property="Text" Value=""/>
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</TextBlock.Style>
+										</TextBlock>-->
+										<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+											<TextBlock Padding="2" Margin="1,1,3,1">
+												<Run Text="{Binding Element}" Foreground="White"/>
+												<TextBlock.Style>
+													<Style TargetType="TextBlock">
+														<Style.Triggers>
+															<DataTrigger Binding="{Binding Element}"
+																		 Value="화">
+																<Setter Property="Background" Value="#FFCB0000"/>
+															</DataTrigger>
+															<DataTrigger Binding="{Binding Element}"
+																		 Value="수">
+																<Setter Property="Background" Value="#FF0063DA"/>
+															</DataTrigger>
+															<DataTrigger Binding="{Binding Element}"
+																		 Value="풍">
+																<Setter Property="Background" Value="#FF3FBD2B"/>
+															</DataTrigger>
+															<DataTrigger Binding="{Binding Element}"
+																		 Value="토">
+																<Setter Property="Background" Value="#FFE08F00"/>
+															</DataTrigger>
+															<DataTrigger Binding="{Binding Element}"
+																		 Value="빛">
+																<Setter Property="Background" Value="#FFFBCD00"/>
+															</DataTrigger>
+															<DataTrigger Binding="{Binding Element}"
+																		 Value="암">
+																<Setter Property="Background" Value="#FF540066"/>
+															</DataTrigger>
+														</Style.Triggers>
+													</Style>
+												</TextBlock.Style>
+											</TextBlock>
+											<TextBlock Padding="2" >
+												<Run Text="{Binding Kind}" />
+												<Run Text=" "/>
+											</TextBlock>
+											<TextBlock FontWeight="Bold" Padding="2" >
+												<Run Text="{Binding ItemName}" />
+											</TextBlock>
+										</StackPanel>
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition SharedSizeGroup="Skill1" MinWidth="60"/>
+												<ColumnDefinition SharedSizeGroup="Skill2" MinWidth="60"/>
+											</Grid.ColumnDefinitions>
+											<TextBlock Grid.Column="0" Text="{Binding SkillName1}" Margin="0,5,5,0" Padding="3">
+												<TextBlock.ToolTip>
+													<TextBlock Text="{Binding SkillDetail1}"/>
+												</TextBlock.ToolTip>
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding SkillType1}"
+																		 Value="1">
+                                                                <Setter Property="Background" Value="#95051D"/>
+																<Setter Property="Foreground" Value="White"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding SkillType1}"
+																		 Value="2">
+                                                                <Setter Property="Background" Value="#FF11B61E"/>
+																<Setter Property="Foreground" Value="White"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+											</TextBlock>
+											<TextBlock Grid.Column="1" Text="{Binding SkillName2}" Margin="0,5,0,0" Padding="3">
+												<TextBlock.ToolTip>
+													<TextBlock Text="{Binding SkillDetail2}"/>
+												</TextBlock.ToolTip>
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding SkillType2}"
+																		 Value="1">
+                                                                <Setter Property="Background" Value="#95051D"/>
+																<Setter Property="Foreground" Value="White"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding SkillType2}"
+																		 Value="2">
+                                                                <Setter Property="Background" Value="#1EB82B"/>
+																<Setter Property="Foreground" Value="White"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+											</TextBlock>
+										</Grid>
+									</StackPanel>
+									<Border.Style>
+										<Style TargetType="Border">
+											<Style.Triggers>
+												<DataTrigger Binding="{Binding is_used}"
+																	 Value="True">
+													<Setter Property="Background" Value="#FFFDAF61"/>
+												</DataTrigger>
+											</Style.Triggers>
+										</Style>
+									</Border.Style>
+								</Border>
+							</StackPanel>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+				<StackPanel x:Name="DeckWeapon"  Orientation="Vertical" Visibility="{Binding DeckWeapon}" >
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="Auto"/>
+						</Grid.ColumnDefinitions>
+						<StackPanel Margin="10">
+							<TextBlock Text="현재 발동중인 스킬" FontSize="15" FontWeight="Bold"/>
+							<TextBlock/>
+							<ItemsControl ItemsSource="{Binding SkillList}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<TextBlock Margin="0,0,0,6" Text="{Binding}">
+										</TextBlock>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</StackPanel>
+						<StackPanel Margin="10" Grid.Column="1">
+							<TextBlock Text="공인적용 실질공격력" FontSize="15" FontWeight="Bold"/>
+							<TextBlock Text="※현재 버전에서는 스킬레벨이 적용되지않습니다."/>
+							<TextBlock>
+								<Run Text="계산식: "/>
+								<metro2:HyperlinkEx Uri="http://goo.gl/iznSGe">
+									<Run Text="グランブルーファンタジー攻略wiki/ダメージの計算式について" />
+								</metro2:HyperlinkEx>
+							</TextBlock>
+							<TextBlock>
+								<Run Text="이전 공격력: "/>
+								<Run Text="{Binding BeforeCalcAtt}"/>
+							</TextBlock>
+							<TextBlock>
+								<Run Text="현재 공격력: "/>
+								<Run Text="{Binding CalcAtt}"/>
+								<Run Text="{Binding CalcAttDetail}"/>
+								<Run Text=" (" Foreground="Red"/>
+								<Run Text="{Binding Gap}" Foreground="Red"/>
+								<Run Text=")" Foreground="Red"/>
+							</TextBlock>
+							<CheckBox Foreground="Black" Content="바하무트 무기 공격력 적용(위스 only)" IsChecked="{Binding IsBaha}"/>
+						</StackPanel>
+					</Grid>
+					<StackPanel  Orientation="Horizontal">
+						<Border BorderBrush="Gray" BorderThickness="0,0,1,1" Margin="10,10,0,0">
+							<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+										  Margin="0,0,0,10" DataContext="{Binding MainWeapon}">
+								<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+									<TextBlock Padding="2" Margin="1,1,3,1">
+												<Run Text="{Binding Element}" Foreground="White"/>
+										<TextBlock.Style>
+											<Style TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Element}"
+																		 Value="화">
+														<Setter Property="Background" Value="#FFCB0000"/>
+													</DataTrigger>
+													<DataTrigger Binding="{Binding Element}"
+																		 Value="수">
+														<Setter Property="Background" Value="#FF0063DA"/>
+													</DataTrigger>
+													<DataTrigger Binding="{Binding Element}"
+																		 Value="풍">
+														<Setter Property="Background" Value="#FF3FBD2B"/>
+													</DataTrigger>
+													<DataTrigger Binding="{Binding Element}"
+																		 Value="토">
+														<Setter Property="Background" Value="#FFE08F00"/>
+													</DataTrigger>
+													<DataTrigger Binding="{Binding Element}"
+																		 Value="빛">
+														<Setter Property="Background" Value="#FFFBCD00"/>
+													</DataTrigger>
+													<DataTrigger Binding="{Binding Element}"
+																		 Value="암">
+														<Setter Property="Background" Value="#FF540066"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+									<TextBlock Background="White" Padding="2" >
+												<Run Text="{Binding Kind}" />
+												<Run Text=" "/>
+									</TextBlock>
+									<TextBlock FontWeight="Bold" Padding="2" >
+												<Run Text="{Binding ItemName}" />
+									</TextBlock>
+								</StackPanel>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition SharedSizeGroup="Skill1" MinWidth="60"/>
+										<ColumnDefinition SharedSizeGroup="Skill2" MinWidth="60"/>
+									</Grid.ColumnDefinitions>
+									<Grid Grid.Column="0">
+										<Grid.RowDefinitions>
+											<RowDefinition/>
+											<RowDefinition/>
+										</Grid.RowDefinitions>
+										<TextBlock Text="{Binding SkillName1}" Margin="0,5,5,0" Padding="3">
+											<TextBlock.ToolTip>
+												<TextBlock Text="{Binding SkillDetail1}"/>
+											</TextBlock.ToolTip>
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding SkillType1}"
+																		 Value="1">
+                                                                <Setter Property="Background" Value="#95051D"/>
+																<Setter Property="Foreground" Value="White"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding SkillType1}"
+																		 Value="2">
+                                                                <Setter Property="Background" Value="#FF11B61E"/>
+																<Setter Property="Foreground" Value="White"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+											</TextBlock>
+										<metro:PromptComboBox Prompt="1"
+															  Grid.Row="1"
+															  MinWidth="50"
+															  HorizontalAlignment="Left"
+															  ItemsSource="{Binding Source={StaticResource SkillLv},UpdateSourceTrigger=PropertyChanged}"
+															  SelectedValue="{Binding SkillLv1, Mode=TwoWay}"
+															  IsReadOnly="True"
+															  />
+									</Grid>
+									<Grid Grid.Column="1">
+										<Grid.RowDefinitions>
+											<RowDefinition/>
+											<RowDefinition/>
+										</Grid.RowDefinitions>
+										<TextBlock Text="{Binding SkillName2}" Margin="0,5,0,0" Padding="3">
+											<TextBlock.ToolTip>
+												<TextBlock Text="{Binding SkillDetail2}"/>
+											</TextBlock.ToolTip>
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding SkillType2}"
+																		 Value="1">
+                                                                <Setter Property="Background" Value="#95051D"/>
+																<Setter Property="Foreground" Value="White"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding SkillType2}"
+																		 Value="2">
+                                                                <Setter Property="Background" Value="#1EB82B"/>
+																<Setter Property="Foreground" Value="White"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+											</TextBlock>
+										<metro:PromptComboBox Prompt="1"
+															  Grid.Row="1"
+															  MinWidth="50"
+															  HorizontalAlignment="Left"
+															  ItemsSource="{Binding Source={StaticResource SkillLv},UpdateSourceTrigger=PropertyChanged}"
+															  SelectedValue="{Binding SkillLv2, Mode=TwoWay}"
+															  IsReadOnly="True"
+															  />
+									</Grid>
+								</Grid>
+							</StackPanel>
+						</Border>
+						<ItemsControl ItemsSource="{Binding WeaponList}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<UniformGrid Columns="3" />
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<StackPanel>
+										<Border BorderBrush="Gray" BorderThickness="0,0,1,1" Margin="10,10,0,0">
+											<StackPanel HorizontalAlignment="Left"
+														Margin="10">
+												<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+													<TextBlock Padding="2" Margin="1,1,3,1">
+														<Run Text="{Binding Element}" Foreground="White"/>
+														<TextBlock.Style>
+															<Style TargetType="TextBlock">
+																<Style.Triggers>
+																	<DataTrigger Binding="{Binding Element}"
+																		 Value="화">
+																		<Setter Property="Background" Value="#FFCB0000"/>
+																	</DataTrigger>
+																	<DataTrigger Binding="{Binding Element}"
+																		 Value="수">
+																		<Setter Property="Background" Value="#FF0063DA"/>
+																	</DataTrigger>
+																	<DataTrigger Binding="{Binding Element}"
+																		 Value="풍">
+																		<Setter Property="Background" Value="#FF3FBD2B"/>
+																	</DataTrigger>
+																	<DataTrigger Binding="{Binding Element}"
+																		 Value="토">
+																		<Setter Property="Background" Value="#FFE08F00"/>
+																	</DataTrigger>
+																	<DataTrigger Binding="{Binding Element}"
+																		 Value="빛">
+																		<Setter Property="Background" Value="#FFFBCD00"/>
+																	</DataTrigger>
+																	<DataTrigger Binding="{Binding Element}"
+																		 Value="암">
+																		<Setter Property="Background" Value="#FF540066"/>
+																	</DataTrigger>
+																</Style.Triggers>
+															</Style>
+														</TextBlock.Style>
+													</TextBlock>
+													<TextBlock Background="White" Padding="2" >
+												<Run Text="{Binding Kind}" />
+												<Run Text=" "/>
+													</TextBlock>
+													<TextBlock FontWeight="Bold" Padding="2" >
+												<Run Text="{Binding ItemName}" />
+													</TextBlock>
+												</StackPanel>
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition SharedSizeGroup="Skill1" MinWidth="60"/>
+														<ColumnDefinition SharedSizeGroup="Skill2" MinWidth="60"/>
+													</Grid.ColumnDefinitions>
+													<Grid>
+														<Grid.RowDefinitions>
+															<RowDefinition/>
+															<RowDefinition/>
+														</Grid.RowDefinitions>
+														<TextBlock Text="{Binding SkillName1}" Margin="0,5,5,0" Padding="3">
+															<TextBlock.ToolTip>
+																<TextBlock Text="{Binding SkillDetail1}"/>
+															</TextBlock.ToolTip>
+														<TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding SkillType1}"
+																		 Value="1">
+                                                                <Setter Property="Background" Value="#95051D"/>
+																<Setter Property="Foreground" Value="White"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding SkillType1}"
+																		 Value="2">
+                                                                <Setter Property="Background" Value="#FF11B61E"/>
+																<Setter Property="Foreground" Value="White"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+													</TextBlock>
+														<metro:PromptComboBox Prompt="1"
+															  Grid.Row="1"
+															  MinWidth="50"
+															  HorizontalAlignment="Left"
+															  ItemsSource="{Binding Source={StaticResource SkillLv},UpdateSourceTrigger=PropertyChanged}"
+															  SelectedValue="{Binding SkillLv1, Mode=TwoWay}"
+															  IsReadOnly="True"
+															  />
+													</Grid>
+													<Grid Grid.Column="1">
+														<Grid.RowDefinitions>
+															<RowDefinition/>
+															<RowDefinition/>
+														</Grid.RowDefinitions>
+														<TextBlock Grid.Column="1" Text="{Binding SkillName2}" Margin="0,5,0,0" Padding="3">
+															<TextBlock.ToolTip>
+																<TextBlock Text="{Binding SkillDetail2}"/>
+															</TextBlock.ToolTip>
+														<TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding SkillType2}"
+																		 Value="1">
+                                                                <Setter Property="Background" Value="#95051D"/>
+																<Setter Property="Foreground" Value="White"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding SkillType2}"
+																		 Value="2">
+                                                                <Setter Property="Background" Value="#1EB82B"/>
+																<Setter Property="Foreground" Value="White"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+													</TextBlock>
+														<metro:PromptComboBox Prompt="1"
+															  Grid.Row="1"
+															  MinWidth="50"
+															  HorizontalAlignment="Left"
+															  ItemsSource="{Binding Source={StaticResource SkillLv},UpdateSourceTrigger=PropertyChanged}"
+															  SelectedValue="{Binding SkillLv2, Mode=TwoWay}"
+															  IsReadOnly="True"
+															  />
+													</Grid>
+													
+													
+												</Grid>
+											</StackPanel>
+										</Border>
+									</StackPanel>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+				</StackPanel>
+			</Grid>
+		</ScrollViewer>
+		<Grid Background="#7FFFFFFF" Panel.ZIndex="99" Visibility="{Binding LoadingScreen}" d:IsHidden="True">
+			<Border BorderBrush="Gray" Background="White" BorderThickness="2" 
+								HorizontalAlignment="Center" 
+								VerticalAlignment="Center"
+								Padding="6">
+				<TextBlock   TextAlignment="Center"  >
+							<Run FontSize="20" Text="무기/캐릭터 목록을 불러오는 중입니다. 잠시 기다려주세요"/>
+							<LineBreak/>
+							<LineBreak/>
+							<Run Text="{Binding Progress,Mode=OneWay}" FontSize="17"/>
+				</TextBlock>
+			</Border>
+		</Grid>
+	</Grid>
+</UserControl>

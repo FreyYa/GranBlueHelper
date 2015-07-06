@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GranBlueHelper", "GranBlueHelper\GranBlueHelper.csproj", "{9E44B1A0-119D-4820-8490-4988BCF2177E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5E6D3D5E-DFFB-492D-8102-E88F81C340D3} = {5E6D3D5E-DFFB-492D-8102-E88F81C340D3}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grandcypher", "Grandcypher\Grandcypher.csproj", "{5E6D3D5E-DFFB-492D-8102-E88F81C340D3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release (beta)|Any CPU = Release (beta)|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9E44B1A0-119D-4820-8490-4988BCF2177E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E44B1A0-119D-4820-8490-4988BCF2177E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E44B1A0-119D-4820-8490-4988BCF2177E}.Release (beta)|Any CPU.ActiveCfg = Release|Any CPU
+		{9E44B1A0-119D-4820-8490-4988BCF2177E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E44B1A0-119D-4820-8490-4988BCF2177E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E6D3D5E-DFFB-492D-8102-E88F81C340D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E6D3D5E-DFFB-492D-8102-E88F81C340D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E6D3D5E-DFFB-492D-8102-E88F81C340D3}.Release (beta)|Any CPU.ActiveCfg = Release|Any CPU
+		{5E6D3D5E-DFFB-492D-8102-E88F81C340D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E6D3D5E-DFFB-492D-8102-E88F81C340D3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
