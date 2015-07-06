@@ -217,7 +217,7 @@ namespace Grandcypher
 			catch { }
 			return JPString;
 		}
-		public void WriteFile(List<Scenario> context)
+		public void WriteFile(List<Scenario> context, TranslateKind type)
 		{
 			XmlDocument NewXmlDoc = new XmlDocument();
 			NewXmlDoc.AppendChild(NewXmlDoc.CreateXmlDeclaration("1.0", "utf-8", "yes"));
@@ -228,6 +228,11 @@ namespace Grandcypher
 				Directory.CreateDirectory(Path.Combine(MainFolder, "Translations"));
 			if (!Directory.Exists(Path.Combine(MainFolder, "Translations", "Scenarios")))
 				Directory.CreateDirectory(Path.Combine(MainFolder, "Translations", "Scenarios"));
+			if (!Directory.Exists(Path.Combine(MainFolder, "Translations", "Scenarios","Google")))
+				Directory.CreateDirectory(Path.Combine(MainFolder, "Translations", "Scenarios","Google"));
+			if (!Directory.Exists(Path.Combine(MainFolder, "Translations", "Scenarios","Naver")))
+				Directory.CreateDirectory(Path.Combine(MainFolder, "Translations", "Scenarios","Naver"));
+
 			if (File.Exists(Path.Combine(MainFolder, "Translations", "Scenarios", context[0].PathName + ".xml")))
 			{
 				File.Copy(Path.Combine(MainFolder, "Translations", "Scenarios", context[0].PathName + ".xml"), Path.Combine(MainFolder, "Translations", "Scenarios", context[0].PathName + ".xml.bak"), true);
@@ -252,8 +257,10 @@ namespace Grandcypher
 				FristNode.AppendChild(root);
 			}
 
-
-			XmlDoc.Save(Path.Combine(MainFolder, "Translations", "Scenarios", context[0].PathName + ".xml"));
+			if (type == TranslateKind.Google)
+				XmlDoc.Save(Path.Combine(MainFolder, "Translations", "Scenarios", "Google", context[0].PathName + ".xml"));
+			else if (type == TranslateKind.Naver)
+				XmlDoc.Save(Path.Combine(MainFolder, "Translations", "Scenarios", "Naver", context[0].PathName + ".xml"));
 		}
 		protected XmlNode CreateNode(XmlDocument xmlDoc, string name, string innerXml)
 		{

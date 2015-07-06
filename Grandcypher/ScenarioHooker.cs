@@ -67,8 +67,10 @@ namespace Grandcypher
 			this.ProgressStatus.Current = 0;
 
 			this.ProgressBar();
+			string TranslateDir = "Google";
+			if (TranslateSite == TranslateKind.Naver) TranslateDir = "Naver";
 
-			if (File.Exists(Path.Combine(MainFolder, "Translations", "Scenarios", PathName + ".xml")))
+			if (File.Exists(Path.Combine(MainFolder, "Translations", "Scenarios", TranslateDir, PathName + ".xml")))
 			{
 				foreach (var detail in Details)
 				{
@@ -167,7 +169,7 @@ namespace Grandcypher
 					this.ProgressBar();
 				}
 				this.TranslatieEnd();
-				GrandcypherClient.Current.Translations.WriteFile(ScenarioList);
+				GrandcypherClient.Current.Translations.WriteFile(ScenarioList, TranslateSite);
 			}
 		}
 		public string Translator(string input, TranslateKind kind)
