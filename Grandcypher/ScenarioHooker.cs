@@ -235,7 +235,7 @@ namespace Grandcypher
 				catch (Exception ex)
 				{
 					Console.WriteLine(ex);
-					return "구글과의 통신이 원활하지않아 번역이 취소되었습니다.";
+					return "번역에러";
 				}
 			}
 			else return null;
@@ -255,21 +255,22 @@ namespace Grandcypher
 
 				try
 				{
-					int temp1 = result.IndexOf("jap_ico") - 14;//span시작
+					int temp1 = result.IndexOf("jap_ico") - 13;//span시작
 
 					result = result.Substring(temp1, result.Count() - temp1);//span시작부터 문서끝까지
 					result = result.Substring(0, result.IndexOf("</div"));//첫번째 </div가 발견되는 부분 이후를 모두 제거
-					result = result.Substring(result.IndexOf("</strong") + 24, result.Count() - result.IndexOf("</strong>") - 24);
+					if (!result.Contains("<span class=\"jp\" lang=\"ja\">")) result = result.Substring(result.IndexOf("</strong") + 22, result.Count() - result.IndexOf("</strong>") - 22);
+					else result = result.Substring(result.IndexOf("</strong") + 43, result.Count() - result.IndexOf("</strong>") - 43);
 					result = result.Substring(0, result.IndexOf("</span"));//첫번째 </div가 발견되는 부분 이후를 모두 제거
 
-					result = result.Replace("\n", "");
+					result = result.Replace("\n", " ");
 
 					return result;
 				}
 				catch (Exception ex)
 				{
 					Console.WriteLine(ex);
-					return "네이버와의 통신이 원활하지않아 번역이 취소되었습니다.";
+					return "번역에러";
 				}
 			}
 			else return null;
