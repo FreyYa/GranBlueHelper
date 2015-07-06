@@ -57,7 +57,7 @@ namespace Grandcypher
 			else
 				JPTRsVersion = "없음";
 		}
-		private IEnumerable<XElement> GetTranslationList(TranslationType type)
+		private IEnumerable<XElement> GetTranslationList(TranslationType type, TranslateKind sitetype = TranslateKind.Google)
 		{
 			if (TranslationType.PartTranslate == type)
 			{
@@ -74,12 +74,14 @@ namespace Grandcypher
 			}
 			else if (type == TranslationType.ScenarioDetail)
 			{
-				if (File.Exists(Path.Combine(MainFolder, "Translations", "Scenarios", GrandcypherClient.Current.ScenarioHooker.PathName + ".xml"))) Scenarios = XDocument.Load(Path.Combine(MainFolder, "Translations", "Scenarios", GrandcypherClient.Current.ScenarioHooker.PathName + ".xml"));
+				string siteKind = "Google";
+				if (sitetype == TranslateKind.Naver) siteKind = "Naver";
+				if (File.Exists(Path.Combine(MainFolder, "Translations", "Scenarios", siteKind, GrandcypherClient.Current.ScenarioHooker.PathName + ".xml"))) Scenarios = XDocument.Load(Path.Combine(MainFolder, "Translations", "Scenarios", GrandcypherClient.Current.ScenarioHooker.PathName + ".xml"));
 				if (Scenarios != null)
 				{
 					if (GrandcypherClient.Current.Updater.JPTRsUpdate)
 					{
-						this.Scenarios = XDocument.Load(Path.Combine(MainFolder, "Translations", "Scenarios", GrandcypherClient.Current.ScenarioHooker.PathName + ".xml"));
+						this.Scenarios = XDocument.Load(Path.Combine(MainFolder, "Translations", "Scenarios", siteKind, GrandcypherClient.Current.ScenarioHooker.PathName + ".xml"));
 						GrandcypherClient.Current.Updater.JPTRsUpdate = false;
 					}
 					return Scenarios.Descendants("Scenario");
@@ -114,11 +116,11 @@ namespace Grandcypher
 			}
 			else return null;
 		}
-		public string GetTranslation(TranslationType type, string JPString, int MasterId = -1)
+		public string GetTranslation(TranslationType type, string JPString, TranslateKind sitekind, int MasterId = -1)
 		{
 			try
 			{
-				IEnumerable<XElement> TranslationList = GetTranslationList(type);
+				IEnumerable<XElement> TranslationList = GetTranslationList(type, sitekind);
 
 				string JPChildElement = "JPstring";
 				string TRChildElement = "TRstring";
@@ -228,10 +230,10 @@ namespace Grandcypher
 				Directory.CreateDirectory(Path.Combine(MainFolder, "Translations"));
 			if (!Directory.Exists(Path.Combine(MainFolder, "Translations", "Scenarios")))
 				Directory.CreateDirectory(Path.Combine(MainFolder, "Translations", "Scenarios"));
-			if (!Directory.Exists(Path.Combine(MainFolder, "Translations", "Scenarios","Google")))
-				Directory.CreateDirectory(Path.Combine(MainFolder, "Translations", "Scenarios","Google"));
-			if (!Directory.Exists(Path.Combine(MainFolder, "Translations", "Scenarios","Naver")))
-				Directory.CreateDirectory(Path.Combine(MainFolder, "Translations", "Scenarios","Naver"));
+			if (!Directory.Exists(Path.Combine(MainFolder, "Translations", "Scenarios", "Google")))
+				Directory.CreateDirectory(Path.Combine(MainFolder, "Translations", "Scenarios", "Google"));
+			if (!Directory.Exists(Path.Combine(MainFolder, "Translations", "Scenarios", "Naver")))
+				Directory.CreateDirectory(Path.Combine(MainFolder, "Translations", "Scenarios", "Naver"));
 
 			if (File.Exists(Path.Combine(MainFolder, "Translations", "Scenarios", context[0].PathName + ".xml")))
 			{

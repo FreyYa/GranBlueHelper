@@ -90,13 +90,13 @@ namespace Grandcypher
 				//if (tempIndex.attribute != null)
 				//	temp.Attribute = tempIndex.attribute;
 
-				temp.ItemName = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponList, "", temp.MasterId);
-				temp.SkillName1 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.FirstSkillName, "", temp.MasterId);
-				temp.SkillName2 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.LastSkillName, "", temp.MasterId);
-				temp.SkillDetail1 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.FirstSkillDetail, "", temp.MasterId);
-				temp.SkillDetail2 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.LastSkillDetail, "", temp.MasterId);
-				temp.Element = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.Element, "", temp.MasterId);
-				temp.Kind = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponType, "", temp.MasterId);
+				temp.ItemName = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponList, "", TranslateKind.Google, temp.MasterId);
+				temp.SkillName1 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.FirstSkillName, "", TranslateKind.Google, temp.MasterId);
+				temp.SkillName2 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.LastSkillName, "", TranslateKind.Google, temp.MasterId);
+				temp.SkillDetail1 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.FirstSkillDetail, "", TranslateKind.Google, temp.MasterId);
+				temp.SkillDetail2 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.LastSkillDetail, "", TranslateKind.Google, temp.MasterId);
+				temp.Element = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.Element, "", TranslateKind.Google, temp.MasterId);
+				temp.Kind = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponType, "", TranslateKind.Google, temp.MasterId);
 				//1=공격 2=체력Up
 				if (temp.SkillDetail1.Contains("공격력") && !temp.SkillDetail1.Contains("HP상승"))
 					temp.SkillType1 = 1;
@@ -215,20 +215,20 @@ namespace Grandcypher
 				//if (master["attribute"].ToString() != "")
 				//	deck.Attribute = (int)master["attribute"];
 
-				deck.ItemName = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponList, "", deck.MasterId);
+				deck.ItemName = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponList, "", TranslateKind.Google, deck.MasterId);
 
-				deck.SkillName1 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.FirstSkillName, "", deck.MasterId);
+				deck.SkillName1 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.FirstSkillName, "", TranslateKind.Google, deck.MasterId);
 				//if (jobject["skill1"].HasValues)
 				//	deck.SkillDetail1 = (string)jobject["skill1"]["description"];
 				deck.attribute = (int)master["attribute"];
-				deck.SkillName2 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.LastSkillName, "", deck.MasterId);
+				deck.SkillName2 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.LastSkillName, "", TranslateKind.Google, deck.MasterId);
 				//if (jobject["skill2"].HasValues)
 				//	deck.SkillDetail2 = (string)jobject["skill2"]["description"];
 
-				deck.SkillDetail1 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.FirstSkillDetail, "", deck.MasterId);
-				deck.SkillDetail2 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.LastSkillDetail, "", deck.MasterId);
-				deck.Element = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.Element, "", deck.MasterId);
-				deck.Kind = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponType, "", deck.MasterId);
+				deck.SkillDetail1 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.FirstSkillDetail, "", TranslateKind.Google, deck.MasterId);
+				deck.SkillDetail2 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.LastSkillDetail, "", TranslateKind.Google, deck.MasterId);
+				deck.Element = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.Element, "", TranslateKind.Google, deck.MasterId);
+				deck.Kind = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponType, "", TranslateKind.Google, deck.MasterId);
 				//1=공격 2=체력Up 
 				//if (mainweaponAttribute != deck.Attribute)
 				//	deck.SkillType1 = 3;

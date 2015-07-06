@@ -89,7 +89,7 @@ namespace Grandcypher
 					temp.TrName = GrandcypherClient.Current.Translations.ReplaceTranslation(temp.Name);
 
 
-					temp.TrContext = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.ScenarioDetail, temp.context);
+					temp.TrContext = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.ScenarioDetail, temp.context, TranslateSite);
 					//if (sel1 != null)
 					//{
 					//	temp.sel1_txt = RemoveWebTag(sel1);
@@ -296,7 +296,7 @@ namespace Grandcypher
 			if (RemoveEnter) IsEnd = true;
 			while (IsEnd)
 			{
-				tempstr = tempstr.Replace("\n", "");
+				tempstr = tempstr.Replace("\n", " ");
 				if (!tempstr.Contains("\n")) IsEnd = false;
 			}
 
