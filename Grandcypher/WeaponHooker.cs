@@ -26,7 +26,8 @@ namespace Grandcypher
 		public WeaponInfo MainWeapon { get; set; }
 		public Skills SkillCounter { get; set; }
 		public List<string> SkillList { get; set; }
-		private bool IsEnd { get; set; }
+		private bool DeckIsEnd { get; set; }
+		private bool ListIsEnd { get; set; }
 		public void SessionReader(Session oS)
 		{
 			if (oS.PathAndQuery.StartsWith("/weapon/list") && oS.oResponse.MIMEType == "application/json")
@@ -45,7 +46,8 @@ namespace Grandcypher
 		private void ListDetail(Session oS)
 		{
 			this.WeaponListLoad();
-
+			this.ListIsEnd = false;
+			this.DeckIsEnd = false;
 			if (this.WeaponLists == null)
 				this.WeaponLists = new List<WeaponInfo>();
 			else
@@ -115,6 +117,7 @@ namespace Grandcypher
 				this.ProgressStatus.Current++;
 				this.ProgressBar();
 			}
+			this.ListIsEnd = true;
 			this.LoadingEnd();
 		}
 		#region 덱 편성
@@ -124,7 +127,9 @@ namespace Grandcypher
 		/// <param name="oS"></param>
 		private void DeckDetail(Session oS)
 		{
-			this.IsEnd = false;
+			this.ListIsEnd = false;
+			this.DeckIsEnd = false;
+
 			this.WeaponListLoad();
 			int MasterAttribute = 0;
 			if (this.WeaponLists == null)
@@ -442,14 +447,15 @@ namespace Grandcypher
 				}
 			}
 			SkillCounter.TotalAttack = TotalAtt;
-			this.IsEnd = true;
+			this.DeckIsEnd = true;
 			this.DeckLoadingEnd();
 		}
 		public void Reload()
 		{
-			if (this.IsEnd) this.DeckLoadingEnd();
+			if (this.DeckIsEnd) this.DeckLoadingEnd();
+			if (this.ListIsEnd) this.LoadingEnd();
 		}
-		public int WeaponLvLoad(int Id,int order)
+		public int WeaponLvLoad(int Id, int order)
 		{
 			string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 			if (!Directory.Exists(Path.Combine(MainFolder, "Bin")))
@@ -489,7 +495,7 @@ namespace Grandcypher
 		}
 		public void WeaponLvSave(int Id, int order, int Lv)
 		{
-			if (!this.IsEnd) return;
+			if (!this.DeckIsEnd) return;
 			string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 			if (!Directory.Exists(Path.Combine(MainFolder, "Bin")))
 				Directory.CreateDirectory(Path.Combine(MainFolder, "Bin"));
