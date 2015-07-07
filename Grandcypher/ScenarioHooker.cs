@@ -27,6 +27,7 @@ namespace Grandcypher
 		public List<Scenario> ScenarioList { get; private set; }
 		public LimitedValue ProgressStatus { get; set; }
 		public TranslateKind TranslateSite { get; set; }
+		public string ScenarioName { get; private set; }
 		public string PathName { get; private set; }
 		string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
@@ -49,6 +50,8 @@ namespace Grandcypher
 			PathName = path[0];
 			PathName = PathName.Substring(1, path[0].Count() - 1);
 			PathName = PathName.Replace("/", "_");
+
+			this.ScenarioName = PathName;
 
 			if (this.ScenarioList == null)
 				this.ScenarioList = new List<Scenario>();

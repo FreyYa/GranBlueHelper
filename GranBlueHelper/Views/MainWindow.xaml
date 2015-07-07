@@ -129,6 +129,7 @@
 					<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
 						<Grid>
 							<StackPanel>
+								<TextBlock Text="{Binding ScenarioName}" FontSize="15" FontWeight="Bold" Margin="5"/>
 								<ItemsControl ItemsSource="{Binding ScenarioList}">
 									<ItemsControl.ItemTemplate>
 										<DataTemplate>

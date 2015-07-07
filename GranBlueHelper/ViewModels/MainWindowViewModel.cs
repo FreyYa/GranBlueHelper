@@ -110,6 +110,25 @@ namespace GranBlueHelper.ViewModels
 
 		#endregion
 
+		#region 시나리오 이름
+
+		private string _ScenarioName;
+
+		public string ScenarioName
+		{
+			get { return this._ScenarioName; }
+			set
+			{
+				if (!Equals(this._ScenarioName, value))
+				{
+					this._ScenarioName = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
 		#region 우측 간편 설정 Visibility
 
 		private bool _Default;
@@ -314,6 +333,7 @@ namespace GranBlueHelper.ViewModels
 			GrandcypherClient.Current.ScenarioHooker.TranslatieEnd += () =>
 			{
 				this.ScenarioList = new List<Scenario>(GrandcypherClient.Current.ScenarioHooker.ScenarioList);
+				this.ScenarioName = GrandcypherClient.Current.ScenarioHooker.ScenarioName;
 				this.LoadingScreen = Visibility.Collapsed;
 				this.AppStatus = "시나리오 번역이 완료되었습니다";
 			};
