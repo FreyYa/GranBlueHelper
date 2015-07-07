@@ -96,9 +96,45 @@
 										<Grid>
 											<Grid.ColumnDefinitions>
 												<ColumnDefinition SharedSizeGroup="Skill1" MinWidth="60"/>
+												<ColumnDefinition SharedSizeGroup="Skill1Lv"/>
 												<ColumnDefinition SharedSizeGroup="Skill2" MinWidth="60"/>
+												<ColumnDefinition SharedSizeGroup="Skill2Lv"/>
 											</Grid.ColumnDefinitions>
-											<TextBlock Grid.Column="0" Text="{Binding SkillName1}" Margin="0,5,5,0" Padding="3">
+											<metro:PromptTextBox Grid.Column="1"
+																		 TextAlignment="Center"
+																		 Width="23"
+																		 Height="21"
+																		 Margin="0,5,5,0"
+																 Visibility="{Binding vSkillLv1}"
+															 >
+												<metro:PromptTextBox.Text>
+													<Binding Path="SkillLv1"
+																		 Mode="TwoWay">
+														<Binding.ValidationRules>
+															<metro:Int32Rule Min="1" />
+															<metro:Int32Rule Max="10" />
+														</Binding.ValidationRules>
+													</Binding>
+												</metro:PromptTextBox.Text>
+											</metro:PromptTextBox>
+											<metro:PromptTextBox Grid.Column="3"
+																		 TextAlignment="Center"
+																		 Width="23"
+																		 Height="21"
+																		 Margin="0,5,5,0"
+																 Visibility="{Binding vSkillLv2}"
+															 >
+												<metro:PromptTextBox.Text>
+													<Binding Path="SkillLv2"
+																		 Mode="TwoWay">
+														<Binding.ValidationRules>
+															<metro:Int32Rule Min="1" />
+															<metro:Int32Rule Max="10" />
+														</Binding.ValidationRules>
+													</Binding>
+												</metro:PromptTextBox.Text>
+											</metro:PromptTextBox>
+											<TextBlock Text="{Binding SkillName1}" Margin="0,5,0,0" Padding="3" Visibility="{Binding vSkillLv1}">
 												<TextBlock.ToolTip>
 													<TextBlock Text="{Binding SkillDetail1}"/>
 												</TextBlock.ToolTip>
@@ -119,7 +155,7 @@
                                                     </Style>
                                                 </TextBlock.Style>
 											</TextBlock>
-											<TextBlock Grid.Column="1" Text="{Binding SkillName2}" Margin="0,5,0,0" Padding="3">
+											<TextBlock Grid.Column="2" Text="{Binding SkillName2}" Margin="0,5,0,0" Padding="3" Visibility="{Binding vSkillLv2}">
 												<TextBlock.ToolTip>
 													<TextBlock Text="{Binding SkillDetail2}"/>
 												</TextBlock.ToolTip>
@@ -252,7 +288,41 @@
 										<ColumnDefinition SharedSizeGroup="Skill2" MinWidth="60"/>
 										<ColumnDefinition SharedSizeGroup="Skill2Lv"/>
 									</Grid.ColumnDefinitions>
-									<Grid>
+									<metro:PromptTextBox Grid.Column="1"
+																		 TextAlignment="Center"
+																		 Width="23"
+																		 Height="21"
+																		 Margin="0,5,5,0"
+																 Visibility="{Binding vSkillLv1}"
+															 >
+										<metro:PromptTextBox.Text>
+											<Binding Path="SkillLv1"
+																		 Mode="TwoWay">
+												<Binding.ValidationRules>
+													<metro:Int32Rule Min="1" />
+													<metro:Int32Rule Max="10" />
+												</Binding.ValidationRules>
+											</Binding>
+										</metro:PromptTextBox.Text>
+									</metro:PromptTextBox>
+									<metro:PromptTextBox Grid.Column="3"
+																		 TextAlignment="Center"
+																		 Width="23"
+																		 Height="21"
+																		 Margin="0,5,5,0"
+																 Visibility="{Binding vSkillLv2}"
+															 >
+										<metro:PromptTextBox.Text>
+											<Binding Path="SkillLv2"
+																		 Mode="TwoWay">
+												<Binding.ValidationRules>
+													<metro:Int32Rule Min="1" />
+													<metro:Int32Rule Max="10" />
+												</Binding.ValidationRules>
+											</Binding>
+										</metro:PromptTextBox.Text>
+									</metro:PromptTextBox>
+									<Grid Visibility="{Binding vSkillLv1}">
 										<Grid.RowDefinitions>
 											<RowDefinition/>
 											<RowDefinition/>
@@ -279,23 +349,7 @@
                                                 </TextBlock.Style>
 											</TextBlock>
 									</Grid>
-									<metro:PromptTextBox Grid.Column="1"
-																		 TextAlignment="Center"
-																		 Width="23"
-																		 Height="21"
-																		 Margin="0,5,5,0"
-															 >
-										<metro:PromptTextBox.Text>
-											<Binding Path="SkillLv1"
-																		 Mode="TwoWay">
-												<Binding.ValidationRules>
-													<metro:Int32Rule Min="1" />
-													<metro:Int32Rule Max="10" />
-												</Binding.ValidationRules>
-											</Binding>
-										</metro:PromptTextBox.Text>
-									</metro:PromptTextBox>
-									<Grid Grid.Column="2">
+									<Grid Grid.Column="2" Visibility="{Binding vSkillLv2}">
 										<Grid.RowDefinitions>
 											<RowDefinition/>
 											<RowDefinition/>
@@ -322,22 +376,6 @@
                                                 </TextBlock.Style>
 											</TextBlock>
 									</Grid>
-									<metro:PromptTextBox Grid.Column="3"
-																		 TextAlignment="Center"
-																		 Width="23"
-																		 Height="21"
-																		 Margin="0,5,5,0"
-															 >
-										<metro:PromptTextBox.Text>
-											<Binding Path="SkillLv2"
-																		 Mode="TwoWay">
-												<Binding.ValidationRules>
-													<metro:Int32Rule Min="1" />
-													<metro:Int32Rule Max="10" />
-												</Binding.ValidationRules>
-											</Binding>
-										</metro:PromptTextBox.Text>
-									</metro:PromptTextBox>
 
 								</Grid>
 							</StackPanel>
@@ -403,7 +441,7 @@
 														<ColumnDefinition SharedSizeGroup="Skill2" MinWidth="60"/>
 														<ColumnDefinition SharedSizeGroup="Skill2Lv"/>
 													</Grid.ColumnDefinitions>
-													<Grid>
+													<Grid Visibility="{Binding vSkillLv1}">
 														<Grid.RowDefinitions>
 															<RowDefinition/>
 															<RowDefinition/>
@@ -435,6 +473,7 @@
 																		 Width="23"
 																		 Height="21"
 																		 Margin="0,5,5,0"
+																 Visibility="{Binding vSkillLv1}"
 															 >
 														<metro:PromptTextBox.Text>
 															<Binding Path="SkillLv1"
@@ -446,7 +485,7 @@
 															</Binding>
 														</metro:PromptTextBox.Text>
 													</metro:PromptTextBox>
-													<Grid Grid.Column="2">
+													<Grid Grid.Column="2" Visibility="{Binding vSkillLv2}">
 														<Grid.RowDefinitions>
 															<RowDefinition/>
 															<RowDefinition/>
@@ -478,6 +517,7 @@
 																		 Width="23"
 																		 Height="21"
 																		 Margin="0,5,5,0"
+																 Visibility="{Binding vSkillLv2}"
 															 >
 														<metro:PromptTextBox.Text>
 															<Binding Path="SkillLv2"

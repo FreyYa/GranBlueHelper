@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows;
 
 namespace Grandcypher
 {
@@ -26,13 +27,8 @@ namespace Grandcypher
 		public Skills SkillCounter { get; set; }
 		public List<string> SkillList { get; set; }
 		private bool IsEnd { get; set; }
-		public WeaponHooker()
-		{
-
-		}
 		public void SessionReader(Session oS)
 		{
-
 			if (oS.PathAndQuery.StartsWith("/weapon/list") && oS.oResponse.MIMEType == "application/json")
 				ListDetail(oS);
 			if (oS.PathAndQuery.StartsWith("/weapon/enhancement_materials") && oS.oResponse.MIMEType == "application/json")
@@ -79,9 +75,11 @@ namespace Grandcypher
 			for (int i = 0; i < weaponList.Count; i++)
 			{
 				dynamic tempIndex = weaponList[i].master;
+				dynamic tempparam = weaponList[i].param;
 				WeaponInfo temp = new WeaponInfo();
 
 				temp.MasterId = tempIndex.id;
+				temp.ParamId = tempparam.id;//무기 스킬레벨등을 저장하고 구별하기 위한 부분
 				temp.is_used = weaponList[i].is_used;
 
 				//if (tempIndex.attribute != null)
@@ -94,6 +92,14 @@ namespace Grandcypher
 				temp.SkillDetail2 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.LastSkillDetail, "", TranslateKind.Google, temp.MasterId);
 				temp.Element = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.Element, "", TranslateKind.Google, temp.MasterId);
 				temp.Kind = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponType, "", TranslateKind.Google, temp.MasterId);
+
+				temp.SkillLv1 = WeaponLvLoad(temp.ParamId, 1);
+				temp.SkillLv2 = WeaponLvLoad(temp.ParamId, 2);
+				if (temp.SkillName1 != string.Empty) temp.vSkillLv1 = Visibility.Visible;
+				else temp.vSkillLv1 = Visibility.Collapsed;
+				if (temp.SkillName2 != string.Empty) temp.vSkillLv2 = Visibility.Visible;
+				else temp.vSkillLv2 = Visibility.Collapsed;
+
 				//1=공격 2=체력Up
 				if (temp.SkillDetail1.Contains("공격력") && !temp.SkillDetail1.Contains("HP상승"))
 					temp.SkillType1 = 1;
@@ -111,6 +117,7 @@ namespace Grandcypher
 			}
 			this.LoadingEnd();
 		}
+		#region 덱 편성
 		/// <summary>
 		/// 덱 편성 화면
 		/// </summary>
@@ -244,6 +251,10 @@ namespace Grandcypher
 					deck.SkillType2 = 2;
 				deck.SkillLv1 = WeaponLvLoad(deck.ParamId, 1);
 				deck.SkillLv2 = WeaponLvLoad(deck.ParamId, 2);
+				if (deck.SkillName1 != string.Empty) deck.vSkillLv1 = Visibility.Visible;
+				else deck.vSkillLv1 = Visibility.Collapsed;
+				if (deck.SkillName2 != string.Empty) deck.vSkillLv2 = Visibility.Visible;
+				else deck.vSkillLv2 = Visibility.Collapsed;
 				if (i == 1)
 				{
 					MainWeapon = deck;
@@ -554,6 +565,7 @@ namespace Grandcypher
 				writer.Close();
 			}
 		}
+		#endregion
 	}
 	public class SkillLvTable
 	{
@@ -610,6 +622,7 @@ namespace Grandcypher
 				GrandcypherClient.Current.WeaponHooker.WeaponLvSave(this.ParamId, 1, this._SkillLv1);
 			}
 		}
+		public Visibility vSkillLv1 { get; set; }
 		private int _SkillLv2;
 		public int SkillLv2
 		{
@@ -623,6 +636,7 @@ namespace Grandcypher
 				GrandcypherClient.Current.WeaponHooker.WeaponLvSave(this.ParamId, 2, this._SkillLv2);
 			}
 		}
+		public Visibility vSkillLv2 { get; set; }
 		//param
 
 	}
