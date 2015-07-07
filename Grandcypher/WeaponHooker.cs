@@ -4,10 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace Grandcypher
 {
@@ -29,6 +25,7 @@ namespace Grandcypher
 		public WeaponInfo MainWeapon { get; set; }
 		public Skills SkillCounter { get; set; }
 		public List<string> SkillList { get; set; }
+		private bool IsEnd { get; set; }
 		public WeaponHooker()
 		{
 
@@ -120,6 +117,7 @@ namespace Grandcypher
 		/// <param name="oS"></param>
 		private void DeckDetail(Session oS)
 		{
+			this.IsEnd = false;
 			this.WeaponListLoad();
 			int MasterAttribute = 0;
 			if (this.WeaponLists == null)
@@ -244,7 +242,8 @@ namespace Grandcypher
 					deck.SkillType2 = 1;
 				else if (deck.SkillDetail2.Contains("HP상승") && !deck.SkillDetail2.Contains("공격력"))
 					deck.SkillType2 = 2;
-
+				deck.SkillLv1 = WeaponLvLoad(deck.ParamId, 1);
+				deck.SkillLv2 = WeaponLvLoad(deck.ParamId, 2);
 				if (i == 1)
 				{
 					MainWeapon = deck;
@@ -432,8 +431,134 @@ namespace Grandcypher
 				}
 			}
 			SkillCounter.TotalAttack = TotalAtt;
+			this.IsEnd = true;
 			this.DeckLoadingEnd();
 		}
+		public void Reload()
+		{
+			if (this.IsEnd) this.DeckLoadingEnd();
+		}
+		public int WeaponLvLoad(int Id,int order)
+		{
+			string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+			if (!Directory.Exists(Path.Combine(MainFolder, "Bin")))
+				Directory.CreateDirectory(Path.Combine(MainFolder, "Bin"));
+
+			var binPath = Path.Combine(MainFolder, "Bin", "WeaponSkills.bin");
+			if (File.Exists(binPath))
+			{
+				var items = new Dictionary<int, SkillLvTable>();
+
+				var bytes = File.ReadAllBytes(binPath);
+				using (var memoryStream = new MemoryStream(bytes))
+				using (var reader = new BinaryReader(memoryStream))
+				{
+					while (memoryStream.Position < memoryStream.Length)
+					{
+						int paramID = reader.ReadInt32();
+						var item = new SkillLvTable
+						{
+							SkillLv1 = reader.ReadInt32(),
+							SkillLv2 = reader.ReadInt32(),
+						};
+						items.Add(paramID, item);
+					}
+					memoryStream.Dispose();
+					memoryStream.Close();
+					reader.Dispose();
+					reader.Close();
+				}
+				if (items.ContainsKey(Id))
+				{
+					if (order == 1) return items[Id].SkillLv1;
+					else return items[Id].SkillLv2;
+				}
+			}
+			return 1;
+		}
+		public void WeaponLvSave(int Id, int order, int Lv)
+		{
+			if (!this.IsEnd) return;
+			string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+			if (!Directory.Exists(Path.Combine(MainFolder, "Bin")))
+				Directory.CreateDirectory(Path.Combine(MainFolder, "Bin"));
+
+			var binPath = Path.Combine(MainFolder, "Bin", "WeaponSkills.bin");
+
+			var items = new Dictionary<int, SkillLvTable>();
+
+			if (File.Exists(binPath))
+			{
+				var bytes = File.ReadAllBytes(binPath);
+				using (var memoryStream = new MemoryStream(bytes))
+				using (var reader = new BinaryReader(memoryStream))
+				{
+					while (memoryStream.Position < memoryStream.Length)
+					{
+						int paramID = reader.ReadInt32();
+						var item = new SkillLvTable
+						{
+							SkillLv1 = reader.ReadInt32(),
+							SkillLv2 = reader.ReadInt32(),
+						};
+						items.Add(paramID, item);
+					}
+					memoryStream.Dispose();
+					memoryStream.Close();
+					reader.Dispose();
+					reader.Close();
+				}
+				//파일 읽기 종료
+
+				if (items.ContainsKey(Id))//키를 가지고 있으면 해당 키에 해당하는 레벨을 조정
+				{
+					if (order == 1) items[Id].SkillLv1 = Lv;
+					else items[Id].SkillLv2 = Lv;
+				}
+				else
+				{
+					var temp = new SkillLvTable();
+
+					if (order == 1)
+					{
+						temp.SkillLv1 = Lv;
+					}
+					else
+					{
+						temp.SkillLv2 = Lv;
+					}
+					items.Add(Id, temp);
+				}
+			}
+			else
+			{
+				var temp = new SkillLvTable();
+
+				if (order == 1) temp.SkillLv1 = Lv;
+				else temp.SkillLv2 = Lv;
+				items.Add(Id, temp);
+			}
+
+			using (var fileStream = new FileStream(binPath, FileMode.Create, FileAccess.Write, FileShare.None))
+			using (var writer = new BinaryWriter(fileStream))
+			{
+				foreach (var item in items)
+				{
+					writer.Write(item.Key);
+					writer.Write(item.Value.SkillLv1);
+					writer.Write(item.Value.SkillLv2);
+				}
+				fileStream.Dispose();
+				fileStream.Close();
+				writer.Dispose();
+				writer.Close();
+			}
+		}
+	}
+	public class SkillLvTable
+	{
+		public int SkillLv1 { get; set; }
+		public int SkillLv2 { get; set; }
 	}
 	public class Skills
 	{
@@ -462,10 +587,8 @@ namespace Grandcypher
 		public int attribute { get; set; }
 		public string ItemName { get; set; }
 		public string SkillName1 { get; set; }
-		public int SkillLv1 { get; set; }
 		public string SkillDetail1 { get; set; }
 		public string SkillName2 { get; set; }
-		public int SkillLv2 { get; set; }
 		public string SkillDetail2 { get; set; }
 		public string Element { get; set; }
 		public string Kind { get; set; }
@@ -474,6 +597,32 @@ namespace Grandcypher
 		//public int Attribute { get; set; }
 		public bool is_used { get; set; }
 
+		private int _SkillLv1;
+		public int SkillLv1
+		{
+			get { return this._SkillLv1; }
+			set
+			{
+				if (this._SkillLv1 == value) return;
+				this._SkillLv1 = value;
+				if (this._SkillLv1 < 1 || this._SkillLv1 > 10) this._SkillLv1 = 1;
+				GrandcypherClient.Current.WeaponHooker.Reload();
+				GrandcypherClient.Current.WeaponHooker.WeaponLvSave(this.ParamId, 1, this._SkillLv1);
+			}
+		}
+		private int _SkillLv2;
+		public int SkillLv2
+		{
+			get { return this._SkillLv2; }
+			set
+			{
+				if (this._SkillLv2 == value) return;
+				this._SkillLv2 = value;
+				if (this._SkillLv2 < 1 || this._SkillLv2 > 10) this._SkillLv2 = 1;
+				GrandcypherClient.Current.WeaponHooker.Reload();
+				GrandcypherClient.Current.WeaponHooker.WeaponLvSave(this.ParamId, 2, this._SkillLv2);
+			}
+		}
 		//param
 
 	}

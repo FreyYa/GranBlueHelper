@@ -16,20 +16,6 @@
 	<UserControl.DataContext>
 		<viewmodels:WeaponListViewModel/>
 	</UserControl.DataContext>
-	<UserControl.Resources>
-		<ResourceDictionary>
-			<ObjectDataProvider
-			xmlns:sys="clr-namespace:System;assembly=mscorlib"
-			xmlns:linq="clr-namespace:System.Linq;assembly=System.Core"
-			x:Key="SkillLv"
-			ObjectType="{x:Type linq:Enumerable}" MethodName="Range">
-				<ObjectDataProvider.MethodParameters>
-					<sys:Int32>1</sys:Int32>
-					<sys:Int32>10</sys:Int32>
-				</ObjectDataProvider.MethodParameters>
-			</ObjectDataProvider>
-		</ResourceDictionary>
-	</UserControl.Resources>
 	<Grid>
 		<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
 			<Grid>
@@ -262,14 +248,16 @@
 								<Grid>
 									<Grid.ColumnDefinitions>
 										<ColumnDefinition SharedSizeGroup="Skill1" MinWidth="60"/>
+										<ColumnDefinition SharedSizeGroup="Skill1Lv"/>
 										<ColumnDefinition SharedSizeGroup="Skill2" MinWidth="60"/>
+										<ColumnDefinition SharedSizeGroup="Skill2Lv"/>
 									</Grid.ColumnDefinitions>
-									<Grid Grid.Column="0">
+									<Grid>
 										<Grid.RowDefinitions>
 											<RowDefinition/>
 											<RowDefinition/>
 										</Grid.RowDefinitions>
-										<TextBlock Text="{Binding SkillName1}" Margin="0,5,5,0" Padding="3">
+										<TextBlock Text="{Binding SkillName1}" Margin="0,5,0,0" Padding="3">
 											<TextBlock.ToolTip>
 												<TextBlock Text="{Binding SkillDetail1}"/>
 											</TextBlock.ToolTip>
@@ -290,16 +278,24 @@
                                                     </Style>
                                                 </TextBlock.Style>
 											</TextBlock>
-										<metro:PromptComboBox Prompt="1"
-															  Grid.Row="1"
-															  MinWidth="50"
-															  HorizontalAlignment="Left"
-															  ItemsSource="{Binding Source={StaticResource SkillLv},UpdateSourceTrigger=PropertyChanged}"
-															  SelectedValue="{Binding SkillLv1, Mode=TwoWay}"
-															  IsReadOnly="True"
-															  />
 									</Grid>
-									<Grid Grid.Column="1">
+									<metro:PromptTextBox Grid.Column="1"
+																		 TextAlignment="Center"
+																		 Width="23"
+																		 Height="21"
+																		 Margin="0,5,5,0"
+															 >
+										<metro:PromptTextBox.Text>
+											<Binding Path="SkillLv1"
+																		 Mode="TwoWay">
+												<Binding.ValidationRules>
+													<metro:Int32Rule Min="1" />
+													<metro:Int32Rule Max="10" />
+												</Binding.ValidationRules>
+											</Binding>
+										</metro:PromptTextBox.Text>
+									</metro:PromptTextBox>
+									<Grid Grid.Column="2">
 										<Grid.RowDefinitions>
 											<RowDefinition/>
 											<RowDefinition/>
@@ -325,15 +321,24 @@
                                                     </Style>
                                                 </TextBlock.Style>
 											</TextBlock>
-										<metro:PromptComboBox Prompt="1"
-															  Grid.Row="1"
-															  MinWidth="50"
-															  HorizontalAlignment="Left"
-															  ItemsSource="{Binding Source={StaticResource SkillLv},UpdateSourceTrigger=PropertyChanged}"
-															  SelectedValue="{Binding SkillLv2, Mode=TwoWay}"
-															  IsReadOnly="True"
-															  />
 									</Grid>
+									<metro:PromptTextBox Grid.Column="3"
+																		 TextAlignment="Center"
+																		 Width="23"
+																		 Height="21"
+																		 Margin="0,5,5,0"
+															 >
+										<metro:PromptTextBox.Text>
+											<Binding Path="SkillLv2"
+																		 Mode="TwoWay">
+												<Binding.ValidationRules>
+													<metro:Int32Rule Min="1" />
+													<metro:Int32Rule Max="10" />
+												</Binding.ValidationRules>
+											</Binding>
+										</metro:PromptTextBox.Text>
+									</metro:PromptTextBox>
+
 								</Grid>
 							</StackPanel>
 						</Border>
@@ -394,14 +399,16 @@
 												<Grid>
 													<Grid.ColumnDefinitions>
 														<ColumnDefinition SharedSizeGroup="Skill1" MinWidth="60"/>
+														<ColumnDefinition SharedSizeGroup="Skill1Lv"/>
 														<ColumnDefinition SharedSizeGroup="Skill2" MinWidth="60"/>
+														<ColumnDefinition SharedSizeGroup="Skill2Lv"/>
 													</Grid.ColumnDefinitions>
 													<Grid>
 														<Grid.RowDefinitions>
 															<RowDefinition/>
 															<RowDefinition/>
 														</Grid.RowDefinitions>
-														<TextBlock Text="{Binding SkillName1}" Margin="0,5,5,0" Padding="3">
+														<TextBlock Text="{Binding SkillName1}" Margin="0,5,0,0" Padding="3">
 															<TextBlock.ToolTip>
 																<TextBlock Text="{Binding SkillDetail1}"/>
 															</TextBlock.ToolTip>
@@ -422,16 +429,24 @@
                                                     </Style>
                                                 </TextBlock.Style>
 													</TextBlock>
-														<metro:PromptComboBox Prompt="1"
-															  Grid.Row="1"
-															  MinWidth="50"
-															  HorizontalAlignment="Left"
-															  ItemsSource="{Binding Source={StaticResource SkillLv},UpdateSourceTrigger=PropertyChanged}"
-															  SelectedValue="{Binding SkillLv1, Mode=TwoWay}"
-															  IsReadOnly="True"
-															  />
 													</Grid>
-													<Grid Grid.Column="1">
+													<metro:PromptTextBox Grid.Column="1"
+																		 TextAlignment="Center"
+																		 Width="23"
+																		 Height="21"
+																		 Margin="0,5,5,0"
+															 >
+														<metro:PromptTextBox.Text>
+															<Binding Path="SkillLv1"
+																		 Mode="TwoWay">
+																<Binding.ValidationRules>
+																	<metro:Int32Rule Min="1" />
+																	<metro:Int32Rule Max="10" />
+																</Binding.ValidationRules>
+															</Binding>
+														</metro:PromptTextBox.Text>
+													</metro:PromptTextBox>
+													<Grid Grid.Column="2">
 														<Grid.RowDefinitions>
 															<RowDefinition/>
 															<RowDefinition/>
@@ -457,17 +472,23 @@
                                                     </Style>
                                                 </TextBlock.Style>
 													</TextBlock>
-														<metro:PromptComboBox Prompt="1"
-															  Grid.Row="1"
-															  MinWidth="50"
-															  HorizontalAlignment="Left"
-															  ItemsSource="{Binding Source={StaticResource SkillLv},UpdateSourceTrigger=PropertyChanged}"
-															  SelectedValue="{Binding SkillLv2, Mode=TwoWay}"
-															  IsReadOnly="True"
-															  />
 													</Grid>
-													
-													
+													<metro:PromptTextBox Grid.Column="3"
+																		 TextAlignment="Center"
+																		 Width="23"
+																		 Height="21"
+																		 Margin="0,5,5,0"
+															 >
+														<metro:PromptTextBox.Text>
+															<Binding Path="SkillLv2"
+																		 Mode="TwoWay">
+																<Binding.ValidationRules>
+																	<metro:Int32Rule Min="1" />
+																	<metro:Int32Rule Max="10" />
+																</Binding.ValidationRules>
+															</Binding>
+														</metro:PromptTextBox.Text>
+													</metro:PromptTextBox>
 												</Grid>
 											</StackPanel>
 										</Border>
