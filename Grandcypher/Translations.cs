@@ -76,7 +76,8 @@ namespace Grandcypher
 			{
 				string siteKind = "Google";
 				if (sitetype == TranslateKind.Naver) siteKind = "Naver";
-				if (File.Exists(Path.Combine(MainFolder, "Translations", "Scenarios", siteKind, GrandcypherClient.Current.ScenarioHooker.PathName + ".xml"))) Scenarios = XDocument.Load(Path.Combine(MainFolder, "Translations", "Scenarios", GrandcypherClient.Current.ScenarioHooker.PathName + ".xml"));
+				if (File.Exists(Path.Combine(MainFolder, "Translations", "Scenarios", siteKind, GrandcypherClient.Current.ScenarioHooker.PathName + ".xml")))
+					Scenarios = XDocument.Load(Path.Combine(MainFolder, "Translations", "Scenarios", siteKind, GrandcypherClient.Current.ScenarioHooker.PathName + ".xml"));
 				if (Scenarios != null)
 				{
 					if (GrandcypherClient.Current.Updater.JPTRsUpdate)
