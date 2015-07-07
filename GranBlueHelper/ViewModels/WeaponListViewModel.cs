@@ -422,73 +422,73 @@ namespace GranBlueHelper.ViewModels
 		{
 			if (skillInfo == null) return;
 			int total = skillInfo.TotalAttack;
-			double baha = 0;
-			double percent = (skillInfo.Large * 6 + skillInfo.Middle * 3 + skillInfo.Small * 1 + skillInfo.NormalSkillLvCount) / (double)100 + 1;
+			decimal baha = 0;
+			decimal percent = (skillInfo.Large * 6 + skillInfo.Middle * 3 + skillInfo.Small * 1 + skillInfo.NormalSkillLvCount) / 100m + 1;
 
-			double Magnapercent = (skillInfo.MagnaL * 6 + skillInfo.MagnaM * 3 + skillInfo.MagnaS * 1 + skillInfo.MagnaSkillLvCount) / (double)100 + 1;
-			double Unknownpercent = (skillInfo.UnknownL * 6 + skillInfo.UnknownM * 3 + skillInfo.UnknownS * 1 + skillInfo.UnknownSkillLvCount) / (double)100 + 1;
-			double Attributepercent = 1;
+			decimal Magnapercent = (skillInfo.MagnaL * 6 + skillInfo.MagnaM * 3 + skillInfo.MagnaS * 1 + skillInfo.MagnaSkillLvCount) / 100m + 1;
+			decimal Unknownpercent = (skillInfo.UnknownL * 6 + skillInfo.UnknownM * 3 + skillInfo.UnknownS * 1 + skillInfo.UnknownSkillLvCount) / 100m + 1;
+			decimal Attributepercent = 1;
 
 			//자신의 가호
 			if (BlessingTable[this.SelectedBlessing] == 3)//캐릭터
 			{
-				percent += (double)this.BlessingPercent / 100d;
+				percent += (decimal)this.BlessingPercent / 100m;
 			}
 			else if (BlessingTable[this.SelectedBlessing] == 2)//마그나
 			{
-				if (Magnapercent > 1) Magnapercent = Magnapercent * (1 + (double)this.BlessingPercent / 100d);
+				if (Magnapercent > 1) Magnapercent = Magnapercent * (1 + (decimal)this.BlessingPercent / 100m);
 			}
 			else if (BlessingTable[this.SelectedBlessing] == 1)//언노운
 			{
-				if (Unknownpercent > 1) Unknownpercent = Unknownpercent * (1 + (double)this.BlessingPercent / 100d);
+				if (Unknownpercent > 1) Unknownpercent = Unknownpercent * (1 + (decimal)this.BlessingPercent / 100m);
 			}
 			else//속성
 			{
-				Attributepercent += (double)this.BlessingPercent / 100d;
+				Attributepercent += (decimal)this.BlessingPercent / 100m;
 			}
 
 			//친구의 가호
 			if (BlessingTable[this.SelectedFriendBlessing] == 3)//캐릭터
 			{
-				percent += (double)this.FriendBlessingPercent / 100d;
+				percent += (decimal)this.FriendBlessingPercent / 100m;
 			}
 			else if (BlessingTable[this.SelectedFriendBlessing] == 2)//마그나
 			{
-				if (Magnapercent > 1) Magnapercent = Magnapercent * (1 + (double)this.FriendBlessingPercent / 100d);
+				if (Magnapercent > 1) Magnapercent = Magnapercent * (1 + (decimal)this.FriendBlessingPercent / 100m);
 			}
 			else if (BlessingTable[this.SelectedFriendBlessing] == 1)//언노운
 			{
-				if (Unknownpercent > 1) Unknownpercent = Unknownpercent * (1 + (double)this.FriendBlessingPercent / 100d);
+				if (Unknownpercent > 1) Unknownpercent = Unknownpercent * (1 + (decimal)this.FriendBlessingPercent / 100m);
 			}
 			else//속성
 			{
-				Attributepercent += (double)this.FriendBlessingPercent / 100d;
+				Attributepercent += (decimal)this.FriendBlessingPercent / 100m;
 			}
 
 			if (this.IsvisBaha)
 			{
 				if (Settings.Current.visLv == 10)
 				{
-					percent += 0.3d;
-					baha += 0.3d;
+					percent += 0.3m;
+					baha += 0.3m;
 				}
 				else
 				{
-					percent += 0.2d + Convert.ToDouble((double)(Settings.Current.visLv - 1) / 100d);
-					baha += 0.2d + Convert.ToDouble((double)(Settings.Current.visLv - 1) / 100d);
+					percent += 0.2m + Convert.ToDecimal((decimal)(Settings.Current.visLv - 1) / 100m);
+					baha += 0.2m + Convert.ToDecimal((decimal)(Settings.Current.visLv - 1) / 100m);
 				}
 			}
 			if (this.IsconcilioBaha)
 			{
 				if (Settings.Current.concilioLv == 10)
 				{
-					percent += 0.15d;
-					baha += 0.15d;
+					percent += 0.15m;
+					baha += 0.15m;
 				}
 				else
 				{
-					percent += 0.1d + Convert.ToDouble((double)(Settings.Current.concilioLv - 1) / 200d);
-					baha += 0.1d + Convert.ToDouble((double)(Settings.Current.concilioLv - 1) / 200d);
+					percent += 0.1m + Convert.ToDecimal((decimal)(Settings.Current.concilioLv - 1) / 200m);
+					baha += 0.1m + Convert.ToDecimal((decimal)(Settings.Current.concilioLv - 1) / 200m);
 				}
 			}
 
