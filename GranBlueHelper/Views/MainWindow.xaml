@@ -14,7 +14,7 @@
 		xmlns:models="clr-namespace:GranBlueHelper.Models"
         mc:Ignorable="d"
         Title="{Binding Title}" 
-		Height="600" Width="1150"
+		Height="650" Width="1190"
 				   FontSize="12"
 				   SnapsToDevicePixels="True"
 				   TextOptions.TextFormattingMode="Display"

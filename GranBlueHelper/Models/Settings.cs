@@ -140,6 +140,35 @@ namespace GranBlueHelper.Models
 		}
 		#endregion
 
+		#region 바하무트 위스 스킬레벨
+		private int _visLv;
+		public int visLv
+		{
+			get { return this._visLv; }
+			set
+			{
+				if (this._visLv == value) return;
+				this._visLv = value;
+				this.RaisePropertyChanged();
+			}
+		}
+		#endregion
+
+		#region 바하무트 콘킬리오 스킬레벨
+		private int _concilioLv;
+		public int concilioLv
+		{
+			get { return this._concilioLv; }
+			set
+			{
+				if (this._concilioLv == value) return;
+				this._concilioLv = value;
+
+				this.RaisePropertyChanged();
+			}
+		}
+		#endregion
+
 		public void Save()
 		{
 			try

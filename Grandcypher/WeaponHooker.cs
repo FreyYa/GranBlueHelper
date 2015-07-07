@@ -97,10 +97,11 @@ namespace Grandcypher
 
 				temp.SkillLv1 = WeaponLvLoad(temp.ParamId, 1);
 				temp.SkillLv2 = WeaponLvLoad(temp.ParamId, 2);
-				if (temp.SkillName1 != string.Empty) temp.vSkillLv1 = Visibility.Visible;
-				else temp.vSkillLv1 = Visibility.Collapsed;
-				if (temp.SkillName2 != string.Empty) temp.vSkillLv2 = Visibility.Visible;
-				else temp.vSkillLv2 = Visibility.Collapsed;
+
+				if (temp.SkillName1 == string.Empty || temp.SkillName1 == null) temp.vSkillLv1 = Visibility.Collapsed;
+				else temp.vSkillLv1 = Visibility.Visible;
+				if (temp.SkillName2 == string.Empty || temp.SkillName2 == null) temp.vSkillLv2 = Visibility.Collapsed;
+				else temp.vSkillLv2 = Visibility.Visible;
 
 				//1=공격 2=체력Up
 				if (temp.SkillDetail1.Contains("공격력") && !temp.SkillDetail1.Contains("HP상승"))
@@ -217,6 +218,8 @@ namespace Grandcypher
 				}
 				catch
 				{
+					deck.vSkillLv1 = Visibility.Collapsed;
+					deck.vSkillLv2 = Visibility.Collapsed;
 					WeaponLists.Add(deck);
 					continue;
 				}
@@ -256,9 +259,10 @@ namespace Grandcypher
 					deck.SkillType2 = 2;
 				deck.SkillLv1 = WeaponLvLoad(deck.ParamId, 1);
 				deck.SkillLv2 = WeaponLvLoad(deck.ParamId, 2);
-				if (deck.SkillName1 != string.Empty) deck.vSkillLv1 = Visibility.Visible;
+
+				if (deck.SkillName1 != string.Empty && deck.SkillName1 != null) deck.vSkillLv1 = Visibility.Visible;
 				else deck.vSkillLv1 = Visibility.Collapsed;
-				if (deck.SkillName2 != string.Empty) deck.vSkillLv2 = Visibility.Visible;
+				if (deck.SkillName2 != string.Empty && deck.SkillName2 != null) deck.vSkillLv2 = Visibility.Visible;
 				else deck.vSkillLv2 = Visibility.Collapsed;
 				if (i == 1)
 				{
@@ -271,13 +275,13 @@ namespace Grandcypher
 			}
 
 			List<WeaponInfo> CollectedWeapon = WeaponLists.Where(x =>
-					(x.SkillDetail1.Contains("공격력 상승") || x.SkillDetail2.Contains("공격력 상승")))
+					(x.SkillDetail1 != null || x.SkillDetail2 != null) && ((x.SkillDetail1.Contains("공격력 상승") || x.SkillDetail2.Contains("공격력 상승"))))
 					.ToList();//공격력 상승이라는 키워드를 가진 모든 무기를 로드(마그나 제외)
 			CollectedWeapon = CollectedWeapon.Where(x => !x.SkillName1.Contains("방진") && !x.SkillName2.Contains("방진"))
 				.ToList();
 
 			List<WeaponInfo> MagnaWeapon = WeaponLists.Where(x =>
-					(x.SkillDetail1.Contains("공격력 상승") || x.SkillDetail2.Contains("공격력 상승")))
+					(x.SkillDetail1 != null || x.SkillDetail2 != null) && ((x.SkillDetail1.Contains("공격력 상승") || x.SkillDetail2.Contains("공격력 상승"))))
 					.ToList();//마그나 공인 무기를 별도로 분류
 			MagnaWeapon = MagnaWeapon.Where(x => x.SkillName1.Contains("방진") || x.SkillName2.Contains("방진"))
 				.ToList();
@@ -405,6 +409,35 @@ namespace Grandcypher
 						x.SkillDetail1.Contains("大") ||
 						x.SkillDetail2.Contains("大"))
 						.ToList();
+
+
+			var normalSum = little.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
+			normalSum += little.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+
+			normalSum += middle.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
+			normalSum += middle.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+
+			normalSum += large.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
+			normalSum += large.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+
+			var MagnaSum = Mlittle.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
+			MagnaSum += Mlittle.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+
+			MagnaSum += Mmiddle.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
+			MagnaSum += Mmiddle.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+
+			MagnaSum += Mlarge.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
+			MagnaSum += Mlarge.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+
+			var UnknownSum = Ulittle.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
+			UnknownSum += Ulittle.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+
+			UnknownSum += Umiddle.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
+			UnknownSum += Umiddle.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+
+			UnknownSum += Ularge.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
+			UnknownSum += Ularge.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+
 			//소/중/대 공인으로 분류
 			SkillCounter = new Skills
 			{
@@ -417,7 +450,11 @@ namespace Grandcypher
 				Large = large.Count,
 				UnknownL = Ularge.Count,
 				MagnaL = Mlarge.Count,
+				NormalSkillLvCount = normalSum,
+				MagnaSkillLvCount = MagnaSum,
+				UnknownSkillLvCount = UnknownSum,
 			};
+
 			int TotalAtt = 0;
 			if (MainWeapon.SkillDetail1.Contains("小") || MainWeapon.SkillDetail2.Contains("小"))
 			{
@@ -441,9 +478,11 @@ namespace Grandcypher
 			if (MainWeapon.SkillName1.Contains("단련의 공인")) SkillCounter.NovelWeaponCount++;
 			foreach (var item in WeaponLists)
 			{
-				if (item.SkillName1.Contains("단련의 공인"))
+				if (item.SkillName1 != null && item.SkillName1.Contains("단련의 공인"))
 				{
 					SkillCounter.NovelWeaponCount++;
+					item.vSkillLv1 = Visibility.Collapsed;
+					item.vSkillLv2 = Visibility.Collapsed;
 				}
 			}
 			SkillCounter.TotalAttack = TotalAtt;
@@ -551,8 +590,17 @@ namespace Grandcypher
 			{
 				var temp = new SkillLvTable();
 
-				if (order == 1) temp.SkillLv1 = Lv;
-				else temp.SkillLv2 = Lv;
+				if (order == 1)
+				{
+					temp.SkillLv1 = Lv;
+					if (temp.SkillLv2 < 1 || temp.SkillLv2 > 10) temp.SkillLv2 = 1;
+				}
+				else
+				{
+					temp.SkillLv2 = Lv;
+					if (temp.SkillLv1 < 1 || temp.SkillLv1 > 10) temp.SkillLv1 = 1;
+				}
+
 				items.Add(Id, temp);
 			}
 
@@ -580,23 +628,34 @@ namespace Grandcypher
 	}
 	public class Skills
 	{
-		public int Small { get; set; }
-		public int MagnaS { get; set; }
-		public int UnknownS { get; set; }
-		public int Middle { get; set; }
-		public int MagnaM { get; set; }
-		public int UnknownM { get; set; }
-		public int Large { get; set; }
-		public int MagnaL { get; set; }
-		public int UnknownL { get; set; }
 		public int TotalAttack { get; set; }
 		public int NovelWeaponCount { get; set; }
+
+		//normal
+		public int Small { get; set; }
+		public int Middle { get; set; }
+		public int Large { get; set; }
+
+		//unknown
+		public int UnknownS { get; set; }
+		public int UnknownM { get; set; }
+		public int UnknownL { get; set; }
+
+		//magna
+		public int MagnaS { get; set; }
+		public int MagnaM { get; set; }
+		public int MagnaL { get; set; }
+
+		public int NormalSkillLvCount { get; set; }
+		public int MagnaSkillLvCount { get; set; }
+		public int UnknownSkillLvCount { get; set; }
 	}
 	public class NpcInfo
 	{
 		public int Masterid { get; set; }
 		public string name { get; set; }
 		public int attack { get; set; }
+		public int CalcAtt { get; set; }
 	}
 	public class WeaponInfo
 	{
