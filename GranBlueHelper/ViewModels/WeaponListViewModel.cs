@@ -525,7 +525,7 @@ namespace GranBlueHelper.ViewModels
 
 			for (int i = 0; i < tempNPC.Count; i++)
 			{
-				tempNPC[i].CalcAtt = Convert.ToInt32(Math.Round(tempNPC[i].attack * percent * Magnapercent * Unknownpercent, 0, MidpointRounding.AwayFromZero));
+				tempNPC[i].CalcAtt = Convert.ToInt32(Math.Round(tempNPC[i].attack * percent * Magnapercent * Unknownpercent * Attributepercent, 0, MidpointRounding.AwayFromZero));
 			}
 			this.NPCList = new List<NpcInfo>(tempNPC);
 		}
