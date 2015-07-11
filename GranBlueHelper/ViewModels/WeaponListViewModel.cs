@@ -246,6 +246,17 @@ namespace GranBlueHelper.ViewModels
 				this.RaisePropertyChanged();
 			}
 		}
+		private string _UnknownWeaponTooltip;
+		public string UnknownWeaponTooltip
+		{
+			get { return this._UnknownWeaponTooltip; }
+			set
+			{
+				if (this._UnknownWeaponTooltip == value) return;
+				this._UnknownWeaponTooltip = value;
+				this.RaisePropertyChanged();
+			}
+		}
 		private string _NovelWeapon;
 		public string NovelWeapon
 		{
@@ -426,7 +437,11 @@ namespace GranBlueHelper.ViewModels
 			decimal percent = (skillInfo.Large * 6 + skillInfo.Middle * 3 + skillInfo.Small * 1 + skillInfo.NormalSkillLvCount) / 100m + 1;
 
 			decimal Magnapercent = (skillInfo.MagnaL * 6 + skillInfo.MagnaM * 3 + skillInfo.MagnaS * 1 + skillInfo.MagnaSkillLvCount) / 100m + 1;
+
 			decimal Unknownpercent = (skillInfo.UnknownL * 6 + skillInfo.UnknownM * 3 + skillInfo.UnknownS * 1 + skillInfo.UnknownSkillLvCount) / 100m + 1;
+			decimal Strangthpercent = (skillInfo.StrL * 6 + skillInfo.StrM * 3 + skillInfo.StrS * 1 + skillInfo.StrangthSkillCount) / 100m;
+
+
 			decimal Attributepercent = 1;
 
 			//자신의 가호
@@ -493,7 +508,7 @@ namespace GranBlueHelper.ViewModels
 			}
 
 			this.BeforeCalcAtt = this.CalcAtt;
-			this.CalcAtt = Convert.ToInt32(Math.Round(total * percent * Magnapercent * Unknownpercent * Attributepercent, 0, MidpointRounding.AwayFromZero));
+			this.CalcAtt = Convert.ToInt32(Math.Round(total * percent * Magnapercent * (Unknownpercent + Strangthpercent) * Attributepercent, 0, MidpointRounding.AwayFromZero));
 
 			StringBuilder stbr = new StringBuilder();
 
@@ -510,8 +525,15 @@ namespace GranBlueHelper.ViewModels
 			if (Magnapercent > 1) this.MagnaWeapon = "×" + string.Format("{0:F2}", Magnapercent);
 
 			if (Unknownpercent > 1) this.UnknownWeapon = "×" + string.Format("{0:F2}", Unknownpercent);
+			this.UnknownWeaponTooltip = "언노운 무기 배율";
+			if (Strangthpercent > 0)
+			{
+				this.UnknownWeapon = "×(" + string.Format("{0:F2}", Unknownpercent) + "+" + string.Format("{0:F2}", Strangthpercent) + ")";
+				this.UnknownWeaponTooltip = "언노운 & 스트렝스 무기 배율";
+			}
 
 			if (Attributepercent > 1) this.Attribute = "×" + string.Format("{0:F2}", Attributepercent);
+
 
 			this.CalcAtt += skillInfo.NovelWeaponCount * 1000;
 			if (skillInfo.NovelWeaponCount > 0) this.NovelWeapon = "+" + (1000 * skillInfo.NovelWeaponCount);
@@ -525,7 +547,7 @@ namespace GranBlueHelper.ViewModels
 
 			for (int i = 0; i < tempNPC.Count; i++)
 			{
-				tempNPC[i].CalcAtt = Convert.ToInt32(Math.Round(tempNPC[i].attack * percent * Magnapercent * Unknownpercent * Attributepercent, 0, MidpointRounding.AwayFromZero));
+				tempNPC[i].CalcAtt = Convert.ToInt32(Math.Round(tempNPC[i].attack * percent * Magnapercent * (Unknownpercent + Strangthpercent) * Attributepercent, 0, MidpointRounding.AwayFromZero));
 			}
 			this.NPCList = new List<NpcInfo>(tempNPC);
 		}

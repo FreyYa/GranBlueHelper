@@ -246,16 +246,12 @@ namespace Grandcypher
 				deck.Element = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.Element, "", TranslateKind.Google, deck.MasterId);
 				deck.Kind = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponType, "", TranslateKind.Google, deck.MasterId);
 				//1=공격 2=체력Up 
-				//if (mainweaponAttribute != deck.Attribute)
-				//	deck.SkillType1 = 3;
 				if (deck.SkillDetail1.Contains("공격력") && !deck.SkillDetail1.Contains("HP상승"))
 					deck.SkillType1 = 1;
 				else if (deck.SkillDetail1.Contains("HP상승") && !deck.SkillDetail1.Contains("공격력"))
 					deck.SkillType1 = 2;
 
 
-				//if (mainweaponAttribute != deck.Attribute)
-				//	deck.SkillType2 = 3;
 				if (deck.SkillDetail2.Contains("공격력") && !deck.SkillDetail2.Contains("HP상승"))
 					deck.SkillType2 = 1;
 				else if (deck.SkillDetail2.Contains("HP상승") && !deck.SkillDetail2.Contains("공격력"))
@@ -270,14 +266,17 @@ namespace Grandcypher
 				if (i == 1)
 				{
 					MainWeapon = deck;
-					//mainweaponAttribute = deck.Attribute;
 				}
 				else WeaponLists.Add(deck);
 				this.ProgressStatus.Current++;
 				this.ProgressBar();
 			}
 
-			List<WeaponInfo> CollectedWeapon = WeaponLists.Where(x =>
+			List<WeaponInfo> CollectedWeapon = new List<WeaponInfo>(WeaponLists);
+			CollectedWeapon.Add(MainWeapon);
+
+
+			CollectedWeapon = CollectedWeapon.Where(x =>
 					(x.SkillDetail1 != null || x.SkillDetail2 != null) && ((x.SkillDetail1.Contains("공격력 상승") || x.SkillDetail2.Contains("공격력 상승"))))
 					.ToList();//공격력 상승이라는 키워드를 가진 모든 무기를 로드(마그나 제외)
 			CollectedWeapon = CollectedWeapon.Where(x => !x.SkillName1.Contains("방진") && !x.SkillName2.Contains("방진"))
@@ -289,12 +288,14 @@ namespace Grandcypher
 			MagnaWeapon = MagnaWeapon.Where(x => x.SkillName1.Contains("방진") || x.SkillName2.Contains("방진"))
 				.ToList();
 
-			//List<WeaponInfo> BahaWeapon = WeaponLists.Where(x =>
-			//		x.SkillDetail1.Contains("족의 공격력") ||
-			//		x.SkillDetail2.Contains("족의 공격력"))
-			//		.ToList();//바하무트 무기의 구분
-			List<WeaponInfo> UnknownWeapon = CollectedWeapon.Where(x => x.SkillName1.Contains("ATK") || x.SkillName2.Contains("ATK")).ToList();
-			UnknownWeapon = UnknownWeapon.Where(x => x.attribute == MasterAttribute).ToList();
+			List<WeaponInfo> UnknownWeapon = CollectedWeapon.Where
+				(x => x.SkillName1.Contains("ATK") || x.SkillName2.Contains("ATK")).ToList();
+			UnknownWeapon = UnknownWeapon.Where(x => x.attribute == MasterAttribute).ToList();//언노운 분류
+
+			List<WeaponInfo> StrangthWeapon = CollectedWeapon.Where
+				(x => x.SkillName1.Contains("스트렝스") || x.SkillName2.Contains("스트렝스")).ToList();
+			StrangthWeapon = StrangthWeapon.Where(x => x.attribute == MasterAttribute).ToList();//스트렝스 분류
+
 
 			switch (MasterAttribute)//일반 공인 분류
 			{
@@ -374,6 +375,8 @@ namespace Grandcypher
 						.ToList();
 					break;
 			}
+
+
 			var little = CollectedWeapon.Where(x =>//1퍼센트
 						x.SkillDetail1.Contains("小") ||
 						x.SkillDetail2.Contains("小"))
@@ -414,6 +417,20 @@ namespace Grandcypher
 						.ToList();
 
 
+			var Slittle = StrangthWeapon.Where(x =>//1퍼센트
+						x.SkillDetail1.Contains("小") ||
+						x.SkillDetail2.Contains("小"))
+						.ToList();
+			var Smiddle = StrangthWeapon.Where(x =>//3퍼센트
+						x.SkillDetail1.Contains("中") ||
+						x.SkillDetail2.Contains("中"))
+						.ToList();
+			var Slarge = StrangthWeapon.Where(x =>//6퍼센트
+						x.SkillDetail1.Contains("大") ||
+						x.SkillDetail2.Contains("大"))
+						.ToList();
+
+
 			var normalSum = little.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
 			normalSum += little.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
 
@@ -441,6 +458,15 @@ namespace Grandcypher
 			UnknownSum += Ularge.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
 			UnknownSum += Ularge.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
 
+			var StrangthSum = Slittle.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
+			StrangthSum += Slittle.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+
+			StrangthSum += Smiddle.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
+			StrangthSum += Smiddle.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+
+			StrangthSum += Slarge.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
+			StrangthSum += Slarge.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+
 			//소/중/대 공인으로 분류
 			SkillCounter = new Skills
 			{
@@ -453,32 +479,24 @@ namespace Grandcypher
 				Large = large.Count,
 				UnknownL = Ularge.Count,
 				MagnaL = Mlarge.Count,
+				StrS = Slittle.Count,
+				StrM = Smiddle.Count,
+				StrL = Slarge.Count,
 				NormalSkillLvCount = normalSum,
 				MagnaSkillLvCount = MagnaSum,
 				UnknownSkillLvCount = UnknownSum,
+				StrangthSkillCount = StrangthSum,
 			};
 
 			int TotalAtt = 0;
-			if (MainWeapon.SkillDetail1.Contains("小") || MainWeapon.SkillDetail2.Contains("小"))
-			{
-				if (MainWeapon.SkillName1.Contains("방진") || MainWeapon.SkillName2.Contains("방진")) SkillCounter.MagnaS++;
-				else if (MainWeapon.SkillName1.Contains("ATK") || MainWeapon.SkillName2.Contains("ATK")) SkillCounter.UnknownS++;
-				else SkillCounter.Small++;
-			}
-			else if (MainWeapon.SkillDetail1.Contains("中") || MainWeapon.SkillDetail2.Contains("中"))
-			{
-				if (MainWeapon.SkillName1.Contains("방진") || MainWeapon.SkillName2.Contains("방진")) SkillCounter.MagnaM++;
-				else if (MainWeapon.SkillName1.Contains("ATK") || MainWeapon.SkillName2.Contains("ATK")) SkillCounter.UnknownM++;
-				else SkillCounter.Middle++;
-			}
-			else if (MainWeapon.SkillDetail1.Contains("大") || MainWeapon.SkillDetail2.Contains("大"))
-			{
-				if (MainWeapon.SkillName1.Contains("방진") || MainWeapon.SkillName2.Contains("방진")) SkillCounter.MagnaL++;
-				else if (MainWeapon.SkillName1.Contains("ATK") || MainWeapon.SkillName2.Contains("ATK")) SkillCounter.UnknownL++;
-				else SkillCounter.Large++;
-			}
+			
 			if (test.deck.pc.param != null) TotalAtt = test.deck.pc.param.attack;
-			if (MainWeapon.SkillName1.Contains("단련의 공인")) SkillCounter.NovelWeaponCount++;
+			if (MainWeapon.SkillName1.Contains("단련의 공인"))
+			{
+				SkillCounter.NovelWeaponCount++;
+				MainWeapon.vSkillLv1 = Visibility.Collapsed;
+				MainWeapon.vSkillLv2 = Visibility.Collapsed;
+			}
 			foreach (var item in WeaponLists)
 			{
 				if (item.SkillName1 != null && item.SkillName1.Contains("단련의 공인"))
@@ -649,9 +667,15 @@ namespace Grandcypher
 		public int MagnaM { get; set; }
 		public int MagnaL { get; set; }
 
+		//strength
+		public int StrS { get; set; }
+		public int StrM { get; set; }
+		public int StrL { get; set; }
+
 		public int NormalSkillLvCount { get; set; }
 		public int MagnaSkillLvCount { get; set; }
 		public int UnknownSkillLvCount { get; set; }
+		public int StrangthSkillCount { get; set; }
 	}
 	public class NpcInfo
 	{

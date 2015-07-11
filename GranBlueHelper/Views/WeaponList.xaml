@@ -240,7 +240,7 @@
 								<Run Text="{Binding Total}" ToolTip="캐릭터 &amp; 무기 합산 공격력"/>
 								<Run Text="{Binding NormalWeapon}" Foreground="#FFE64E4E" ToolTip="기본 무기 배율"/>
 								<Run Text="{Binding MagnaWeapon}" Foreground="#FF09A26A" ToolTip="마그나 무기 배율"/>
-								<Run Text="{Binding UnknownWeapon}" Foreground="#FF5B5BE4" ToolTip="언노운 무기 배율"/>
+								<Run Text="{Binding UnknownWeapon}" Foreground="#FF5B5BE4" ToolTip="{Binding UnknownWeaponTooltip}"/>
 								<Run Text="{Binding Attribute}" ToolTip="속성 배율" Foreground="#FF7727D6"/>
 								<Run Text="{Binding NovelWeapon}" ToolTip="소설무기"/>
 								
