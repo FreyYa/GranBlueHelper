@@ -43,6 +43,7 @@ namespace Grandcypher
 		/// 기본 무기 리스트. 강화/리스트/창고가 포함됨
 		/// </summary>
 		/// <param name="oS"></param>
+		#region List
 		private void ListDetail(Session oS)
 		{
 			this.WeaponListLoad();
@@ -121,11 +122,13 @@ namespace Grandcypher
 			this.ListIsEnd = true;
 			this.LoadingEnd();
 		}
-		#region 덱 편성
+		#endregion
+
 		/// <summary>
-		/// 덱 편성 화면
+		/// 덱 편성 화면. 공인계산기 포함
 		/// </summary>
 		/// <param name="oS"></param>
+		#region 덱 편성
 		private void DeckDetail(Session oS)
 		{
 			this.ListIsEnd = false;
@@ -534,7 +537,7 @@ namespace Grandcypher
 		}
 		public void WeaponLvSave(int Id, int order, int Lv)
 		{
-			if (!this.DeckIsEnd) return;
+			if (!this.DeckIsEnd && !this.ListIsEnd) return;
 			string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 			if (!Directory.Exists(Path.Combine(MainFolder, "Bin")))
 				Directory.CreateDirectory(Path.Combine(MainFolder, "Bin"));
