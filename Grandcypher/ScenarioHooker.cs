@@ -37,9 +37,7 @@ namespace Grandcypher
 		}
 		public void SessionReader(Session oS)
 		{
-			if (oS.PathAndQuery.StartsWith("/quest/scenario") && oS.oResponse.MIMEType == "application/json")
-				QuestDetail(oS);
-			if (oS.PathAndQuery.StartsWith("/coopraid/scenario") && oS.oResponse.MIMEType == "application/json")
+			if (oS.PathAndQuery.Contains("/scenario") && oS.oResponse.MIMEType == "application/json")
 				QuestDetail(oS);
 		}
 		private void QuestDetail(Session oS)
