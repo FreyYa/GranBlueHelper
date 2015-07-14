@@ -34,7 +34,7 @@ namespace GranBlueHelper.ViewModels
 
 		#endregion
 
-		#region Libraries 変更通知プロパティ
+		#region Libraries
 
 		private IEnumerable<BindableTextViewModel> _Libraries;
 

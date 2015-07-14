@@ -50,9 +50,9 @@ namespace GranBlueHelper
 			WindowSizeSetter.Current.WindowSize = new WindowSize();
 			this.MainWindow.Show();
 
-			KListener = new KeyboardListener();
+			//KListener = new KeyboardListener();
 
-			KListener.KeyDown += new RawKeyEventHandler(KListener_KeyDown);
+			//KListener.KeyDown += new RawKeyEventHandler(KListener_KeyDown);
 
 			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
 			{
@@ -68,7 +68,7 @@ namespace GranBlueHelper
 		protected override void OnExit(ExitEventArgs e)
 		{
 			base.OnExit(e);
-			KListener.Dispose();
+			//KListener.Dispose();
 
 			GrandcypherClient.Current.Proxy.Quit();
 

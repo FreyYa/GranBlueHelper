@@ -183,7 +183,13 @@
 				</TabItem.Header>
 				<views:MessageView/>
 			</TabItem>
-			<TabItem x:Name="Settings" IsSelected="{Binding HassanSettings}">
+            <TabItem x:Name="Calc">
+                <TabItem.Header>
+                    <TextBlock Text="계산기" Width="70" Height="25" FontSize="16" TextAlignment="Center" FontWeight="Bold"/>
+                </TabItem.Header>
+                <views:ExpCal/>
+            </TabItem>
+            <TabItem x:Name="Settings" IsSelected="{Binding HassanSettings}">
 				<TabItem.Header>
 					<TextBlock Text="설정" Width="70" Height="25" FontSize="16" TextAlignment="Center" FontWeight="Bold"/>
 				</TabItem.Header>

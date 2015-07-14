@@ -62,7 +62,7 @@ namespace Grandcypher
 			{
 				UserIf temp = new UserIf();
 				temp.UserComment = new UserComment();
-				string userName, userComment,userLevel,userTime;
+				string userName, userComment, userLevel, userTime;
 
 				JProperty SkillProperty = item;
 				var Firsts = SkillProperty.First;
@@ -70,14 +70,14 @@ namespace Grandcypher
 				{
 					userName = "user_name";
 					userComment = "user_comment";
-					userLevel="user_level";
+					userLevel = "user_level";
 					userTime = "chat_time";
 				}
 				else
 				{
 					userName = "from_user_name";
 					userComment = "from_user_comment";
-					userLevel="from_user_level";
+					userLevel = "from_user_level";
 					userTime = "from_greet_time";
 				}
 				temp.from_user_name = (string)Firsts[userName];
