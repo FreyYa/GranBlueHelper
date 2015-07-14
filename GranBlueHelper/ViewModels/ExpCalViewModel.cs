@@ -190,6 +190,7 @@ namespace GranBlueHelper.ViewModels
 					this._IsWeapon = value;
 					if (value) this.ExpTable = EquipExpTable;
 					this.RaisePropertyChanged();
+					if (this.expInfo != null) this.UpdateExpData();
 				}
 			}
 		}
@@ -210,6 +211,7 @@ namespace GranBlueHelper.ViewModels
 					this._IsChar = value;
 					if (value) this.ExpTable = CharExpTable;
 					this.RaisePropertyChanged();
+					if (this.expInfo != null) this.UpdateExpData();
 				}
 			}
 		}

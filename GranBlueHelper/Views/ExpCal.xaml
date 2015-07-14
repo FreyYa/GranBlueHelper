@@ -43,9 +43,11 @@
         <StackPanel>
 			<StackPanel Orientation="Horizontal">
 				<RadioButton Content="무기/소환석" Foreground="Black" Margin="10,0"
-							 IsChecked="{Binding IsWeapon,Mode=TwoWay}"/>
+							 IsChecked="{Binding IsWeapon,Mode=TwoWay}"
+							 IsEnabled="False"/>
 				<RadioButton Content="캐릭터" Foreground="Black" Margin="10,0"
-							 IsChecked="{Binding IsChar,Mode=TwoWay}"/>
+							 IsChecked="{Binding IsChar,Mode=TwoWay}"
+							 IsEnabled="False"/>
 			</StackPanel>
 			<TextBlock/>
 			<StackPanel Orientation="Horizontal" Margin="5,0,5,5">
