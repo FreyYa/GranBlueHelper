@@ -52,7 +52,7 @@ namespace GranBlueHelper.Models
 
 		#endregion
 
-		#region SettingsVersion 変更通知プロパティ
+		#region SettingsVersion
 
 		private string _SettingsVersion;
 

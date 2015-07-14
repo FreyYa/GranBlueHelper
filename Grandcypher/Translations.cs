@@ -18,7 +18,7 @@ namespace Grandcypher
 		string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
 
-		#region JPTRsVersion 変更通知プロパティ
+		#region JPTRsVersion
 
 		private string _JPTRsVersion;
 
