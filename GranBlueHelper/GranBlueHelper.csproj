@@ -120,14 +120,10 @@
     <Compile Include="Models\WindowInformation.cs" />
     <Compile Include="Models\WindowSetter.cs" />
     <Compile Include="ViewModels\BindableTextViewModel.cs" />
-    <Compile Include="ViewModels\ExpCalViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MessageViewViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\WeaponListViewModel.cs" />
-    <Compile Include="Views\ExpCal.xaml.cs">
-      <DependentUpon>ExpCal.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MessageView.xaml.cs">
       <DependentUpon>MessageView.xaml</DependentUpon>
     </Compile>
@@ -143,10 +139,6 @@
     <Compile Include="Win32\IViewObject.cs" />
     <Compile Include="Win32\NativeMethods.cs" />
     <Compile Include="Win32\WinInet.cs" />
-    <Page Include="Views\ExpCal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

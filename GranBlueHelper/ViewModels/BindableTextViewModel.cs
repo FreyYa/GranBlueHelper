@@ -5,7 +5,7 @@ namespace GranBlueHelper.ViewModels
 {
 	public class BindableTextViewModel : ViewModel
 	{
-		#region Text
+		#region Text 変更通知プロパティ
 
 		private string _Text;
 
@@ -27,7 +27,7 @@ namespace GranBlueHelper.ViewModels
 
 	public class HyperlinkViewModel : BindableTextViewModel
 	{
-		#region Uri
+		#region Uri 変更通知プロパティ
 
 		private Uri _Uri;
 

@@ -28,7 +28,6 @@ namespace Grandcypher
 		public Translations Translations { get; private set; }
 		public WeaponHooker WeaponHooker { get; private set; }
 		public NoticeHooker NoticeHooker { get; private set; }
-		public EnhancementHooker EnhancementHooker { get; private set; }
 
 		private GrandcypherClient()
 		{
@@ -45,7 +44,6 @@ namespace Grandcypher
 			this.Translations = new Translations();
 			this.WeaponHooker = new WeaponHooker();
 			this.NoticeHooker = new NoticeHooker();
-			this.EnhancementHooker = new EnhancementHooker();
 		}
 		public void PostMan(string str)
 		{

@@ -6,7 +6,7 @@ namespace GranBlueHelper.ViewModels
 {
 	public class WindowViewModel : ViewModel
 	{
-		#region Title
+		#region Title 変更通知プロパティ
 
 		private string _Title = "Window";
 
@@ -25,7 +25,7 @@ namespace GranBlueHelper.ViewModels
 
 		#endregion
 
-		#region WindowState
+		#region WindowState 変更通知プロパティ
 
 		private WindowState _WindowState;
 
@@ -47,7 +47,7 @@ namespace GranBlueHelper.ViewModels
 
 		#endregion
 
-		#region IsMaximized
+		#region IsMaximized 変更通知プロパティ
 
 		private bool _IsMaximized;
 
@@ -66,7 +66,7 @@ namespace GranBlueHelper.ViewModels
 
 		#endregion
 
-		#region Left
+		#region Left 変更通知プロパティ
 
 		private double _Left;
 
@@ -85,7 +85,7 @@ namespace GranBlueHelper.ViewModels
 
 		#endregion
 
-		#region Top
+		#region Top 変更通知プロパティ
 
 		private double _Top;
 
@@ -104,7 +104,7 @@ namespace GranBlueHelper.ViewModels
 
 		#endregion
 
-		#region Width
+		#region Width 変更通知プロパティ
 
 		private double _Width;
 
@@ -123,7 +123,7 @@ namespace GranBlueHelper.ViewModels
 
 		#endregion
 
-		#region Height
+		#region Height 変更通知プロパティ
 
 		private double _Height;
 
@@ -142,7 +142,7 @@ namespace GranBlueHelper.ViewModels
 
 		#endregion
 
-		#region IsActive
+		#region IsActive 変更通知プロパティ
 
 		private bool _IsActive;
 
@@ -161,7 +161,7 @@ namespace GranBlueHelper.ViewModels
 
 		#endregion
 
-		#region CanMaximize
+		#region CanMaximize 変更通知プロパティ
 
 		private bool _CanMaximize = true;
 
@@ -180,7 +180,7 @@ namespace GranBlueHelper.ViewModels
 
 		#endregion
 
-		#region CanMinimize
+		#region CanMinimize 変更通知プロパティ
 
 		private bool _CanMinimize = true;
 
@@ -199,7 +199,7 @@ namespace GranBlueHelper.ViewModels
 
 		#endregion
 
-		#region CanNormalize
+		#region CanNormalize 変更通知プロパティ
 
 		private bool _CanNormalize;
 
@@ -218,7 +218,7 @@ namespace GranBlueHelper.ViewModels
 
 		#endregion
 
-		#region Overlay
+		#region Overlay 変更通知プロパティ
 
 		private ImageSource _Overlay;
 
