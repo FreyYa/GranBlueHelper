@@ -44,17 +44,19 @@
 			<StackPanel Orientation="Horizontal">
 				<RadioButton Content="무기/소환석" Foreground="Black" Margin="10,0"
 							 IsChecked="{Binding IsWeapon,Mode=TwoWay}"
-							 IsEnabled="False"/>
+							 IsEnabled="{Binding IsManual}"/>
 				<RadioButton Content="캐릭터" Foreground="Black" Margin="10,0"
 							 IsChecked="{Binding IsChar,Mode=TwoWay}"
-							 IsEnabled="False"/>
+							 IsEnabled="{Binding IsManual}"/>
+				<CheckBox Content="수동계산" Foreground="Black" IsChecked="{Binding IsManual}"/>
 			</StackPanel>
 			<TextBlock/>
 			<StackPanel Orientation="Horizontal" Margin="5,0,5,5">
                 <TextBlock Text="현재 레벨"/>
                 <metro:PromptComboBox Margin="10,0" Prompt="" MinWidth="50"
 									  ItemsSource="{Binding Source={StaticResource CharLevelRange}}"
-									  SelectedValue="{Binding CurrentLevel, Mode=TwoWay}"/>
+									  SelectedValue="{Binding CurrentLevel, Mode=TwoWay}"
+									  IsEnabled="{Binding IsManual}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="5,0,5,5">
                 <TextBlock Text="목표 레벨"/>
@@ -99,7 +101,9 @@
 			<TextBlock Text="※엔젤웨폰(R)의 기본경험치는 100, 아크엔젤웨폰(SR)의 기본경험치는 500입니다."/>
 			<TextBlock Text="※동종무기의 경우 1.5배의 보정을 받아 획득경험치는 각각 150(R), 750(SR)이 됩니다."/>
 			<TextBlock Text="※엔젤소환석도 기본경험치는 동일하지만 빛속성이기때문에 빛속성 소환석에 먹일때 1.5배 보정을 받습니다"/>
-			<TextBlock Text="※캐릭터도 빛속성의 경우 엔젤무기를 먹일때 1.5배 보정을 받습니다"/>
+			<TextBlock Text="※빛속성 캐릭터의 경우에도 엔젤무기를 먹일때 1.5배 보정을 받습니다"/>
+			<TextBlock/>
+			<TextBlock Text="※수동계산이 아닌경우 현재레벨,경험치 테이블 종류 변경이 불가능합니다. 수동계산에서는 실제 경험치를 반영하지 않습니다."/>
 		</StackPanel>
         
     </Grid>

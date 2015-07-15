@@ -51,8 +51,10 @@ namespace GranBlueHelper.ViewModels
 				{
 					this._CurrentLevel = value;
 					this.TargetLevel = Math.Max(this.TargetLevel, Math.Min(value + 1, this.MaxLevel));
+					if (IsManual) this.CurrentExp = ExpTable[value];
 					this.RaisePropertyChanged();
-					this.UpdateExpData();
+					if (this.expInfo != null && !IsManual) this.UpdateExpData();
+					else this.ManualCalc();
 				}
 			}
 		}
@@ -74,7 +76,8 @@ namespace GranBlueHelper.ViewModels
 					this.TargetExp = ExpTable[value];
 					this.CurrentLevel = Math.Min(this.CurrentLevel, Math.Max(value - 1, 1));
 					this.RaisePropertyChanged();
-					this.UpdateExpData();
+					if (this.expInfo != null && !IsManual) this.UpdateExpData();
+					else this.ManualCalc();
 				}
 			}
 		}
@@ -190,7 +193,8 @@ namespace GranBlueHelper.ViewModels
 					this._IsWeapon = value;
 					if (value) this.ExpTable = EquipExpTable;
 					this.RaisePropertyChanged();
-					if (this.expInfo != null) this.UpdateExpData();
+					if (this.expInfo != null && !IsManual) this.UpdateExpData();
+					else this.ManualCalc();
 				}
 			}
 		}
@@ -211,7 +215,8 @@ namespace GranBlueHelper.ViewModels
 					this._IsChar = value;
 					if (value) this.ExpTable = CharExpTable;
 					this.RaisePropertyChanged();
-					if (this.expInfo != null) this.UpdateExpData();
+					if (this.expInfo != null&&!IsManual)this.UpdateExpData();
+					else this.ManualCalc();
 				}
 			}
 		}
@@ -231,7 +236,29 @@ namespace GranBlueHelper.ViewModels
 				{
 					this._IsMultiply = value;
 					this.RaisePropertyChanged();
-					if (this.expInfo != null) this.UpdateExpData();
+					if (this.expInfo != null && !IsManual) this.UpdateExpData();
+					else this.ManualCalc();
+				}
+			}
+		}
+
+		#endregion
+
+		#region IsManual
+
+		private bool _IsManual;
+
+		public bool IsManual
+		{
+			get { return this._IsManual; }
+			private set
+			{
+				if (this._IsManual != value)
+				{
+					this._IsManual = value;
+					this.RaisePropertyChanged();
+					if (value) this.ManualCalc();
+					else if (this.expInfo != null) this.UpdateExpData();
 				}
 			}
 		}
@@ -244,7 +271,16 @@ namespace GranBlueHelper.ViewModels
 
 		public ExpCalViewModel()
 		{
+			this.IsManual = false;
+			this.IsWeapon = true;
 			this.Read();
+		}
+		private void ManualCalc()
+		{
+			this.MaxLevel = 100;
+			this.CurrentLevel = 1;
+
+			this.CalcExp();
 		}
 		private void UpdateExpData()
 		{
@@ -255,6 +291,10 @@ namespace GranBlueHelper.ViewModels
 			this.CurrentExp = this.expInfo.exp;
 			this.CurrentLevel = this.expInfo.level;
 
+			this.CalcExp();
+		}
+		private void CalcExp()
+		{
 			this.RemainingExp = ExpTable[TargetLevel] - this.CurrentExp;
 			if (IsMultiply) this.AngelWeapon = Convert.ToInt32(Math.Ceiling((double)RemainingExp / (100d * 1.5d)));
 			else this.AngelWeapon = Convert.ToInt32(Math.Ceiling((double)RemainingExp / 100d));
@@ -266,21 +306,27 @@ namespace GranBlueHelper.ViewModels
 		{
 			GrandcypherClient.Current.EnhancementHooker.WeaponReadStart += () =>
 			{
-				this.IsWeapon = true;
-				this.IsChar = false;
+				if (!IsManual)
+				{
+					this.IsWeapon = true;
+					this.IsChar = false;
+				}
 			};
 			GrandcypherClient.Current.EnhancementHooker.WeaponReadEnd += () =>
 			{
-				this.UpdateExpData();
+				if (!IsManual) this.UpdateExpData();
 			};
 			GrandcypherClient.Current.EnhancementHooker.CharReadStart += () =>
 			{
-				this.IsChar = true;
-				this.IsWeapon = false;
+				if (!IsManual)
+				{
+					this.IsChar = true;
+					this.IsWeapon = false;
+				}
 			};
 			GrandcypherClient.Current.EnhancementHooker.CharReadEnd += () =>
 			{
-				this.UpdateExpData();
+				if (!IsManual) this.UpdateExpData();
 			};
 		}
 	}
