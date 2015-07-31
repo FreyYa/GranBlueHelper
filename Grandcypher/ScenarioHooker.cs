@@ -197,7 +197,7 @@ namespace Grandcypher
 				{
 					bool SpanRemain = true;
 
-					string url = String.Format("http://www.google.com/translate_t?hl=ko&ie=UTF8&text={0}&langpair=ja|ko", input);
+					string url = String.Format("https://translate.google.com/?hl=ko&ie=UTF8&text={0}&langpair=ja%7Cko#ja/ko/{1}", input,input);
 
 					WebClient webClient = new WebClient();
 
