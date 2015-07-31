@@ -196,13 +196,10 @@ namespace Grandcypher
 				try
 				{
 					bool SpanRemain = true;
-
-					string url = String.Format("https://translate.google.com/?hl=ko&ie=UTF8&text={0}&langpair=ja%7Cko#ja/ko/{1}", input,input);
+					string url = String.Format("https://translate.google.com/?hl=ko&ie=UTF8&text={0}&langpair=ja%7Cko#ja/ko/{1}", HttpUtility.UrlEncode(input), HttpUtility.UrlEncode(input));
 
 					WebClient webClient = new WebClient();
-
 					string result = webClient.DownloadString(url);
-
 					int temp1 = result.IndexOf("id=result_box") - 6;//span시작
 
 					result = result.Substring(result.IndexOf("id=result_box") - 6, result.Count() - temp1);//span시작부터 문서끝까지
