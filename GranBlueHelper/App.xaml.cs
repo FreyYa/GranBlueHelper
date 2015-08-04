@@ -42,7 +42,7 @@ namespace GranBlueHelper
 			ProductInfo = new ProductInfo();
 
 			GrandcypherClient.Current.Proxy.StartUp(Settings.Current.portNum);
-
+			GrandcypherClient.Current.WeaponHooker.MasterInfoListLoad();
 			ViewModelRoot = new MainWindowViewModel();
 
 			this.MainWindow = new MainWindow { DataContext = ViewModelRoot };

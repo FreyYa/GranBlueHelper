@@ -21,6 +21,7 @@ namespace Grandcypher
 		public EventHandler ProgressBar;
 		#endregion
 		public LimitedValue ProgressStatus { get; set; }
+		public Dictionary<int, WeaponInfo> MasterBinList { get; set; }
 		public List<WeaponInfo> WeaponLists { get; set; }
 		public List<NpcInfo> NPCList { get; set; }
 		public WeaponInfo MainWeapon { get; set; }
@@ -228,46 +229,49 @@ namespace Grandcypher
 				}
 				deck.MasterId = (int)master["id"];
 				deck.ParamId = (int)param["id"];//무기 스킬레벨등을 저장하고 구별하기 위한 부분
-				//if (master["attribute"].ToString() != "")
-				//	deck.Attribute = (int)master["attribute"];
 
 				deck.ItemName = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponList, "", TranslateKind.Google, deck.MasterId);
+				if (deck.ItemName == string.Empty)
+				{
+					deck = MasterInfoLoad(deck.MasterId);
+				}
+				else
+				{
+					deck.SkillName1 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.FirstSkillName, "", TranslateKind.Google, deck.MasterId);
 
-				deck.SkillName1 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.FirstSkillName, "", TranslateKind.Google, deck.MasterId);
-				//if (jobject["skill1"].HasValues)
-				//	deck.SkillDetail1 = (string)jobject["skill1"]["description"];
-				deck.attribute = (int)master["attribute"];
-				deck.SkillName2 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.LastSkillName, "", TranslateKind.Google, deck.MasterId);
-				//if (jobject["skill2"].HasValues)
-				//	deck.SkillDetail2 = (string)jobject["skill2"]["description"];
+					deck.attribute = (int)master["attribute"];
+					deck.SkillName2 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.LastSkillName, "", TranslateKind.Google, deck.MasterId);
 
-				deck.SkillDetail1 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.FirstSkillDetail, "", TranslateKind.Google, deck.MasterId);
-				deck.SkillDetail2 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.LastSkillDetail, "", TranslateKind.Google, deck.MasterId);
-				deck.Element = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.Element, "", TranslateKind.Google, deck.MasterId);
-				deck.Kind = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponType, "", TranslateKind.Google, deck.MasterId);
-				//1=공격 2=체력Up 
-				if (deck.SkillDetail1.Contains("공격력") && !deck.SkillDetail1.Contains("HP상승"))
-					deck.SkillType1 = 1;
-				else if (deck.SkillDetail1.Contains("HP상승") && !deck.SkillDetail1.Contains("공격력"))
-					deck.SkillType1 = 2;
+					deck.SkillDetail1 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.FirstSkillDetail, "", TranslateKind.Google, deck.MasterId);
+					deck.SkillDetail2 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.LastSkillDetail, "", TranslateKind.Google, deck.MasterId);
+					deck.Element = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.Element, "", TranslateKind.Google, deck.MasterId);
+					deck.Kind = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponType, "", TranslateKind.Google, deck.MasterId);
+					//1=공격 2=체력Up 
+					if (deck.SkillDetail1.Contains("공격력") && !deck.SkillDetail1.Contains("HP상승"))
+						deck.SkillType1 = 1;
+					else if (deck.SkillDetail1.Contains("HP상승") && !deck.SkillDetail1.Contains("공격력"))
+						deck.SkillType1 = 2;
 
 
-				if (deck.SkillDetail2.Contains("공격력") && !deck.SkillDetail2.Contains("HP상승"))
-					deck.SkillType2 = 1;
-				else if (deck.SkillDetail2.Contains("HP상승") && !deck.SkillDetail2.Contains("공격력"))
-					deck.SkillType2 = 2;
-				deck.SkillLv1 = WeaponLvLoad(deck.ParamId, 1);
-				deck.SkillLv2 = WeaponLvLoad(deck.ParamId, 2);
+					if (deck.SkillDetail2.Contains("공격력") && !deck.SkillDetail2.Contains("HP상승"))
+						deck.SkillType2 = 1;
+					else if (deck.SkillDetail2.Contains("HP상승") && !deck.SkillDetail2.Contains("공격력"))
+						deck.SkillType2 = 2;
+					deck.SkillLv1 = WeaponLvLoad(deck.ParamId, 1);
+					deck.SkillLv2 = WeaponLvLoad(deck.ParamId, 2);
 
-				if (deck.SkillName1 != string.Empty && deck.SkillName1 != null) deck.vSkillLv1 = Visibility.Visible;
-				else deck.vSkillLv1 = Visibility.Collapsed;
-				if (deck.SkillName2 != string.Empty && deck.SkillName2 != null) deck.vSkillLv2 = Visibility.Visible;
-				else deck.vSkillLv2 = Visibility.Collapsed;
+					if (deck.SkillName1 != string.Empty && deck.SkillName1 != null) deck.vSkillLv1 = Visibility.Visible;
+					else deck.vSkillLv1 = Visibility.Collapsed;
+					if (deck.SkillName2 != string.Empty && deck.SkillName2 != null) deck.vSkillLv2 = Visibility.Visible;
+					else deck.vSkillLv2 = Visibility.Collapsed;
+				}
+
 				if (i == 1)
 				{
 					MainWeapon = deck;
 				}
 				else WeaponLists.Add(deck);
+
 				this.ProgressStatus.Current++;
 				this.ProgressBar();
 			}
@@ -489,7 +493,7 @@ namespace Grandcypher
 			};
 
 			int TotalAtt = 0;
-			
+
 			if (test.deck.pc.param != null) TotalAtt = test.deck.pc.param.attack;
 			if (MainWeapon.SkillName1.Contains("단련의 공인"))
 			{
@@ -514,6 +518,96 @@ namespace Grandcypher
 		{
 			if (this.DeckIsEnd) this.DeckLoadingEnd();
 			if (this.ListIsEnd) this.LoadingEnd();
+		}
+		/// <summary>
+		/// 마스터 리스트를 불러온다
+		/// </summary>
+		public void MasterInfoListLoad()
+		{
+			string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+			if (!Directory.Exists(Path.Combine(MainFolder, "Bin")))
+				Directory.CreateDirectory(Path.Combine(MainFolder, "Bin"));
+
+			var binPath = Path.Combine(MainFolder, "Bin", "MasterWeapon.bin");
+
+			if (File.Exists(binPath))
+			{
+				var items = new Dictionary<int, WeaponInfo>();
+
+				var bytes = File.ReadAllBytes(binPath);
+				using (var memoryStream = new MemoryStream(bytes))
+				using (var reader = new BinaryReader(memoryStream))
+				{
+					while (memoryStream.Position < memoryStream.Length)
+					{
+						int MasterID = reader.ReadInt32();
+						var item = new WeaponInfo
+						{
+							attribute = reader.ReadInt32(),
+							WeaponType = reader.ReadInt32(),
+							ItemName = reader.ReadString(),
+							SkillName1 = reader.ReadString(),
+							SkillName2 = reader.ReadString(),
+						};
+						items.Add(MasterID, item);
+					}
+					memoryStream.Dispose();
+					memoryStream.Close();
+					reader.Dispose();
+					reader.Close();
+				}
+				MasterBinList = new Dictionary<int, WeaponInfo>(items);
+			}
+		}
+		/// <summary>
+		/// 어플리케이션 구동시 불러온 마스터 리스트를 기반으로 데이터를 검색해서 자동으로 세팅.
+		/// </summary>
+		/// <param name="MasterId"></param>
+		/// <returns></returns>
+		private WeaponInfo MasterInfoLoad(int MasterId)
+		{
+			if (this.MasterBinList == null)
+			{
+				return new WeaponInfo//스킬 리스트에 직접 접근하지 못하므로 일단 스킬명은 String.Empty로 설정
+				{
+					attribute = 1,
+					Element = "화",
+					WeaponType = 1,
+					Kind = "검",
+					ItemName = MasterId.ToString(),
+					SkillName1 = string.Empty,
+					SkillName2 = string.Empty,
+					MaualMode = Visibility.Visible,
+					AutoMode = Visibility.Collapsed,
+					vSkillLv1 = Visibility.Collapsed,
+					vSkillLv2 = Visibility.Collapsed,
+				};
+			}
+			if (this.MasterBinList.ContainsKey(MasterId))
+			{
+				return this.MasterBinList[MasterId];
+			}
+			else//해당하는 마스터ID가 없는경우 빈 데이터를 출력한다.
+			{
+				return new WeaponInfo//스킬 리스트에 직접 접근하지 못하므로 일단 스킬명은 String.Empty로 설정
+				{
+					attribute = 1,
+					WeaponType = 1,
+					ItemName = MasterId.ToString(),
+					SkillName1 = string.Empty,
+					SkillName2 = string.Empty,
+					MaualMode = Visibility.Visible,
+					AutoMode = Visibility.Collapsed,
+				};
+			}
+		}
+		/// <summary>
+		/// UI에서 수동으로 설정한 데이터를 bin파일에 저장한다.
+		/// </summary>
+		/// <param name="data"></param>
+		private void MasterInfoSave(WeaponInfo data)
+		{
+
 		}
 		public int WeaponLvLoad(int Id, int order)
 		{
@@ -698,9 +792,10 @@ namespace Grandcypher
 		public string Kind { get; set; }
 		public int SkillType1 { get; set; }
 		public int SkillType2 { get; set; }
-		//public int Attribute { get; set; }
+		public int WeaponType { get; set; }
 		public bool is_used { get; set; }
-
+		public Visibility MaualMode { get; set; }
+		public Visibility AutoMode { get; set; }
 		private int _SkillLv1;
 		public int SkillLv1
 		{

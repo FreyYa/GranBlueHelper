@@ -43,7 +43,7 @@ namespace Grandcypher
 			{
 				if (File.Exists(Path.Combine(MainFolder, "Translations", "JPTRs.xml"))) JPTRs = XDocument.Load(Path.Combine(MainFolder, "Translations", "JPTRs.xml"));
 				if (File.Exists(Path.Combine(MainFolder, "Translations", "WeaponList.xml"))) WeaponLists = XDocument.Load(Path.Combine(MainFolder, "Translations", "WeaponList.xml"));
-				if (File.Exists(Path.Combine(MainFolder, "Translations", "SkillDetail.xml"))) WeapokSkills = XDocument.Load(Path.Combine(MainFolder, "Translations", "SkillDetail.xml"));
+				if (File.Exists(Path.Combine(MainFolder, "Translations", "SkillList.xml"))) WeapokSkills = XDocument.Load(Path.Combine(MainFolder, "Translations", "SkillList.xml"));
 
 				GetVersions();
 			}
@@ -108,7 +108,7 @@ namespace Grandcypher
 				{
 					if (GrandcypherClient.Current.Updater.JPTRsUpdate)
 					{
-						this.JPTRs = XDocument.Load(Path.Combine(MainFolder, "Translations", "SkillDetail.xml"));
+						this.JPTRs = XDocument.Load(Path.Combine(MainFolder, "Translations", "SkillList.xml"));
 						GrandcypherClient.Current.Updater.JPTRsUpdate = false;
 					}
 					return JPTRs.Descendants("Skill");
@@ -143,6 +143,18 @@ namespace Grandcypher
 							return el.Attribute(TRChildElement).Value;
 						}
 					}
+					else if (type == TranslationType.FirstSkillName || type == TranslationType.LastSkillName)
+					{
+						JPChildElement = "JpName";
+						TRChildElement = "KrName";
+
+						IEnumerable<XElement> OldFoundTranslation = TranslationList.Where(b => b.Attribute(JPChildElement).Value.Equals(JPString));
+
+						foreach (XElement el in OldFoundTranslation)
+						{
+							return el.Attribute(TRChildElement).Value;
+						}
+					}
 					else
 					{
 						IEnumerable<XElement> OldFoundTranslation = TranslationList.Where(b => b.Element(JPChildElement).Value.Equals(JPString));//string 비교검색
@@ -153,7 +165,7 @@ namespace Grandcypher
 					}
 
 #if DEBUG
-				Debug.WriteLine(string.Format("Can't find Translation: {0,-20} {1}", JPString, MasterId));
+					Debug.WriteLine(string.Format("Can't find Translation: {0,-20} {1}", JPString, MasterId));
 #endif
 				}
 				else
