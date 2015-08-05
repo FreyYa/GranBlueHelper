@@ -377,7 +377,7 @@ namespace GranBlueHelper.ViewModels
 		/// <summary>
 		/// 통상 0  언노운 1 마그나 2 캐릭터 3
 		/// </summary>
-		public static Dictionary<string, int> BlessingTable = new Dictionary<string, int> 
+		public static Dictionary<string, int> BlessingTable = new Dictionary<string, int>
 		{
 			{"속성", 0}, {"언노운", 1}, {"마그나", 2},{"캐릭터",3},
 		};

@@ -20,6 +20,7 @@ namespace Grandcypher
 		public EventHandler DeckLoadingEnd;
 		public EventHandler ProgressBar;
 		#endregion
+
 		public LimitedValue ProgressStatus { get; set; }
 		public Dictionary<int, WeaponInfo> MasterBinList { get; set; }
 		public List<WeaponInfo> WeaponLists { get; set; }
@@ -237,6 +238,8 @@ namespace Grandcypher
 				}
 				else
 				{
+					deck.AutoMode = Visibility.Visible;
+					deck.ManualMode = Visibility.Hidden;
 					deck.SkillName1 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.FirstSkillName, "", TranslateKind.Google, deck.MasterId);
 
 					deck.attribute = (int)master["attribute"];
@@ -577,8 +580,8 @@ namespace Grandcypher
 					ItemName = MasterId.ToString(),
 					SkillName1 = string.Empty,
 					SkillName2 = string.Empty,
-					MaualMode = Visibility.Visible,
-					AutoMode = Visibility.Collapsed,
+					ManualMode = Visibility.Visible,
+					AutoMode = Visibility.Hidden,
 					vSkillLv1 = Visibility.Collapsed,
 					vSkillLv2 = Visibility.Collapsed,
 				};
@@ -596,7 +599,7 @@ namespace Grandcypher
 					ItemName = MasterId.ToString(),
 					SkillName1 = string.Empty,
 					SkillName2 = string.Empty,
-					MaualMode = Visibility.Visible,
+					ManualMode = Visibility.Visible,
 					AutoMode = Visibility.Collapsed,
 				};
 			}
@@ -605,7 +608,7 @@ namespace Grandcypher
 		/// UI에서 수동으로 설정한 데이터를 bin파일에 저장한다.
 		/// </summary>
 		/// <param name="data"></param>
-		private void MasterInfoSave(WeaponInfo data)
+		public void MasterInfoSave(WeaponInfo data)
 		{
 
 		}
@@ -780,6 +783,28 @@ namespace Grandcypher
 	}
 	public class WeaponInfo
 	{
+		#region attribute List
+		private static Dictionary<string, int> AttributeTable = new Dictionary<string, int>
+		{
+			{"화",1 }, {"수",2 }, {"토",3 }, {"풍",4 }, {"빛",5 }, {"암",6 },
+		};
+		public IEnumerable<string> AttributeList
+		{
+			get { return AttributeTable.Keys.ToList(); }
+		}
+		#endregion
+
+		#region WeaponType List
+		private static Dictionary<string, int> WeaponTypeTable = new Dictionary<string, int>
+		{
+			{"검",1 }, {"단검",2 }, {"창",3 }, {"도끼",4 }, {"지팡이",5 }, {"총",6 }, {"권갑",7 }, {"활",8 }, {"악기",9 }, {"도",10 }, {"소재",11 },
+		};
+		public IEnumerable<string> WeaponTypeList
+		{
+			get { return WeaponTypeTable.Keys.ToList(); }
+		}
+		#endregion
+
 		public int MasterId { get; set; }
 		public int ParamId { get; set; }
 		public int attribute { get; set; }
@@ -788,13 +813,42 @@ namespace Grandcypher
 		public string SkillDetail1 { get; set; }
 		public string SkillName2 { get; set; }
 		public string SkillDetail2 { get; set; }
-		public string Element { get; set; }
-		public string Kind { get; set; }
+
+		#region Element
+		private string _Element;
+		public string Element
+		{
+			get { return this._Element; }
+			set
+			{
+				if (this._Element == value) return;
+				this._Element = value;
+				GrandcypherClient.Current.WeaponHooker.Reload();
+				GrandcypherClient.Current.WeaponHooker.MasterInfoSave(this);
+			}
+		}
+		#endregion
+
+		#region Kind
+		private string _Kind;
+		public string Kind
+		{
+			get { return this._Kind; }
+			set
+			{
+				if (this._Kind == value) return;
+				this._Kind = value;
+				GrandcypherClient.Current.WeaponHooker.Reload();
+				GrandcypherClient.Current.WeaponHooker.MasterInfoSave(this);
+			}
+		}
+		#endregion
+
 		public int SkillType1 { get; set; }
 		public int SkillType2 { get; set; }
 		public int WeaponType { get; set; }
 		public bool is_used { get; set; }
-		public Visibility MaualMode { get; set; }
+		public Visibility ManualMode { get; set; }
 		public Visibility AutoMode { get; set; }
 		private int _SkillLv1;
 		public int SkillLv1
