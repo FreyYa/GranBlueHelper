@@ -49,11 +49,11 @@ namespace GranBlueHelper
 
 			WindowSizeSetter.Current.WindowSize = new WindowSize();
 			this.MainWindow.Show();
-
+#if !DEBUG
 			KListener = new KeyboardListener();
 
 			KListener.KeyDown += new RawKeyEventHandler(KListener_KeyDown);
-
+#endif
 			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
 			{
 				float dpiX = graphics.DpiX;
@@ -68,8 +68,9 @@ namespace GranBlueHelper
 		protected override void OnExit(ExitEventArgs e)
 		{
 			base.OnExit(e);
+#if !DEBUG
 			KListener.Dispose();
-
+#endif
 			GrandcypherClient.Current.Proxy.Quit();
 
 			Settings.Current.Save();
@@ -80,24 +81,24 @@ namespace GranBlueHelper
 			{
 				GrandcypherClient.Current.GlobalKeyCore.TakeScreenShot();
 			}
-			#region .Do(debug)
+#region .Do(debug)
 #if DEBUG
 			Console.WriteLine(args.Key.ToString());
 #endif
-			#endregion
+#endregion
 
 		}
 
 		private static void ReportException(object sender, Exception exception)
 		{
-			#region const
+#region const
 			const string messageFormat = @"
 ===========================================================
 ERROR, date = {0}, sender = {1},
 {2}
 ";
 			const string path = "error.log";
-			#endregion
+#endregion
 
 			try
 			{
