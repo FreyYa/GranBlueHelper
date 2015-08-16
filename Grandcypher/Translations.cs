@@ -14,7 +14,7 @@ namespace Grandcypher
 		private XDocument JPTRs;
 		private XDocument Scenarios;
 		private XDocument WeaponLists;
-		private XDocument WeapokSkills;
+		private XDocument WeaponSkills;
 		string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
 
@@ -37,13 +37,51 @@ namespace Grandcypher
 
 		#endregion
 
+		#region SkillListVersion
+
+		private string _SkillListVersion;
+
+		public string SkillListVersion
+		{
+			get { return _SkillListVersion; }
+			set
+			{
+				if (_SkillListVersion != value)
+				{
+					_SkillListVersion = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
+		#region WeaponListVersion
+
+		private string _WeaponListVersion;
+
+		public string WeaponListVersion
+		{
+			get { return _JPTRsVersion; }
+			set
+			{
+				if (_WeaponListVersion != value)
+				{
+					_WeaponListVersion = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
 		internal Translations()
 		{
 			try
 			{
 				if (File.Exists(Path.Combine(MainFolder, "Translations", "JPTRs.xml"))) JPTRs = XDocument.Load(Path.Combine(MainFolder, "Translations", "JPTRs.xml"));
 				if (File.Exists(Path.Combine(MainFolder, "Translations", "WeaponList.xml"))) WeaponLists = XDocument.Load(Path.Combine(MainFolder, "Translations", "WeaponList.xml"));
-				if (File.Exists(Path.Combine(MainFolder, "Translations", "SkillList.xml"))) WeapokSkills = XDocument.Load(Path.Combine(MainFolder, "Translations", "SkillList.xml"));
+				if (File.Exists(Path.Combine(MainFolder, "Translations", "SkillList.xml"))) WeaponSkills = XDocument.Load(Path.Combine(MainFolder, "Translations", "SkillList.xml"));
 
 				GetVersions();
 			}
@@ -52,10 +90,28 @@ namespace Grandcypher
 		private void GetVersions()
 		{
 			if (JPTRs != null)
+			{
 				if (JPTRs.Root.Attribute("Version") != null) JPTRsVersion = JPTRs.Root.Attribute("Version").Value;
 				else JPTRsVersion = "알 수 없음";
+			}
 			else
 				JPTRsVersion = "없음";
+
+			if (WeaponLists != null)
+			{
+				if (WeaponLists.Root.Attribute("Version") != null) WeaponListVersion = WeaponLists.Root.Attribute("Version").Value;
+				else WeaponListVersion = "알 수 없음";
+			}
+			else
+				WeaponListVersion = "없음";
+
+			if (WeaponSkills != null)
+			{
+				if (WeaponSkills.Root.Attribute("Version") != null) SkillListVersion = WeaponSkills.Root.Attribute("Version").Value;
+				else SkillListVersion = "알 수 없음";
+			}
+			else
+				SkillListVersion = "없음";
 		}
 		private IEnumerable<XElement> GetTranslationList(TranslationType type, TranslateKind sitetype = TranslateKind.Google)
 		{
@@ -104,18 +160,53 @@ namespace Grandcypher
 			}
 			else if (TranslationType.SkillDetails == type)
 			{
-				if (JPTRs != null)
+				if (WeaponSkills != null)
 				{
 					if (GrandcypherClient.Current.Updater.JPTRsUpdate)
 					{
-						this.JPTRs = XDocument.Load(Path.Combine(MainFolder, "Translations", "SkillList.xml"));
-						GrandcypherClient.Current.Updater.JPTRsUpdate = false;
+						this.WeaponSkills = XDocument.Load(Path.Combine(MainFolder, "Translations", "SkillList.xml"));
+						GrandcypherClient.Current.Updater.SkillListUpdate = false;
 					}
-					return JPTRs.Descendants("Skill");
+					return WeaponSkills.Descendants("Skill");
 				}
 				return null;
 			}
 			else return null;
+		}
+		public List<string> GetSkillList()
+		{
+			List<string> temp = new List<string>();
+			IEnumerable<XElement> TranslationList = GetTranslationList(TranslationType.SkillDetails);
+			foreach (var item in TranslationList)
+			{
+				temp.Add(item.Element("Detail").Value);
+			}
+
+			temp.Sort(delegate (string x, string y)
+			{
+				return x.CompareTo(y);
+			});
+			return temp;
+		}
+		public string GetSkillInfo(string SkillDetail, bool IsDetailFind = false)
+		{
+			var start = "Detail";
+			var Target = "KrName";
+			if (IsDetailFind)
+			{
+				start = "KrName";
+				Target = "Detail";
+			}
+
+			IEnumerable<XElement> TranslationList = GetTranslationList(TranslationType.SkillDetails);
+
+
+
+			foreach (var item in TranslationList)
+			{
+				if (item.Element(start).Value == SkillDetail) return item.Element(Target).Value;
+			}
+			return string.Empty;
 		}
 		public string GetTranslation(TranslationType type, string JPString, TranslateKind sitekind, int MasterId = -1)
 		{

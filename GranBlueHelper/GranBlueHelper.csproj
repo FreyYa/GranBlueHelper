@@ -122,11 +122,15 @@
     <Compile Include="ViewModels\BindableTextViewModel.cs" />
     <Compile Include="ViewModels\ExpCalViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\MasterInfoModifyViewModel.cs" />
     <Compile Include="ViewModels\MessageViewViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\WeaponListViewModel.cs" />
     <Compile Include="Views\ExpCal.xaml.cs">
       <DependentUpon>ExpCal.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MasterInfoModify.xaml.cs">
+      <DependentUpon>MasterInfoModify.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MessageView.xaml.cs">
       <DependentUpon>MessageView.xaml</DependentUpon>
@@ -160,6 +164,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\MasterInfoModify.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MessageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

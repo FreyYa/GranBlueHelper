@@ -43,24 +43,37 @@ namespace GranBlueHelper
 
 			GrandcypherClient.Current.Proxy.StartUp(Settings.Current.portNum);
 			GrandcypherClient.Current.WeaponHooker.MasterInfoListLoad();
+			if(GrandcypherClient.Current.Updater.IsOnlineVersionGreater(0, ProductInfo.Version.ToString()))
+			{
+
+			}
+			if (GrandcypherClient.Current.Updater.UpdateTranslations(AppSettings.Default.XMLTransUrl.AbsoluteUri, GrandcypherClient.Current.Translations) > 0)
+			{
+
+			}
 			ViewModelRoot = new MainWindowViewModel();
 
 			this.MainWindow = new MainWindow { DataContext = ViewModelRoot };
 
 			WindowSizeSetter.Current.WindowSize = new WindowSize();
+
 			this.MainWindow.Show();
+			#region .Do(debug)
 #if !DEBUG
 			KListener = new KeyboardListener();
 
 			KListener.KeyDown += new RawKeyEventHandler(KListener_KeyDown);
 #endif
+			#endregion
 			using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
 			{
 				float dpiX = graphics.DpiX;
 				float dpiY = graphics.DpiY;
+				#region .Do(debug)
 #if DEBUG
 				Console.WriteLine(dpiX.ToString() + " " + dpiY.ToString());
 #endif
+				#endregion
 				WindowSizeSetter.Current.dpiX = dpiX;
 				WindowSizeSetter.Current.dpiY = dpiY;
 			}
@@ -68,9 +81,11 @@ namespace GranBlueHelper
 		protected override void OnExit(ExitEventArgs e)
 		{
 			base.OnExit(e);
+			#region .Do(debug)
 #if !DEBUG
 			KListener.Dispose();
 #endif
+			#endregion
 			GrandcypherClient.Current.Proxy.Quit();
 
 			Settings.Current.Save();
@@ -81,12 +96,11 @@ namespace GranBlueHelper
 			{
 				GrandcypherClient.Current.GlobalKeyCore.TakeScreenShot();
 			}
-#region .Do(debug)
+			#region .Do(debug)
 #if DEBUG
 			Console.WriteLine(args.Key.ToString());
 #endif
 #endregion
-
 		}
 
 		private static void ReportException(object sender, Exception exception)

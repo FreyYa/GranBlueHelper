@@ -1,5 +1,6 @@
 ﻿using Grandcypher;
 using Livet;
+using Livet.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -372,6 +373,20 @@ namespace GranBlueHelper.ViewModels
 
 		#endregion
 
+		#region IsManualExist
+		private bool _IsManualExist;
+		public bool IsManualExist
+		{
+			get { return this._IsManualExist; }
+			set
+			{
+				if (this._IsManualExist == value) return;
+				this._IsManualExist = value;
+				this.RaisePropertyChanged();
+			}
+		}
+		#endregion
+
 		public IEnumerable<string> BlessingList { get; private set; }
 
 		/// <summary>
@@ -379,9 +394,14 @@ namespace GranBlueHelper.ViewModels
 		/// </summary>
 		public static Dictionary<string, int> BlessingTable = new Dictionary<string, int>
 		{
-			{"속성", 0}, {"언노운", 1}, {"마그나", 2},{"캐릭터",3},
+			{"속성", 0}, {"언노운", 1}, {"마그나", 2},{"캐릭터",3},{"일반공인강화",4}
 		};
-
+		public void ShowMasterInfoModify()
+		{
+			var window = new MasterInfoModifyViewModel();
+			var message = new TransitionMessage(window, "Show/MasterInfoModify");
+			this.Messenger.RaiseAsync(message);
+		}
 		public WeaponListViewModel()
 		{
 			this.BlessingList = BlessingTable.Keys.ToList();
@@ -389,6 +409,8 @@ namespace GranBlueHelper.ViewModels
 			this.DeckWeapon = Visibility.Collapsed;
 			this.ListWeapon = Visibility.Collapsed;
 			this.LoadingScreen = Visibility.Collapsed;
+			this.IsManualExist = false;
+
 			Read();
 
 			SelectedBlessing = BlessingTable.Keys.FirstOrDefault();
@@ -417,6 +439,9 @@ namespace GranBlueHelper.ViewModels
 				this.SkillCounter = GrandcypherClient.Current.WeaponHooker.SkillCounter;
 				this.CalcAttack(this.SkillCounter);
 
+				if (this.WeaponList.Where(x => x.IsManual).Count() > 0 || this.MainWeapon.IsManual) this.IsManualExist = true;
+				else this.IsManualExist = false;
+
 				this.LoadingScreen = Visibility.Collapsed;
 				this.DeckWeapon = Visibility.Visible;
 				this.ListWeapon = Visibility.Collapsed;
@@ -439,6 +464,7 @@ namespace GranBlueHelper.ViewModels
 			decimal Magnapercent = (skillInfo.MagnaL * 6 + skillInfo.MagnaM * 3 + skillInfo.MagnaS * 1 + skillInfo.MagnaSkillLvCount) / 100m + 1;
 
 			decimal Unknownpercent = (skillInfo.UnknownL * 6 + skillInfo.UnknownM * 3 + skillInfo.UnknownS * 1 + skillInfo.UnknownSkillLvCount) / 100m + 1;
+
 			decimal Strangthpercent = (skillInfo.StrL * 6 + skillInfo.StrM * 3 + skillInfo.StrS * 1 + skillInfo.StrangthSkillCount) / 100m;
 
 
@@ -451,11 +477,30 @@ namespace GranBlueHelper.ViewModels
 			}
 			else if (BlessingTable[this.SelectedBlessing] == 2)//마그나
 			{
-				if (Magnapercent > 1) Magnapercent = Magnapercent * (1 + (decimal)this.BlessingPercent / 100m);
+				if (Magnapercent > 1)
+				{
+					Magnapercent -= 1;
+					Magnapercent = Magnapercent * (1 + (decimal)this.BlessingPercent / 100m);
+					Magnapercent += 1;
+				}
 			}
 			else if (BlessingTable[this.SelectedBlessing] == 1)//언노운
 			{
-				if (Unknownpercent > 1) Unknownpercent = Unknownpercent * (1 + (decimal)this.BlessingPercent / 100m);
+				if (Unknownpercent > 1)
+				{
+					Unknownpercent -= 1;
+					Unknownpercent = Unknownpercent * (1 + (decimal)this.BlessingPercent / 100m);
+					Unknownpercent += 1;
+				}
+			}
+			else if (BlessingTable[this.SelectedBlessing] == 4)//제우스 티탄 등 일반공인 부스트
+			{
+				if (percent > 1)
+				{
+					percent -= 1;
+					percent = percent * (1 + (decimal)this.BlessingPercent / 100m);
+					percent += 1;
+				}
 			}
 			else//속성
 			{
@@ -469,11 +514,27 @@ namespace GranBlueHelper.ViewModels
 			}
 			else if (BlessingTable[this.SelectedFriendBlessing] == 2)//마그나
 			{
-				if (Magnapercent > 1) Magnapercent = Magnapercent * (1 + (decimal)this.FriendBlessingPercent / 100m);
+				if (Magnapercent > 1)
+				{
+					Magnapercent -= 1;
+					Magnapercent = Magnapercent * (1 + (decimal)this.BlessingPercent / 100m);
+					Magnapercent += 1;
+				}
 			}
 			else if (BlessingTable[this.SelectedFriendBlessing] == 1)//언노운
 			{
-				if (Unknownpercent > 1) Unknownpercent = Unknownpercent * (1 + (decimal)this.FriendBlessingPercent / 100m);
+				if (Unknownpercent > 1)
+				{
+					Unknownpercent -= 1;
+					Unknownpercent = Unknownpercent * (1 + (decimal)this.BlessingPercent / 100m);
+					Unknownpercent += 1;
+				}
+			}
+			else if (BlessingTable[this.SelectedFriendBlessing] == 4)//제우스 티탄 등 일반공인 부스트
+			{
+				percent -= 1;
+				percent = percent * (1 + (decimal)this.BlessingPercent / 100m);
+				percent += 1;
 			}
 			else//속성
 			{

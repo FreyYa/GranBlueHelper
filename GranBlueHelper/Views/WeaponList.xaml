@@ -13,114 +13,123 @@
 			 xmlns:viewmodels="clr-namespace:GranBlueHelper.ViewModels"
 			 xmlns:models="clr-namespace:GranBlueHelper.Models"
 			 mc:Ignorable="d">
-	<UserControl.DataContext>
-		<viewmodels:WeaponListViewModel/>
-	</UserControl.DataContext>
-	<Grid>
-		<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-			<Grid>
-				<ItemsControl x:Name="ListWeapon" ItemsSource="{Binding WeaponList}"  Visibility="{Binding ListWeapon}">
-					<ItemsControl.ItemsPanel>
-						<ItemsPanelTemplate>
-							<UniformGrid Columns="4" />
-						</ItemsPanelTemplate>
-					</ItemsControl.ItemsPanel>
-					<ItemsControl.ItemTemplate>
-						<DataTemplate>
-							<StackPanel>
-								<Border BorderBrush="Gray" BorderThickness="0,0,1,1" Margin="10,10,0,0">
+    <UserControl.DataContext>
+        <viewmodels:WeaponListViewModel/>
+    </UserControl.DataContext>
+    <i:Interaction.Triggers>
+        <livet:InteractionMessageTrigger Messenger="{Binding Messenger}"
+										 MessageKey="Show/MasterInfoModify">
+            <livet:TransitionInteractionMessageAction Mode="NewOrActive"
+													  WindowType="views:MasterInfoModify"
+													  IsOwned="False" />
+        </livet:InteractionMessageTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Grid>
+				<!--무기 목록 시작-->
+                <ItemsControl x:Name="ListWeapon" ItemsSource="{Binding WeaponList}"  Visibility="{Binding ListWeapon}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Border BorderBrush="Gray" BorderThickness="0,0,1,1" Margin="10,10,0,0">
                                     <StackPanel HorizontalAlignment="Left"
 												VerticalAlignment="Center"
 												Margin="0,0,0,10">
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-											<TextBlock Padding="2" Margin="1,1,3,1">
+                                            <TextBlock Padding="2" Margin="1,1,3,1">
 												<Run Text="{Binding Element}" Foreground="White"/>
-												<TextBlock.Style>
-													<Style TargetType="TextBlock">
-														<Style.Triggers>
-															<DataTrigger Binding="{Binding Element}"
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Element}"
 																		 Value="화">
-																<Setter Property="Background" Value="#FFCB0000"/>
-															</DataTrigger>
-															<DataTrigger Binding="{Binding Element}"
+                                                                <Setter Property="Background" Value="#FFCB0000"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Element}"
 																		 Value="수">
-																<Setter Property="Background" Value="#FF0063DA"/>
-															</DataTrigger>
-															<DataTrigger Binding="{Binding Element}"
+                                                                <Setter Property="Background" Value="#FF0063DA"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Element}"
 																		 Value="풍">
-																<Setter Property="Background" Value="#FF3FBD2B"/>
-															</DataTrigger>
-															<DataTrigger Binding="{Binding Element}"
+                                                                <Setter Property="Background" Value="#FF3FBD2B"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Element}"
 																		 Value="토">
-																<Setter Property="Background" Value="#FFE08F00"/>
-															</DataTrigger>
-															<DataTrigger Binding="{Binding Element}"
+                                                                <Setter Property="Background" Value="#FFE08F00"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Element}"
 																		 Value="빛">
-																<Setter Property="Background" Value="#FFFBCD00"/>
-															</DataTrigger>
-															<DataTrigger Binding="{Binding Element}"
+                                                                <Setter Property="Background" Value="#FFFBCD00"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Element}"
 																		 Value="암">
-																<Setter Property="Background" Value="#FF540066"/>
-															</DataTrigger>
-														</Style.Triggers>
-													</Style>
-												</TextBlock.Style>
-											</TextBlock>
-											<TextBlock Padding="2" >
+                                                                <Setter Property="Background" Value="#FF540066"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                            <TextBlock Padding="2" >
 												<Run Text="{Binding Kind}" />
 												<Run Text=" "/>
-											</TextBlock>
-											<TextBlock FontWeight="Bold" Padding="2" >
+                                            </TextBlock>
+                                            <TextBlock FontWeight="Bold" Padding="2" >
 												<Run Text="{Binding ItemName}"  FontFamily="Meiryo UI"/>
-											</TextBlock>
-										</StackPanel>
-										<Grid>
-											<Grid.ColumnDefinitions>
-												<ColumnDefinition SharedSizeGroup="Skill1" MinWidth="60"/>
-												<ColumnDefinition SharedSizeGroup="Skill1Lv"/>
-												<ColumnDefinition SharedSizeGroup="Skill2" MinWidth="60"/>
-												<ColumnDefinition SharedSizeGroup="Skill2Lv"/>
-											</Grid.ColumnDefinitions>
-											<metro:PromptTextBox Grid.Column="1"
+                                            </TextBlock>
+                                        </StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition SharedSizeGroup="Skill1" MinWidth="60"/>
+                                                <ColumnDefinition SharedSizeGroup="Skill1Lv"/>
+                                                <ColumnDefinition SharedSizeGroup="Skill2" MinWidth="60"/>
+                                                <ColumnDefinition SharedSizeGroup="Skill2Lv"/>
+                                            </Grid.ColumnDefinitions>
+                                            <metro:PromptTextBox Grid.Column="1"
 																		 TextAlignment="Center"
 																		 Width="23"
 																		 Height="21"
 																		 Margin="0,5,5,0"
 																 Visibility="{Binding vSkillLv1}"
 															 >
-												<metro:PromptTextBox.Text>
-													<Binding Path="SkillLv1"
+                                                <metro:PromptTextBox.Text>
+                                                    <Binding Path="SkillLv1"
 																		 Mode="TwoWay"
 								 UpdateSourceTrigger="PropertyChanged">
-														<Binding.ValidationRules>
-															<metro:Int32Rule Min="1" />
-															<metro:Int32Rule Max="15" />
-														</Binding.ValidationRules>
-													</Binding>
-												</metro:PromptTextBox.Text>
-											</metro:PromptTextBox>
-											<metro:PromptTextBox Grid.Column="3"
+                                                        <Binding.ValidationRules>
+                                                            <metro:Int32Rule Min="1" />
+                                                            <metro:Int32Rule Max="15" />
+                                                        </Binding.ValidationRules>
+                                                    </Binding>
+                                                </metro:PromptTextBox.Text>
+                                            </metro:PromptTextBox>
+                                            <metro:PromptTextBox Grid.Column="3"
 																		 TextAlignment="Center"
 																		 Width="23"
 																		 Height="21"
 																		 Margin="0,5,5,0"
 																 Visibility="{Binding vSkillLv2}"
 															 >
-												<metro:PromptTextBox.Text>
-													<Binding Path="SkillLv2"
+                                                <metro:PromptTextBox.Text>
+                                                    <Binding Path="SkillLv2"
 																		 Mode="TwoWay"
 								 UpdateSourceTrigger="PropertyChanged">
-														<Binding.ValidationRules>
-															<metro:Int32Rule Min="1" />
-															<metro:Int32Rule Max="15" />
-														</Binding.ValidationRules>
-													</Binding>
-												</metro:PromptTextBox.Text>
-											</metro:PromptTextBox>
-											<TextBlock Text="{Binding SkillName1}" Margin="0,5,0,0" Padding="3" Visibility="{Binding vSkillLv1}">
-												<TextBlock.ToolTip>
-													<TextBlock Text="{Binding SkillDetail1}"/>
-												</TextBlock.ToolTip>
+                                                        <Binding.ValidationRules>
+                                                            <metro:Int32Rule Min="1" />
+                                                            <metro:Int32Rule Max="15" />
+                                                        </Binding.ValidationRules>
+                                                    </Binding>
+                                                </metro:PromptTextBox.Text>
+                                            </metro:PromptTextBox>
+                                            <TextBlock Text="{Binding SkillName1}" Margin="0,5,0,0" Padding="3" Visibility="{Binding vSkillLv1}">
+                                                <TextBlock.ToolTip>
+                                                    <TextBlock Text="{Binding SkillDetail1}"/>
+                                                </TextBlock.ToolTip>
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Style.Triggers>
@@ -138,10 +147,10 @@
                                                     </Style>
                                                 </TextBlock.Style>
 											</TextBlock>
-											<TextBlock Grid.Column="2" Text="{Binding SkillName2}" Margin="0,5,0,0" Padding="3" Visibility="{Binding vSkillLv2}">
-												<TextBlock.ToolTip>
-													<TextBlock Text="{Binding SkillDetail2}"/>
-												</TextBlock.ToolTip>
+                                            <TextBlock Grid.Column="2" Text="{Binding SkillName2}" Margin="0,5,0,0" Padding="3" Visibility="{Binding vSkillLv2}">
+                                                <TextBlock.ToolTip>
+                                                    <TextBlock Text="{Binding SkillDetail2}"/>
+                                                </TextBlock.ToolTip>
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Style.Triggers>
@@ -159,61 +168,65 @@
                                                     </Style>
                                                 </TextBlock.Style>
 											</TextBlock>
-										</Grid>
-									</StackPanel>
-									<Border.Style>
-										<Style TargetType="Border">
-											<Style.Triggers>
-												<DataTrigger Binding="{Binding is_used}"
+                                        </Grid>
+                                    </StackPanel>
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding is_used}"
 																	 Value="True">
-													<Setter Property="Background" Value="#FFFDAF61"/>
-												</DataTrigger>
-											</Style.Triggers>
-										</Style>
-									</Border.Style>
-								</Border>
-							</StackPanel>
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
-				</ItemsControl>
-				<Grid x:Name="DeckWeapon" Visibility="{Binding DeckWeapon}" >
-					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto"/>
-						<RowDefinition Height="*"/>
-						<RowDefinition Height="Auto"/>
-					</Grid.RowDefinitions>
-					<Grid>
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="Auto"/>
-							<ColumnDefinition Width="Auto"/>
-							<ColumnDefinition Width="Auto"/>
-						</Grid.ColumnDefinitions>
-						<StackPanel Margin="10">
-							<TextBlock Text="현재 발동중인 스킬" FontSize="15" FontWeight="Bold"/>
-							<TextBlock/>
-							<ItemsControl ItemsSource="{Binding SkillList}">
-								<ItemsControl.ItemTemplate>
-									<DataTemplate>
-										<TextBlock Margin="0,0,0,6" Text="{Binding}">
-										</TextBlock>
-									</DataTemplate>
-								</ItemsControl.ItemTemplate>
-							</ItemsControl>
-						</StackPanel>
-						<StackPanel Margin="0,10,10,10" Grid.Column="1">
-							<TextBlock Text="공인적용 실질공격력" FontSize="15" FontWeight="Bold"/>
-							<TextBlock/>
-							<TextBlock>
+                                                    <Setter Property="Background" Value="#FFFDAF61"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                </Border>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+				<!--무기 목록 끝-->
+				<!--덱 목록 시작-->
+                <Grid x:Name="DeckWeapon" Visibility="{Binding DeckWeapon}" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+					<!--상단 계산기 시작-->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Margin="10">
+                            <TextBlock Text="현재 발동중인 스킬" FontSize="15" FontWeight="Bold"/>
+                            <TextBlock/>
+                            <ItemsControl ItemsSource="{Binding SkillList}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Margin="0,0,0,6" Text="{Binding}">
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+							
+                        </StackPanel>
+                        <StackPanel Margin="0,10,10,10" Grid.Column="1">
+                            <TextBlock Text="공인적용 실질공격력" FontSize="15" FontWeight="Bold"/>
+                            <TextBlock/>
+                            <TextBlock>
 								<Run Text="계산식: "/>
 								<metro2:HyperlinkEx Uri="http://goo.gl/iznSGe">
 									<Run Text="グランブルーファンタジー攻略wiki/ダメージの計算式について" FontFamily="Meiryo UI"/>
 								</metro2:HyperlinkEx>
-							</TextBlock>
-							<TextBlock>
+                            </TextBlock>
+                            <TextBlock>
 								<Run Text="이전 공격력: "/>
 								<Run Text="{Binding BeforeCalcAtt}"/>
-							</TextBlock>
-							<TextBlock>
+                            </TextBlock>
+                            <TextBlock>
 								<Run Text="현재 공격력: "/>
 								<Run Text="{Binding CalcAtt}"/>
 								
@@ -230,226 +243,233 @@
 								<Run Text=" (" Foreground="Red"/>
 								<Run Text="{Binding Gap}" Foreground="Red"/>
 								<Run Text=")" Foreground="Red"/>
-							</TextBlock>
-							<StackPanel Orientation="Horizontal">
-								<CheckBox Foreground="Black" Content="바하무트 무기 공격력 적용(위스)" IsChecked="{Binding IsvisBaha}" Margin="0,0,10,0"
+                            </TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox Foreground="Black" Content="바하무트 무기 공격력 적용(위스)" IsChecked="{Binding IsvisBaha}" Margin="0,0,10,0"
 										  ToolTip="최저 20% 최대 30%"/>
-								<metro:PromptTextBox Grid.Column="1"
+                                <metro:PromptTextBox Grid.Column="1"
 													 TextAlignment="Center"
 													 Width="23"
 													 Height="21"
 															 >
-									<metro:PromptTextBox.Text>
-										<Binding Source="{x:Static models:Settings.Current}"
+                                    <metro:PromptTextBox.Text>
+                                        <Binding Source="{x:Static models:Settings.Current}"
 								 Path="visLv"
 								 UpdateSourceTrigger="PropertyChanged">
-											<Binding.ValidationRules>
-												<metro:Int32Rule Min="1" />
-												<metro:Int32Rule Max="10" />
-											</Binding.ValidationRules>
-										</Binding>
-									</metro:PromptTextBox.Text>
-								</metro:PromptTextBox>
+                                            <Binding.ValidationRules>
+                                                <metro:Int32Rule Min="1" />
+                                                <metro:Int32Rule Max="10" />
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </metro:PromptTextBox.Text>
+                                </metro:PromptTextBox>
 
-							</StackPanel>
-							<StackPanel Orientation="Horizontal">
-								<CheckBox Foreground="Black" Content="바하무트 무기 공격력 적용(콩킬리오)" IsChecked="{Binding IsconcilioBaha}" Margin="0,0,10,0"
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox Foreground="Black" Content="바하무트 무기 공격력 적용(콩킬리오)" IsChecked="{Binding IsconcilioBaha}" Margin="0,0,10,0"
 										  ToolTip="최저 10% 최대 15%"/>
-								<metro:PromptTextBox Grid.Column="1"
+                                <metro:PromptTextBox Grid.Column="1"
 													 TextAlignment="Center"
 													 Width="23"
 													 Height="21"
 															 >
-									<metro:PromptTextBox.Text>
-										<Binding Source="{x:Static models:Settings.Current}"
+                                    <metro:PromptTextBox.Text>
+                                        <Binding Source="{x:Static models:Settings.Current}"
 								 Path="concilioLv"
 								 UpdateSourceTrigger="PropertyChanged">
-											<Binding.ValidationRules>
-												<metro:Int32Rule Min="1" />
-												<metro:Int32Rule Max="10" />
-											</Binding.ValidationRules>
-										</Binding>
-									</metro:PromptTextBox.Text>
-								</metro:PromptTextBox>
+                                            <Binding.ValidationRules>
+                                                <metro:Int32Rule Min="1" />
+                                                <metro:Int32Rule Max="10" />
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </metro:PromptTextBox.Text>
+                                </metro:PromptTextBox>
 
-							</StackPanel>
-							<TextBlock/>
-							<Grid>
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="Auto"/>
-									<ColumnDefinition Width="Auto"/>
-									<ColumnDefinition Width="Auto"/>
-									<ColumnDefinition Width="30"/>
-									<ColumnDefinition Width="Auto"/>
-									<ColumnDefinition Width="Auto"/>
-									<ColumnDefinition Width="Auto"/>
-								</Grid.ColumnDefinitions>
-								<TextBlock Text="가호: " VerticalAlignment="Center"/>
-								<metro:PromptComboBox  ItemsSource="{Binding BlessingList}"
+                            </StackPanel>
+                            <TextBlock/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="가호: " VerticalAlignment="Center"/>
+                                <metro:PromptComboBox  ItemsSource="{Binding BlessingList}"
 														HorizontalAlignment="Left"
 														Prompt=""
 														SelectedValue="{Binding SelectedBlessing, Mode=TwoWay}"
 														IsReadOnly="True"
 														MinWidth="50"
 														Grid.Column="1" />
-								<metro:PromptTextBox Grid.Column="2"
+                                <metro:PromptTextBox Grid.Column="2"
 														 TextAlignment="Center"
 														 Width="30"
 														 Height="21">
-									<metro:PromptTextBox.Text>
-										<Binding Path="BlessingPercent"
+                                    <metro:PromptTextBox.Text>
+                                        <Binding Path="BlessingPercent"
 													 Mode="TwoWay"
 													 UpdateSourceTrigger="PropertyChanged">
-											<Binding.ValidationRules>
-												<metro:Int32Rule Min="0" />
-											</Binding.ValidationRules>
-										</Binding>
-									</metro:PromptTextBox.Text>
-								</metro:PromptTextBox>
-								
-								<TextBlock Text="동료가호: " Grid.Column="4" VerticalAlignment="Center"/>
-								<metro:PromptComboBox  ItemsSource="{Binding BlessingList}"
+                                            <Binding.ValidationRules>
+                                                <metro:Int32Rule Min="0" />
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </metro:PromptTextBox.Text>
+                                </metro:PromptTextBox>
+
+                                <TextBlock Text="동료가호: " Grid.Column="4" VerticalAlignment="Center"/>
+                                <metro:PromptComboBox  ItemsSource="{Binding BlessingList}"
 														HorizontalAlignment="Left"
 														Prompt=""
 														SelectedValue="{Binding SelectedFriendBlessing, Mode=TwoWay}"
 														IsReadOnly="True"
 														MinWidth="50"
 														Grid.Column="5" />
-								<metro:PromptTextBox Grid.Column="6"
+                                <metro:PromptTextBox Grid.Column="6"
 														 TextAlignment="Center"
 														 Width="30"
 														 Height="21">
-									<metro:PromptTextBox.Text>
-										<Binding Path="FriendBlessingPercent"
+                                    <metro:PromptTextBox.Text>
+                                        <Binding Path="FriendBlessingPercent"
 													 Mode="TwoWay"
 													 UpdateSourceTrigger="PropertyChanged">
-											<Binding.ValidationRules>
-												<metro:Int32Rule Min="0" />
-											</Binding.ValidationRules>
-										</Binding>
-									</metro:PromptTextBox.Text>
-								</metro:PromptTextBox>
+                                            <Binding.ValidationRules>
+                                                <metro:Int32Rule Min="0" />
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </metro:PromptTextBox.Text>
+                                </metro:PromptTextBox>
 
-							</Grid>
-						</StackPanel>
-						<StackPanel Margin="0,10,10,10" Grid.Column="2">
-							<TextBlock Text="NPC 공격력" FontSize="15" FontWeight="Bold"/>
-							<TextBlock/>
-							<ItemsControl ItemsSource="{Binding NPCList}">
-								<ItemsControl.ItemTemplate>
-									<DataTemplate>
-										<StackPanel>
-											<TextBlock Text="{Binding name}" FontWeight="ExtraBold" FontSize="12" FontFamily="Meiryo UI"/>
-											<TextBlock>
+                            </Grid>
+							<metro2:CallMethodButton Content="무기정보수정"
+													 Padding="20,4"
+													 Margin="4"
+													 MethodName="ShowMasterInfoModify"
+													 IsEnabled="{Binding IsManualExist}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,10,10,10" Grid.Column="2">
+                            <TextBlock Text="NPC 공격력" FontSize="15" FontWeight="Bold"/>
+                            <TextBlock/>
+                            <ItemsControl ItemsSource="{Binding NPCList}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding name}" FontWeight="ExtraBold" FontSize="12" FontFamily="Meiryo UI"/>
+                                            <TextBlock>
 												<Run Text="{Binding CalcAtt}" ToolTip="곱연산된 공격력"/>
 												<Run Text="("/>
 												<Run Text="{Binding attack}" Foreground="Red" ToolTip="무기+캐릭터 공격력"/>
 												<Run Text=")"/>
-											</TextBlock>
-										</StackPanel>
-									</DataTemplate>
-								</ItemsControl.ItemTemplate>
-							</ItemsControl>
-						</StackPanel>
-					</Grid>
-					<StackPanel Grid.Row="1" Orientation="Horizontal">
-						<Border BorderBrush="Gray" BorderThickness="0,0,1,1" Margin="10,10,0,0">
-                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center"
-											Margin="0,0,0,10" DataContext="{Binding MainWeapon}">
-                                <StackPanel Visibility="{Binding AutoMode}">
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                        <TextBlock Padding="2" Margin="1,1,3,1">
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Grid>
+					<!--상단 계산기 끝-->
+					<!--덱 리스트 시작-->
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+						<!--메인 무기 시작-->
+                        <Border BorderBrush="Gray" BorderThickness="0,0,1,1" Margin="10,10,0,0">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+										  Margin="0,0,0,10" DataContext="{Binding MainWeapon}">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Padding="2" Margin="1,1,3,1">
 												<Run Text="{Binding Element}" Foreground="White"/>
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Element}"
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Element}"
 																		 Value="화">
-                                                            <Setter Property="Background" Value="#FFCB0000"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Element}"
+                                                        <Setter Property="Background" Value="#FFCB0000"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Element}"
 																		 Value="수">
-                                                            <Setter Property="Background" Value="#FF0063DA"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Element}"
+                                                        <Setter Property="Background" Value="#FF0063DA"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Element}"
 																		 Value="풍">
-                                                            <Setter Property="Background" Value="#FF3FBD2B"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Element}"
+                                                        <Setter Property="Background" Value="#FF3FBD2B"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Element}"
 																		 Value="토">
-                                                            <Setter Property="Background" Value="#FFE08F00"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Element}"
+                                                        <Setter Property="Background" Value="#FFE08F00"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Element}"
 																		 Value="빛">
-                                                            <Setter Property="Background" Value="#FFFBCD00"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Element}"
+                                                        <Setter Property="Background" Value="#FFFBCD00"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Element}"
 																		 Value="암">
-                                                            <Setter Property="Background" Value="#FF540066"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                        <TextBlock Background="White" Padding="2" >
+                                                        <Setter Property="Background" Value="#FF540066"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <TextBlock Background="White" Padding="2" >
 												<Run Text="{Binding Kind}" />
 												<Run Text=" "/>
-                                        </TextBlock>
-                                        <TextBlock FontWeight="Bold" Padding="2" >
+                                    </TextBlock>
+                                    <TextBlock FontWeight="Bold" Padding="2" >
 												<Run Text="{Binding ItemName}"  FontFamily="Meiryo UI"/>
-                                        </TextBlock>
-                                    </StackPanel>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition SharedSizeGroup="Skill1" MinWidth="60"/>
-                                            <ColumnDefinition SharedSizeGroup="Skill1Lv"/>
-                                            <ColumnDefinition SharedSizeGroup="Skill2" MinWidth="60"/>
-                                            <ColumnDefinition SharedSizeGroup="Skill2Lv"/>
-                                        </Grid.ColumnDefinitions>
-                                        <metro:PromptTextBox Grid.Column="1"
+                                    </TextBlock>
+                                </StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition SharedSizeGroup="Skill1" MinWidth="60"/>
+                                        <ColumnDefinition SharedSizeGroup="Skill1Lv"/>
+                                        <ColumnDefinition SharedSizeGroup="Skill2" MinWidth="60"/>
+                                        <ColumnDefinition SharedSizeGroup="Skill2Lv"/>
+                                    </Grid.ColumnDefinitions>
+                                    <metro:PromptTextBox Grid.Column="1"
 														 TextAlignment="Center"
 														 Width="23"
 														 Height="21"
 														 Margin="0,5,5,0"
 														 Visibility="{Binding vSkillLv1}">
-                                            <metro:PromptTextBox.Text>
-                                                <Binding Path="SkillLv1"
+                                        <metro:PromptTextBox.Text>
+                                            <Binding Path="SkillLv1"
 													 Mode="TwoWay"
 													 UpdateSourceTrigger="PropertyChanged">
-                                                    <Binding.ValidationRules>
-                                                        <metro:Int32Rule Min="1" />
-                                                        <metro:Int32Rule Max="15" />
-                                                    </Binding.ValidationRules>
-                                                </Binding>
-                                            </metro:PromptTextBox.Text>
-                                        </metro:PromptTextBox>
-                                        <metro:PromptTextBox Grid.Column="3"
+                                                <Binding.ValidationRules>
+                                                    <metro:Int32Rule Min="1" />
+                                                    <metro:Int32Rule Max="15" />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </metro:PromptTextBox.Text>
+                                    </metro:PromptTextBox>
+                                    <metro:PromptTextBox Grid.Column="3"
 																		 TextAlignment="Center"
 																		 Width="23"
 																		 Height="21"
 																		 Margin="0,5,5,0"
 																 Visibility="{Binding vSkillLv2}"
 															 >
-                                            <metro:PromptTextBox.Text>
-                                                <Binding Path="SkillLv2"
+                                        <metro:PromptTextBox.Text>
+                                            <Binding Path="SkillLv2"
 																		 Mode="TwoWay"
 								 UpdateSourceTrigger="PropertyChanged">
-                                                    <Binding.ValidationRules>
-                                                        <metro:Int32Rule Min="1" />
-                                                        <metro:Int32Rule Max="15" />
-                                                    </Binding.ValidationRules>
-                                                </Binding>
-                                            </metro:PromptTextBox.Text>
-                                        </metro:PromptTextBox>
-                                        <Grid Visibility="{Binding vSkillLv1}">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition/>
-                                                <RowDefinition/>
-                                            </Grid.RowDefinitions>
-                                            <TextBlock Text="{Binding SkillName1}" Margin="0,5,0,0" Padding="3">
-                                                <TextBlock.ToolTip>
-                                                    <TextBlock Text="{Binding SkillDetail1}"/>
-                                                </TextBlock.ToolTip>
+                                                <Binding.ValidationRules>
+                                                    <metro:Int32Rule Min="1" />
+                                                    <metro:Int32Rule Max="15" />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </metro:PromptTextBox.Text>
+                                    </metro:PromptTextBox>
+                                    <Grid Visibility="{Binding vSkillLv1}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="{Binding SkillName1}" Margin="0,5,0,0" Padding="3">
+                                            <TextBlock.ToolTip>
+                                                <TextBlock Text="{Binding SkillDetail1}"/>
+                                            </TextBlock.ToolTip>
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Style.Triggers>
@@ -467,16 +487,16 @@
                                                     </Style>
                                                 </TextBlock.Style>
 											</TextBlock>
-                                        </Grid>
-                                        <Grid Grid.Column="2" Visibility="{Binding vSkillLv2}">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition/>
-                                                <RowDefinition/>
-                                            </Grid.RowDefinitions>
-                                            <TextBlock Text="{Binding SkillName2}" Margin="0,5,0,0" Padding="3">
-                                                <TextBlock.ToolTip>
-                                                    <TextBlock Text="{Binding SkillDetail2}"/>
-                                                </TextBlock.ToolTip>
+                                    </Grid>
+                                    <Grid Grid.Column="2" Visibility="{Binding vSkillLv2}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="{Binding SkillName2}" Margin="0,5,0,0" Padding="3">
+                                            <TextBlock.ToolTip>
+                                                <TextBlock Text="{Binding SkillDetail2}"/>
+                                            </TextBlock.ToolTip>
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Style.Triggers>
@@ -494,196 +514,83 @@
                                                     </Style>
                                                 </TextBlock.Style>
 											</TextBlock>
-                                        </Grid>
                                     </Grid>
-                                </StackPanel>
-                                <StackPanel Visibility="{Binding ManualMode}">
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                        <metro:PromptComboBox Padding="2" Margin="1,1,3,1"
-															  ItemsSource="{Binding AttributeList}"
-															  SelectedValue="{Binding Element}"
-															  IsReadOnly="True"
-															  Prompt=""/>
-                                        <metro:PromptComboBox Padding="2"
-															  ItemsSource="{Binding WeaponTypeList}"
-															  SelectedValue="{Binding Kind}"
-															  IsReadOnly="True"
-															  Prompt="" Margin="0,0,3,0"/>
-                                        <TextBlock FontWeight="Bold" Padding="2" >
-												<Run Text="{Binding ItemName}"  FontFamily="Meiryo UI"/>
-                                        </TextBlock>
-                                    </StackPanel>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition SharedSizeGroup="Skill1" MinWidth="60"/>
-                                            <ColumnDefinition SharedSizeGroup="Skill1Lv"/>
-                                            <ColumnDefinition SharedSizeGroup="Skill2" MinWidth="60"/>
-                                            <ColumnDefinition SharedSizeGroup="Skill2Lv"/>
-                                        </Grid.ColumnDefinitions>
-                                        <metro:PromptTextBox Grid.Column="1"
-														 TextAlignment="Center"
-														 Width="23"
-														 Height="21"
-														 Margin="0,5,5,0"
-														 Visibility="{Binding vSkillLv1}">
-                                            <metro:PromptTextBox.Text>
-                                                <Binding Path="SkillLv1"
-													 Mode="TwoWay"
-													 UpdateSourceTrigger="PropertyChanged">
-                                                    <Binding.ValidationRules>
-                                                        <metro:Int32Rule Min="1" />
-                                                        <metro:Int32Rule Max="15" />
-                                                    </Binding.ValidationRules>
-                                                </Binding>
-                                            </metro:PromptTextBox.Text>
-                                        </metro:PromptTextBox>
-                                        <metro:PromptTextBox Grid.Column="3"
-																		 TextAlignment="Center"
-																		 Width="23"
-																		 Height="21"
-																		 Margin="0,5,5,0"
-																 Visibility="{Binding vSkillLv2}"
-															 >
-                                            <metro:PromptTextBox.Text>
-                                                <Binding Path="SkillLv2"
-																		 Mode="TwoWay"
-								 UpdateSourceTrigger="PropertyChanged">
-                                                    <Binding.ValidationRules>
-                                                        <metro:Int32Rule Min="1" />
-                                                        <metro:Int32Rule Max="15" />
-                                                    </Binding.ValidationRules>
-                                                </Binding>
-                                            </metro:PromptTextBox.Text>
-                                        </metro:PromptTextBox>
-                                        <Grid Visibility="{Binding vSkillLv1}">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition/>
-                                                <RowDefinition/>
-                                            </Grid.RowDefinitions>
-                                            <TextBlock Text="{Binding SkillName1}" Margin="0,5,0,0" Padding="3">
-                                                <TextBlock.ToolTip>
-                                                    <TextBlock Text="{Binding SkillDetail1}"/>
-                                                </TextBlock.ToolTip>
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding SkillType1}"
-																		 Value="1">
-                                                                <Setter Property="Background" Value="#95051D"/>
-																<Setter Property="Foreground" Value="White"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding SkillType1}"
-																		 Value="2">
-                                                                <Setter Property="Background" Value="#FF11B61E"/>
-																<Setter Property="Foreground" Value="White"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-											</TextBlock>
-                                        </Grid>
-                                        <Grid Grid.Column="2" Visibility="{Binding vSkillLv2}">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition/>
-                                                <RowDefinition/>
-                                            </Grid.RowDefinitions>
-                                            <TextBlock Text="{Binding SkillName2}" Margin="0,5,0,0" Padding="3">
-                                                <TextBlock.ToolTip>
-                                                    <TextBlock Text="{Binding SkillDetail2}"/>
-                                                </TextBlock.ToolTip>
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding SkillType2}"
-																		 Value="1">
-                                                                <Setter Property="Background" Value="#95051D"/>
-																<Setter Property="Foreground" Value="White"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding SkillType2}"
-																		 Value="2">
-                                                                <Setter Property="Background" Value="#1EB82B"/>
-																<Setter Property="Foreground" Value="White"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-											</TextBlock>
-                                        </Grid>
-                                    </Grid>
-                                </StackPanel>
-                            </Grid>
+
+                                </Grid>
+                            </StackPanel>
                         </Border>
-						<ItemsControl ItemsSource="{Binding WeaponList}">
-							<ItemsControl.ItemsPanel>
-								<ItemsPanelTemplate>
-									<UniformGrid Columns="3" />
-								</ItemsPanelTemplate>
-							</ItemsControl.ItemsPanel>
-							<ItemsControl.ItemTemplate>
-								<DataTemplate>
-									<StackPanel Visibility="{Binding AutoMode}">
-										<Border BorderBrush="Gray" BorderThickness="0,0,1,1" Margin="10,10,0,0">
-                                            <Grid>
-                                                <StackPanel HorizontalAlignment="Left"
+						<!--메인 무기 끝-->
+						<!--메인 제외한 나머지 목록 시작-->
+                        <ItemsControl ItemsSource="{Binding WeaponList}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="3" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <Border BorderBrush="Gray" BorderThickness="0,0,1,1" Margin="10,10,0,0">
+                                            <StackPanel HorizontalAlignment="Left"
 														Margin="10">
-                                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                                        <TextBlock Padding="2" Margin="1,1,3,1">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <TextBlock Padding="2" Margin="1,1,3,1">
 														<Run Text="{Binding Element}" Foreground="White"/>
-                                                            <TextBlock.Style>
-                                                                <Style TargetType="TextBlock">
-                                                                    <Style.Triggers>
-                                                                        <DataTrigger Binding="{Binding Element}"
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding Element}"
 																		 Value="화">
-                                                                            <Setter Property="Background" Value="#FFCB0000"/>
-                                                                        </DataTrigger>
-                                                                        <DataTrigger Binding="{Binding Element}"
+                                                                        <Setter Property="Background" Value="#FFCB0000"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding Element}"
 																		 Value="수">
-                                                                            <Setter Property="Background" Value="#FF0063DA"/>
-                                                                        </DataTrigger>
-                                                                        <DataTrigger Binding="{Binding Element}"
+                                                                        <Setter Property="Background" Value="#FF0063DA"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding Element}"
 																		 Value="풍">
-                                                                            <Setter Property="Background" Value="#FF3FBD2B"/>
-                                                                        </DataTrigger>
-                                                                        <DataTrigger Binding="{Binding Element}"
+                                                                        <Setter Property="Background" Value="#FF3FBD2B"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding Element}"
 																		 Value="토">
-                                                                            <Setter Property="Background" Value="#FFE08F00"/>
-                                                                        </DataTrigger>
-                                                                        <DataTrigger Binding="{Binding Element}"
+                                                                        <Setter Property="Background" Value="#FFE08F00"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding Element}"
 																		 Value="빛">
-                                                                            <Setter Property="Background" Value="#FFFBCD00"/>
-                                                                        </DataTrigger>
-                                                                        <DataTrigger Binding="{Binding Element}"
+                                                                        <Setter Property="Background" Value="#FFFBCD00"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding Element}"
 																		 Value="암">
-                                                                            <Setter Property="Background" Value="#FF540066"/>
-                                                                        </DataTrigger>
-                                                                    </Style.Triggers>
-                                                                </Style>
-                                                            </TextBlock.Style>
-                                                        </TextBlock>
-                                                        <TextBlock Background="White" Padding="2" >
+                                                                        <Setter Property="Background" Value="#FF540066"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                    <TextBlock Background="White" Padding="2" >
 												<Run Text="{Binding Kind}" />
 												<Run Text=" "/>
-                                                        </TextBlock>
-                                                        <TextBlock FontWeight="Bold" Padding="2" >
+                                                    </TextBlock>
+                                                    <TextBlock FontWeight="Bold" Padding="2" >
 												<Run Text="{Binding ItemName}"  FontFamily="Meiryo UI"/>
-                                                        </TextBlock>
-                                                    </StackPanel>
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition SharedSizeGroup="Skill1" MinWidth="60"/>
-                                                            <ColumnDefinition SharedSizeGroup="Skill1Lv"/>
-                                                            <ColumnDefinition SharedSizeGroup="Skill2" MinWidth="60"/>
-                                                            <ColumnDefinition SharedSizeGroup="Skill2Lv"/>
-                                                        </Grid.ColumnDefinitions>
-                                                        <Grid Visibility="{Binding vSkillLv1}">
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition/>
-                                                                <RowDefinition/>
-                                                            </Grid.RowDefinitions>
-                                                            <TextBlock Text="{Binding SkillName1}" Margin="0,5,0,0" Padding="3">
-                                                                <TextBlock.ToolTip>
-                                                                    <TextBlock Text="{Binding SkillDetail1}"/>
-                                                                </TextBlock.ToolTip>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition SharedSizeGroup="Skill1" MinWidth="60"/>
+                                                        <ColumnDefinition SharedSizeGroup="Skill1Lv"/>
+                                                        <ColumnDefinition SharedSizeGroup="Skill2" MinWidth="60"/>
+                                                        <ColumnDefinition SharedSizeGroup="Skill2Lv"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid Visibility="{Binding vSkillLv1}">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition/>
+                                                            <RowDefinition/>
+                                                        </Grid.RowDefinitions>
+                                                        <TextBlock Text="{Binding SkillName1}" Margin="0,5,0,0" Padding="3">
+                                                            <TextBlock.ToolTip>
+                                                                <TextBlock Text="{Binding SkillDetail1}"/>
+                                                            </TextBlock.ToolTip>
 														<TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Style.Triggers>
@@ -701,33 +608,33 @@
                                                     </Style>
                                                 </TextBlock.Style>
 													</TextBlock>
-                                                        </Grid>
-                                                        <metro:PromptTextBox Grid.Column="1"
+                                                    </Grid>
+                                                    <metro:PromptTextBox Grid.Column="1"
 																		 TextAlignment="Center"
 																		 Width="23"
 																		 Height="21"
 																		 Margin="0,5,5,0"
 																 Visibility="{Binding vSkillLv1}"
 															 >
-                                                            <metro:PromptTextBox.Text>
-                                                                <Binding Path="SkillLv1"
+                                                        <metro:PromptTextBox.Text>
+                                                            <Binding Path="SkillLv1"
 																		 Mode="TwoWay">
-                                                                    <Binding.ValidationRules>
-                                                                        <metro:Int32Rule Min="1" />
-                                                                        <metro:Int32Rule Max="15" />
-                                                                    </Binding.ValidationRules>
-                                                                </Binding>
-                                                            </metro:PromptTextBox.Text>
-                                                        </metro:PromptTextBox>
-                                                        <Grid Grid.Column="2" Visibility="{Binding vSkillLv2}">
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition/>
-                                                                <RowDefinition/>
-                                                            </Grid.RowDefinitions>
-                                                            <TextBlock Grid.Column="1" Text="{Binding SkillName2}" Margin="0,5,0,0" Padding="3">
-                                                                <TextBlock.ToolTip>
-                                                                    <TextBlock Text="{Binding SkillDetail2}"/>
-                                                                </TextBlock.ToolTip>
+                                                                <Binding.ValidationRules>
+                                                                    <metro:Int32Rule Min="1" />
+                                                                    <metro:Int32Rule Max="15" />
+                                                                </Binding.ValidationRules>
+                                                            </Binding>
+                                                        </metro:PromptTextBox.Text>
+                                                    </metro:PromptTextBox>
+                                                    <Grid Grid.Column="2" Visibility="{Binding vSkillLv2}">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition/>
+                                                            <RowDefinition/>
+                                                        </Grid.RowDefinitions>
+                                                        <TextBlock Grid.Column="1" Text="{Binding SkillName2}" Margin="0,5,0,0" Padding="3">
+                                                            <TextBlock.ToolTip>
+                                                                <TextBlock Text="{Binding SkillDetail2}"/>
+                                                            </TextBlock.ToolTip>
 														<TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Style.Triggers>
@@ -745,52 +652,56 @@
                                                     </Style>
                                                 </TextBlock.Style>
 													</TextBlock>
-                                                        </Grid>
-                                                        <metro:PromptTextBox Grid.Column="3"
+                                                    </Grid>
+                                                    <metro:PromptTextBox Grid.Column="3"
 																		 TextAlignment="Center"
 																		 Width="23"
 																		 Height="21"
 																		 Margin="0,5,5,0"
 																 Visibility="{Binding vSkillLv2}"
 															 >
-                                                            <metro:PromptTextBox.Text>
-                                                                <Binding Path="SkillLv2"
+                                                        <metro:PromptTextBox.Text>
+                                                            <Binding Path="SkillLv2"
 																		 Mode="TwoWay">
-                                                                    <Binding.ValidationRules>
-                                                                        <metro:Int32Rule Min="1" />
-                                                                        <metro:Int32Rule Max="15" />
-                                                                    </Binding.ValidationRules>
-                                                                </Binding>
-                                                            </metro:PromptTextBox.Text>
-                                                        </metro:PromptTextBox>
-                                                    </Grid>
-                                                </StackPanel>
-                                            </Grid>
-										</Border>
-									</StackPanel>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
-					</StackPanel>
-					<StackPanel Grid.Row="2">
-						<TextBlock Text="※해당 계산기는 단종족/단속성 파티 구성을 기준으로 만들어졌습니다. 종족은 무조건 같다고 보고 속성은 주인공의 속성을 따릅니다" Foreground="Red" FontWeight="Bold" Margin="10,10,10,0"/>
-						<TextBlock Text="※스킬레벨을 변경한 뒤에는 그랑블루를 새로고침해야 스킬레벨이 적용됩니다.(바하무트 스킬은 체크박스 on/off로도 갱신가능)" Foreground="Red" FontWeight="Bold" Margin="10"/>
-					</StackPanel>
-				</Grid>
-			</Grid>
-		</ScrollViewer>
-		<Grid Background="#7FFFFFFF" Panel.ZIndex="99" Visibility="{Binding LoadingScreen}" d:IsHidden="True">
-			<Border BorderBrush="Gray" Background="White" BorderThickness="2" 
+                                                                <Binding.ValidationRules>
+                                                                    <metro:Int32Rule Min="1" />
+                                                                    <metro:Int32Rule Max="15" />
+                                                                </Binding.ValidationRules>
+                                                            </Binding>
+                                                        </metro:PromptTextBox.Text>
+                                                    </metro:PromptTextBox>
+                                                </Grid>
+                                            </StackPanel>
+                                        </Border>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+						<!--메인 제외한 나머지 목록 끝-->
+                    </StackPanel>
+                    <StackPanel Grid.Row="2">
+                        <TextBlock Text="※해당 계산기는 단종족/단속성 파티 구성을 기준으로 만들어졌습니다. 종족은 무조건 같다고 보고 속성은 주인공의 속성을 따릅니다" Foreground="Red" FontWeight="Bold" Margin="10,10,10,0"/>
+                        <TextBlock Text="※스킬레벨을 변경한 뒤에는 그랑블루를 새로고침해야 스킬레벨이 적용됩니다.(바하무트 스킬은 체크박스 on/off로도 갱신가능)" Foreground="Red" FontWeight="Bold" Margin="10"/>
+                    </StackPanel>
+                </Grid>
+				<!--덱 목록 끝-->
+            </Grid>
+        </ScrollViewer>
+		
+		<!--로딩창 시작-->
+        <Grid Background="#7FFFFFFF" Panel.ZIndex="99" Visibility="{Binding LoadingScreen}" d:IsHidden="True">
+            <Border BorderBrush="Gray" Background="White" BorderThickness="2" 
 								HorizontalAlignment="Center" 
 								VerticalAlignment="Center"
 								Padding="6">
-				<TextBlock   TextAlignment="Center"  >
+                <TextBlock   TextAlignment="Center"  >
 							<Run FontSize="20" Text="무기/캐릭터 목록을 불러오는 중입니다. 잠시 기다려주세요"/>
 							<LineBreak/>
 							<LineBreak/>
 							<Run Text="{Binding Progress,Mode=OneWay}" FontSize="17"/>
-				</TextBlock>
-			</Border>
-		</Grid>
-	</Grid>
+                </TextBlock>
+            </Border>
+        </Grid>
+		<!--로딩창 끝-->
+    </Grid>
 </UserControl>
