@@ -40,6 +40,8 @@ namespace Grandcypher
 				ListDetail(oS);
 			if (!oS.PathAndQuery.Contains("decks") && oS.PathAndQuery.StartsWith("/party/deck") && oS.oResponse.MIMEType == "application/json")
 				DeckDetail(oS);
+			if (oS.PathAndQuery.StartsWith("/npc/enhancement_materials") && oS.oResponse.MIMEType == "application/json")
+				ListDetail(oS);
 		}
 		/// <summary>
 		/// 기본 무기 리스트. 강화/리스트/창고가 포함됨
