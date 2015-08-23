@@ -958,23 +958,22 @@ namespace Grandcypher
 				this._SkillLv1 = value;
 				if (this._SkillLv1 < 1 || this._SkillLv1 > 10) this._SkillLv1 = 1;
 				GrandcypherClient.Current.WeaponHooker.Reload();
-				if (this.ParamId != 0) GrandcypherClient.Current.WeaponHooker.WeaponLvSave(this.ParamId, 1, this._SkillLv1);
+				if (this.ParamId != 0)
+				{
+					GrandcypherClient.Current.WeaponHooker.WeaponLvSave(this.ParamId, 1, this._SkillLv1);
+					if (vSkillLv2 == Visibility.Visible)
+					{
+						SkillLv2 = value;
+						if (this.SkillLv2 < 1 || this.SkillLv2 > 10) this.SkillLv2 = 1;
+						GrandcypherClient.Current.WeaponHooker.Reload();
+
+						GrandcypherClient.Current.WeaponHooker.WeaponLvSave(this.ParamId, 2, value);
+					}
+				}
 			}
 		}
 		public Visibility vSkillLv1 { get; set; }
-		private int _SkillLv2;
-		public int SkillLv2
-		{
-			get { return this._SkillLv2; }
-			set
-			{
-				if (this._SkillLv2 == value) return;
-				this._SkillLv2 = value;
-				if (this._SkillLv2 < 1 || this._SkillLv2 > 10) this._SkillLv2 = 1;
-				GrandcypherClient.Current.WeaponHooker.Reload();
-				if (this.ParamId != 0) GrandcypherClient.Current.WeaponHooker.WeaponLvSave(this.ParamId, 2, this._SkillLv2);
-			}
-		}
+		public int SkillLv2 { get; set; }
 		public Visibility vSkillLv2 { get; set; }
 		//param
 

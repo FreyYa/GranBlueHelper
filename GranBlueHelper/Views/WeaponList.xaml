@@ -113,6 +113,7 @@
 																		 Width="23"
 																		 Height="21"
 																		 Margin="0,5,5,0"
+																 IsEnabled="False"
 																 Visibility="{Binding vSkillLv2}"
 															 >
                                                 <metro:PromptTextBox.Text>
@@ -448,6 +449,7 @@
 																		 Width="23"
 																		 Height="21"
 																		 Margin="0,5,5,0"
+																 IsEnabled="False"
 																 Visibility="{Binding vSkillLv2}"
 															 >
                                         <metro:PromptTextBox.Text>
@@ -658,6 +660,7 @@
 																		 Width="23"
 																		 Height="21"
 																		 Margin="0,5,5,0"
+																 IsEnabled="False"
 																 Visibility="{Binding vSkillLv2}"
 															 >
                                                         <metro:PromptTextBox.Text>
