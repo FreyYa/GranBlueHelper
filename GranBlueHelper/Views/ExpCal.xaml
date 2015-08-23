@@ -12,17 +12,6 @@
         <viewmodels:ExpCalViewModel/>
     </UserControl.DataContext>
     <UserControl.Resources>
-        <!--<ObjectDataProvider
-			    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-			    xmlns:linq="clr-namespace:System.Linq;assembly=System.Core"
-			    x:Key="EquipLevelRange"
-			    ObjectType="{x:Type linq:Enumerable}" MethodName="Range">
-            <ObjectDataProvider.MethodParameters>
-                <sys:Int32>1</sys:Int32>
-                <sys:Int32>150</sys:Int32>
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
-        아직 150레벨까지의 경험치 테이블이 존재하지않음.-->
         <ObjectDataProvider
 			    xmlns:sys="clr-namespace:System;assembly=mscorlib"
 			    xmlns:linq="clr-namespace:System.Linq;assembly=System.Core"
@@ -40,6 +29,10 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         <StackPanel>
 			<StackPanel Orientation="Horizontal">
 				<RadioButton Content="무기/소환석" Foreground="Black" Margin="10,0"
@@ -71,40 +64,139 @@
 		</StackPanel>
         <Rectangle Width="2" Height="Auto" Margin="30,5" Grid.Column="1"/>
         <StackPanel Grid.Column="2">
-			<Grid>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto" SharedSizeGroup="Category"/>
-					<ColumnDefinition Width="Auto" SharedSizeGroup="Count"/>
-					<ColumnDefinition Width="Auto" SharedSizeGroup="CheckBox"/>
-				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					<RowDefinition/>
-					<RowDefinition/>
-				</Grid.RowDefinitions>
-				<TextBlock Text="엔젤웨폰(R) 필요개수: "/>
-				<TextBlock Text="{Binding AngelWeapon}" Grid.Column="1" Margin="0,0,15,0"/>
-				<CheckBox Content="보정치 적용" Grid.Column="2" Foreground="Black"
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="Category"/>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="Count"/>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="CheckBox"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="엔젤웨폰(R) 필요개수: "/>
+                <TextBlock Text="{Binding AngelWeapon}" Grid.Column="1" Margin="0,0,15,0"/>
+                <CheckBox Content="보정치 적용" Grid.Column="2" Foreground="Black"
 						  IsChecked="{Binding IsMultiply}"/>
 
-				<TextBlock Text="아크엔젤웨폰(SR) 필요개수: " Grid.Row="1"/>
-				<TextBlock Text="{Binding ArchAngelWeapon}" Grid.Row="1" Grid.Column="1" Margin="0,0,15,0"/>
-			</Grid>
+                <TextBlock Text="아크엔젤웨폰(SR) 필요개수: " Grid.Row="1"/>
+                <TextBlock Text="{Binding ArchAngelWeapon}" Grid.Row="1" Grid.Column="1" Margin="0,0,15,0"/>
+            </Grid>
             <StackPanel Orientation="Horizontal" Margin="5,0,5,5">
-               
-                
-				
+
+
+
             </StackPanel>
-			<StackPanel Orientation="Horizontal" Margin="5,0,5,5">
-				
+            <StackPanel Orientation="Horizontal" Margin="5,0,5,5">
+
+            </StackPanel>
+            <TextBlock/>
+            <TextBlock Text="※엔젤웨폰(R)의 기본경험치는 100, 아크엔젤웨폰(SR)의 기본경험치는 500입니다."/>
+            <TextBlock Text="※동종무기의 경우 1.5배의 보정을 받아 획득경험치는 각각 150(R), 750(SR)이 됩니다."/>
+            <TextBlock Text="※소환석도 빛속성 소환석에 먹일때 1.5배 보정을 받습니다"/>
+            <TextBlock Text="※빛속성 캐릭터의 경우에도 엔젤무기를 먹일때 1.5배 보정을 받습니다"/>
+            <TextBlock/>
+            <TextBlock Text="※수동계산이 아닌경우 현재레벨,경험치 테이블 종류 변경이 불가능합니다."/>
+            <TextBlock/>
+            <TextBlock Text="수동계산에서는 실제 경험치를 반영하지 않습니다."/>
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <ItemsControl ItemsSource="{Binding EnhanceList}" HorizontalAlignment="Left">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="10"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate >
+                    <DataTemplate>
+                        <Grid Margin="0,0,0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="AUto"/>
+                                <ColumnDefinition Width="AUto"/>
+                            </Grid.ColumnDefinitions>
+                            <metro:PromptTextBox Prompt=""
+												 MinWidth="40"
+												 Margin="7,0">
+                                <metro:PromptTextBox.Text>
+                                    <Binding Path="SkillLv"
+											 Mode="TwoWay"
+											 UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <metro:Int32Rule Min="0" />
+                                            <metro:Int32Rule Max="15" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </metro:PromptTextBox.Text>
+
+                            </metro:PromptTextBox>
+							<metro:PromptComboBox Grid.Column="1" 
+												  Prompt=""
+												  MinWidth="70"
+												  Margin="0,0,7,0"
+												  IsReadOnly="True"
+												  ItemsSource="{Binding ElementList}"
+												  SelectedValue="{Binding SelectedElement, Mode=TwoWay}"
+												  />
+                            <!--<TextBlock Text="{Binding Result}"
+									   Grid.Column="2"
+									   VerticalAlignment="Center"/>-->
+						</Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+        <Grid Grid.Row="1"
+			  Grid.Column="3"
+			  Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<StackPanel VerticalAlignment="Top"
+						DataContext="{Binding MasterEnhance}"
+						Orientation="Horizontal">
+				<metro:PromptTextBox Prompt=""
+									 MinWidth="40"
+									 Margin="7,0">
+					<metro:PromptTextBox.Text>
+						<Binding Path="SkillLv"
+								 Mode="TwoWay"
+								 UpdateSourceTrigger="PropertyChanged">
+							<Binding.ValidationRules>
+								<metro:Int32Rule Min="0" />
+								<metro:Int32Rule Max="15" />
+							</Binding.ValidationRules>
+						</Binding>
+					</metro:PromptTextBox.Text>
+
+				</metro:PromptTextBox>
+				<metro:PromptComboBox Grid.Column="1" 
+												  Prompt=""
+												  MinWidth="70"
+												  Margin="0,0,7,0"
+												  IsReadOnly="True"
+												  ItemsSource="{Binding RankList}"
+												  SelectedValue="{Binding SelectedRank, Mode=TwoWay}"
+												  />
 			</StackPanel>
-			<TextBlock/>
-			<TextBlock Text="※엔젤웨폰(R)의 기본경험치는 100, 아크엔젤웨폰(SR)의 기본경험치는 500입니다."/>
-			<TextBlock Text="※동종무기의 경우 1.5배의 보정을 받아 획득경험치는 각각 150(R), 750(SR)이 됩니다."/>
-			<TextBlock Text="※엔젤소환석도 기본경험치는 동일하지만 빛속성이기때문에 빛속성 소환석에 먹일때 1.5배 보정을 받습니다"/>
-			<TextBlock Text="※빛속성 캐릭터의 경우에도 엔젤무기를 먹일때 1.5배 보정을 받습니다"/>
-			<TextBlock/>
-			<TextBlock Text="※수동계산이 아닌경우 현재레벨,경험치 테이블 종류 변경이 불가능합니다. 수동계산에서는 실제 경험치를 반영하지 않습니다."/>
-		</StackPanel>
-        
+			<Grid Grid.Row="1"
+				  Margin="20">
+				<TextBlock Grid.Column="1" TextAlignment="Center">
+					<Run Text="성공확률" FontWeight="Bold" FontSize="14"/>
+					<LineBreak/>
+					<Run Text="{Binding Total}" FontSize="50" Foreground="Red" FontWeight="Bold"/>
+					<Run Text="%" FontSize="30"/>
+				</TextBlock>
+			</Grid>
+			<Grid Grid.Row="2" Grid.ColumnSpan="2">
+				<TextBlock Text="※확률계산의 경우 게임 내에서는 소수점 이하를 모두 버립니다."/>
+			</Grid>
+		</Grid>
     </Grid>
 </UserControl>

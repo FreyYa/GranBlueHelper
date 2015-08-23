@@ -10,6 +10,7 @@ namespace GranBlueHelper.ViewModels
 {
 	public class ExpCalViewModel : ViewModel
 	{
+		#region Table
 		public static int[] EquipExpTable = new int[]
 		{
 			0,0,10,22,36,52,70,90,112,136,162,
@@ -37,6 +38,7 @@ namespace GranBlueHelper.ViewModels
 			853050,1053050,1303050,1603050,1953050,2353050,2803050,3303050,3803050,4803050,
 		};
 		public int[] ExpTable { get; set; }
+		#endregion
 
 		#region CurrentLevel
 
@@ -215,7 +217,7 @@ namespace GranBlueHelper.ViewModels
 					this._IsChar = value;
 					if (value) this.ExpTable = CharExpTable;
 					this.RaisePropertyChanged();
-					if (this.expInfo != null&&!IsManual)this.UpdateExpData();
+					if (this.expInfo != null && !IsManual) this.UpdateExpData();
 					else this.ManualCalc();
 				}
 			}
@@ -264,17 +266,53 @@ namespace GranBlueHelper.ViewModels
 		}
 
 		#endregion
-		//
+
 		public ExpInfo expInfo { get; set; }
 		private int MaxLevel { get; set; }
-
+		private List<EnhanceInfo> _EnhanceList;
+		public List<EnhanceInfo> EnhanceList
+		{
+			get { return this._EnhanceList; }
+			set
+			{
+				if (this._EnhanceList == value) return;
+				this._EnhanceList = value;
+				this.RaisePropertyChanged();
+			}
+		}
+		public EnhanceInfo _MasterEnhance;
+		public EnhanceInfo MasterEnhance
+		{
+			get { return this._MasterEnhance; }
+			set
+			{
+				if (this._MasterEnhance == value) return;
+				this._MasterEnhance = value;
+				this.RaisePropertyChanged();
+			}
+		}
+		public string _Total;
+		public string Total
+		{
+			get { return this._Total; }
+			set
+			{
+				if (this._Total == value) return;
+				this._Total = value;
+				this.RaisePropertyChanged();
+			}
+		}
 
 		public ExpCalViewModel()
 		{
 			this.IsManual = false;
 			this.IsWeapon = true;
 			this.Read();
+
+			this.EnhanceList = new List<EnhanceInfo>(GrandcypherClient.Current.EnhancementHooker.EnhanceList);
+			this.MasterEnhance = GrandcypherClient.Current.EnhancementHooker.MasterInfo;
 		}
+
 		private void ManualCalc()
 		{
 			this.MaxLevel = 100;
@@ -282,6 +320,9 @@ namespace GranBlueHelper.ViewModels
 
 			this.CalcExp();
 		}
+
+
+
 		private void UpdateExpData()
 		{
 			this.expInfo = GrandcypherClient.Current.EnhancementHooker.expInfo;
@@ -327,6 +368,16 @@ namespace GranBlueHelper.ViewModels
 			GrandcypherClient.Current.EnhancementHooker.CharReadEnd += () =>
 			{
 				if (!IsManual) this.UpdateExpData();
+			};
+			GrandcypherClient.Current.EnhancementHooker.CalcEnd += () =>
+			{
+				decimal temp = this.MasterEnhance.TotalResult * 100;
+				this.Total = temp.ToString("#.0");
+			};
+			GrandcypherClient.Current.EnhancementHooker.ChangeEnd += () =>
+			{
+				this.MasterEnhance = GrandcypherClient.Current.EnhancementHooker.MasterInfo;
+				this.EnhanceList = new List<EnhanceInfo>(GrandcypherClient.Current.EnhancementHooker.EnhanceList);
 			};
 		}
 	}
