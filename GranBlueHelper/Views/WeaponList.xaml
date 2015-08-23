@@ -267,8 +267,8 @@
 
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox Foreground="Black" Content="바하무트 무기 공격력 적용(콩킬리오)" IsChecked="{Binding IsconcilioBaha}" Margin="0,0,10,0"
-										  ToolTip="최저 10% 최대 15%"/>
+                                <CheckBox Foreground="Black" Content="바하무트 무기 공격력 적용(콘킬리오)" IsChecked="{Binding IsconcilioBaha}" Margin="0,0,10,0"
+										  ToolTip="HP/ATK상승 최저 10% 최대 15%"/>
                                 <metro:PromptTextBox Grid.Column="1"
 													 TextAlignment="Center"
 													 Width="23"

@@ -28,6 +28,10 @@ namespace Grandcypher
 		public WeaponInfo MainWeapon { get; set; }
 		public Skills SkillCounter { get; set; }
 		public List<string> SkillList { get; set; }
+
+		public bool IsConcilioExist { get; private set; }
+		public bool IsVisExist { get; private set; }
+
 		private bool DeckIsEnd { get; set; }
 		private bool ListIsEnd { get; set; }
 		public void SessionReader(Session oS)
@@ -43,17 +47,17 @@ namespace Grandcypher
 			if (oS.PathAndQuery.StartsWith("/npc/enhancement_materials") && oS.oResponse.MIMEType == "application/json")
 				ListDetail(oS);
 			if (oS.PathAndQuery.StartsWith("/weapon/weapon") && oS.oResponse.MIMEType == "application/json")
-				WeaponDetail(oS,false);
+				WeaponDetail(oS, false);
 			if (oS.PathAndQuery.StartsWith("/weapon/weapon_base") && oS.oResponse.MIMEType == "application/json")
-				WeaponDetail(oS,false);
+				WeaponDetail(oS, false);
 			if (oS.PathAndQuery.StartsWith("/enhancement_weapon/enhancement") && oS.oResponse.MIMEType == "application/json")
 				WeaponDetail(oS);
-        }
+		}
 		/// <summary>
 		/// 무기 정보에 접근할때 자동적으로 무기의 레벨을 저장한다.
 		/// </summary>
 		/// <param name="oS"></param>
-		private void WeaponDetail(Session oS,bool IsEnhance=true)
+		private void WeaponDetail(Session oS, bool IsEnhance = true)
 		{
 			JObject jsonFull = JObject.Parse(oS.GetResponseBodyAsString()) as JObject;
 			dynamic temp = jsonFull;
@@ -84,7 +88,7 @@ namespace Grandcypher
 					int ParamId = detail.id;
 					int MasterId = detail.master.id;
 					int NewSkillLv = (int)NewInfo["skill_level"];
-					
+
 					if (NewSkillLv <= 1) return;
 					if (MasterId == 1039900000 || MasterId == 1029900000) return;
 
@@ -333,7 +337,6 @@ namespace Grandcypher
 				else if (deck.SkillDetail1.Contains("HP상승") && !deck.SkillDetail1.Contains("공격력"))
 					deck.SkillType1 = 2;
 
-
 				if (deck.SkillDetail2.Contains("공격력") && !deck.SkillDetail2.Contains("HP상승"))
 					deck.SkillType2 = 1;
 				else if (deck.SkillDetail2.Contains("HP상승") && !deck.SkillDetail2.Contains("공격력"))
@@ -360,6 +363,10 @@ namespace Grandcypher
 			List<WeaponInfo> CollectedWeapon = new List<WeaponInfo>(WeaponLists);
 			CollectedWeapon.Add(MainWeapon);
 
+			List<WeaponInfo> MagnaWeapon = new List<WeaponInfo>(CollectedWeapon);
+			List<WeaponInfo> UnknownWeapon = new List<WeaponInfo>(CollectedWeapon);
+			List<WeaponInfo> StrangthWeapon = new List<WeaponInfo>(CollectedWeapon);
+			List<WeaponInfo> BahaWeapon = new List<WeaponInfo>(CollectedWeapon);
 
 			CollectedWeapon = CollectedWeapon.Where(x =>
 					(x.SkillDetail1 != null || x.SkillDetail2 != null) && ((x.SkillDetail1.Contains("공격력 상승") || x.SkillDetail2.Contains("공격력 상승"))))
@@ -367,18 +374,24 @@ namespace Grandcypher
 			CollectedWeapon = CollectedWeapon.Where(x => !x.SkillName1.Contains("방진") && !x.SkillName2.Contains("방진"))
 				.ToList();
 
-			List<WeaponInfo> MagnaWeapon = WeaponLists.Where(x =>
+			BahaWeapon = BahaWeapon.Where(x => x.ItemName != null && x.ItemName.Contains("バハムート")).ToList();//바하무트 무기를 분류
+
+			MagnaWeapon = MagnaWeapon.Where(x =>
 					(x.SkillDetail1 != null || x.SkillDetail2 != null) && ((x.SkillDetail1.Contains("공격력 상승") || x.SkillDetail2.Contains("공격력 상승"))))
 					.ToList();//마그나 공인 무기를 별도로 분류
 			MagnaWeapon = MagnaWeapon.Where(x => x.SkillName1.Contains("방진") || x.SkillName2.Contains("방진"))
 				.ToList();
 
-			List<WeaponInfo> UnknownWeapon = CollectedWeapon.Where
-				(x => x.SkillName1.Contains("ATK") || x.SkillName2.Contains("ATK")).ToList();
+			UnknownWeapon = UnknownWeapon.Where
+				(x =>
+				(x.SkillName1 != null || x.SkillName2 != null) && (x.SkillName1.Contains("ATK") || x.SkillName2.Contains("ATK"))
+				).ToList();
 			UnknownWeapon = UnknownWeapon.Where(x => x.attribute == MasterAttribute).ToList();//언노운 분류
 
-			List<WeaponInfo> StrangthWeapon = CollectedWeapon.Where
-				(x => x.SkillName1.Contains("스트렝스") || x.SkillName2.Contains("스트렝스")).ToList();
+			StrangthWeapon = StrangthWeapon.Where
+				(x =>
+				(x.SkillName1 != null || x.SkillName2 != null) && (x.SkillName1.Contains("스트렝스") || x.SkillName2.Contains("스트렝스"))
+				).ToList();
 			StrangthWeapon = StrangthWeapon.Where(x => x.attribute == MasterAttribute).ToList();//스트렝스 분류
 
 
@@ -593,6 +606,14 @@ namespace Grandcypher
 			}
 			SkillCounter.TotalAttack = TotalAtt;
 			this.DeckIsEnd = true;
+			if (BahaWeapon.Count > 0)
+			{
+				if (BahaWeapon.Any(x => x.SkillName1.Contains("콘킬리오"))) this.IsConcilioExist = true;
+				else this.IsConcilioExist = false;
+
+				if (BahaWeapon.Any(x => x.SkillName1.Contains("위스"))) this.IsVisExist = true;
+				else this.IsVisExist = false;
+			}
 			this.DeckLoadingEnd();
 		}
 		public void Reload()

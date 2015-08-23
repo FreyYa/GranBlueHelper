@@ -442,6 +442,9 @@ namespace GranBlueHelper.ViewModels
 				if (this.WeaponList.Where(x => x.IsManual).Count() > 0 || this.MainWeapon.IsManual) this.IsManualExist = true;
 				else this.IsManualExist = false;
 
+				this.IsconcilioBaha = GrandcypherClient.Current.WeaponHooker.IsConcilioExist;
+				this.IsvisBaha = GrandcypherClient.Current.WeaponHooker.IsVisExist;
+
 				this.LoadingScreen = Visibility.Collapsed;
 				this.DeckWeapon = Visibility.Visible;
 				this.ListWeapon = Visibility.Collapsed;
