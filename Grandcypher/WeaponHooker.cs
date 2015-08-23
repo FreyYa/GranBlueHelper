@@ -42,6 +42,59 @@ namespace Grandcypher
 				DeckDetail(oS);
 			if (oS.PathAndQuery.StartsWith("/npc/enhancement_materials") && oS.oResponse.MIMEType == "application/json")
 				ListDetail(oS);
+			if (oS.PathAndQuery.StartsWith("/weapon/weapon") && oS.oResponse.MIMEType == "application/json")
+				WeaponDetail(oS,false);
+			if (oS.PathAndQuery.StartsWith("/weapon/weapon_base") && oS.oResponse.MIMEType == "application/json")
+				WeaponDetail(oS,false);
+			if (oS.PathAndQuery.StartsWith("/enhancement_weapon/enhancement") && oS.oResponse.MIMEType == "application/json")
+				WeaponDetail(oS);
+        }
+		/// <summary>
+		/// 무기 정보에 접근할때 자동적으로 무기의 레벨을 저장한다.
+		/// </summary>
+		/// <param name="oS"></param>
+		private void WeaponDetail(Session oS,bool IsEnhance=true)
+		{
+			JObject jsonFull = JObject.Parse(oS.GetResponseBodyAsString()) as JObject;
+			dynamic temp = jsonFull;
+			if (!IsEnhance)
+			{
+				dynamic master = temp.master;
+				dynamic param = temp.param;
+				if (temp.id != null)
+				{
+					int SkillLv = param.skill_level;
+					int MasterId = master.id;
+					if (SkillLv <= 1) return;
+					if (MasterId == 1039900000 || MasterId == 1029900000) return;
+					int id = temp.id;
+					dynamic skill1 = temp.skill1;
+					dynamic skill2 = temp.skill2;
+
+					if (skill1.comment != null) this.WeaponLvSave(id, 1, SkillLv);
+					if (skill2.comment != null) this.WeaponLvSave(id, 2, SkillLv);
+				}
+			}
+			else
+			{
+				dynamic detail = temp.detail;
+				JObject NewInfo = (JObject)temp["new"];
+				if (detail.id != null)
+				{
+					int ParamId = detail.id;
+					int MasterId = detail.master.id;
+					int NewSkillLv = (int)NewInfo["skill_level"];
+					
+					if (NewSkillLv <= 1) return;
+					if (MasterId == 1039900000 || MasterId == 1029900000) return;
+
+					dynamic skill1 = detail.skill1;
+					dynamic skill2 = detail.skill2;
+
+					if (skill1.comment != null) this.WeaponLvSave(ParamId, 1, NewSkillLv);
+					if (skill2.comment != null) this.WeaponLvSave(ParamId, 2, NewSkillLv);
+				}
+			}
 		}
 		/// <summary>
 		/// 기본 무기 리스트. 강화/리스트/창고가 포함됨
