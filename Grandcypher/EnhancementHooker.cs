@@ -155,7 +155,7 @@ namespace Grandcypher
 
 		private static Dictionary<string, decimal> ElementTable = new Dictionary<string, decimal>
 		{
-			{"R",1}, {"SR",4 }, {"SSR",40 }, {"쁘띠",2}, {"데빌" ,4.8m}
+			{"없음",0 },{"R",1}, {"SR",4 }, {"SSR",40 }, {"쁘띠",2}, {"데빌" ,4.8m}
 		};
 		public IEnumerable<string> ElementList { get { return ElementTable.Keys.ToList(); } }
 		private string _SelectedElement;
