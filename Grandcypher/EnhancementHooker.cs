@@ -48,6 +48,19 @@ namespace Grandcypher
 			this.MasterInfo = new EnhanceInfo();
 			this.MasterInfo.ID = -1;
 		}
+		public void Clear()
+		{
+			List<EnhanceInfo> temps = new List<EnhanceInfo>();
+
+			for (int i = 0; i < 20; i++)
+			{
+				EnhanceInfo temp = new EnhanceInfo();
+				temp.ID = i;
+				temps.Add(temp);
+			}
+			this.EnhanceList = new List<EnhanceInfo>(temps);
+			this.ChangeEnd();
+		}
 		private void EnhancementHook(Session oS, bool IsWeapon)
 		{
 			if (IsWeapon) this.WeaponReadStart();

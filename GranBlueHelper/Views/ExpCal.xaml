@@ -194,6 +194,12 @@
 					<Run Text="%" FontSize="30"/>
 				</TextBlock>
 			</Grid>
+			<metro2:CallMethodButton Margin="5"
+									 Grid.Row="1"
+									 Grid.Column="1"
+									 VerticalAlignment="Center"
+									 Content="초기화"
+									 MethodName="Clear"/>
 			<Grid Grid.Row="2" Grid.ColumnSpan="2">
 				<TextBlock Text="※확률계산의 경우 게임 내에서는 소수점 이하를 모두 버립니다."/>
 			</Grid>

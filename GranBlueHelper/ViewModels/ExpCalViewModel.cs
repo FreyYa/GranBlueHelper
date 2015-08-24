@@ -320,7 +320,10 @@ namespace GranBlueHelper.ViewModels
 
 			this.CalcExp();
 		}
-
+		public void Clear()
+		{
+			GrandcypherClient.Current.EnhancementHooker.Clear();
+		}
 
 
 		private void UpdateExpData()
