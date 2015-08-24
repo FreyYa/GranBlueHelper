@@ -457,6 +457,13 @@ namespace GranBlueHelper.ViewModels
 				this.Progress = temp;
 			};
 		}
+		public void CompareAttackStatus()
+		{
+			if (this.CalcAtt - this.BeforeCalcAtt > 0) this.Gap = "+" + (this.CalcAtt - this.BeforeCalcAtt);
+			else this.Gap = (this.CalcAtt - this.BeforeCalcAtt).ToString();
+
+			this.BeforeCalcAtt = this.CalcAtt;
+		}
 		private void CalcAttack(Skills skillInfo)
 		{
 			if (skillInfo == null) return;
@@ -571,7 +578,6 @@ namespace GranBlueHelper.ViewModels
 				}
 			}
 
-			this.BeforeCalcAtt = this.CalcAtt;
 			this.CalcAtt = Convert.ToInt32(Math.Round(total * percent * Magnapercent * (Unknownpercent + Strangthpercent) * Attributepercent, 0, MidpointRounding.AwayFromZero));
 
 			StringBuilder stbr = new StringBuilder();
@@ -601,10 +607,6 @@ namespace GranBlueHelper.ViewModels
 
 			this.CalcAtt += skillInfo.NovelWeaponCount * 1000;
 			if (skillInfo.NovelWeaponCount > 0) this.NovelWeapon = "+" + (1000 * skillInfo.NovelWeaponCount);
-
-
-			if (this.CalcAtt - this.BeforeCalcAtt > 0) this.Gap = "+" + (this.CalcAtt - this.BeforeCalcAtt);
-			else this.Gap = (this.CalcAtt - this.BeforeCalcAtt).ToString();
 
 
 			var tempNPC = new List<NpcInfo>(GrandcypherClient.Current.WeaponHooker.NPCList);

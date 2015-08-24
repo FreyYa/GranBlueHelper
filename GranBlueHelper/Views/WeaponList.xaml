@@ -345,7 +345,11 @@
                                 </metro:PromptTextBox>
 
                             </Grid>
-							<metro2:CallMethodButton Content="무기정보수정"
+                            <metro2:CallMethodButton Content="이전 공격력과 비교"
+													 Padding="20,4"
+													 Margin="4"
+													 MethodName="CompareAttackStatus"/>
+                            <metro2:CallMethodButton Content="무기정보수정"
 													 Padding="20,4"
 													 Margin="4"
 													 MethodName="ShowMasterInfoModify"
