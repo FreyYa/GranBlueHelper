@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,19 +48,35 @@ namespace Grandcypher
 				this.AreaList.Add(Info);
 			}
 			StringBuilder stbr = new StringBuilder();
-			stbr.Append(today.ToLongDateString()+",");
-
-			for (int i = 0; i < AreaList.Count; i++)
-			{
-				stbr.Append(AreaList[i].point + ",");
-			}
 			for (int i = 0; i < AreaList.Count; i++)
 			{
 				stbr.Append(AreaList[i].ranking);
 			}
-#if DEBUG
-			Console.WriteLine(stbr.ToString());
-#endif
+			this.Logger("{0},{1},{2},{3},{4},{5}",today.ToLongDateString(),AreaList[0].point,AreaList[1].point,AreaList[2].point,AreaList[3].point,stbr.ToString());
+		}
+		private void Logger(string str, params object[] args)
+		{
+			byte[] utf8Bom = { 0xEF, 0xBB, 0xBF };
+			string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+
+			if (!System.IO.File.Exists(MainFolder + "\\BookMaker.csv"))
+			{
+				var csvPath = Path.Combine(MainFolder, "BookMaker.csv");
+				using (var fileStream = new FileStream(csvPath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+				using (var writer = new BinaryWriter(fileStream))
+				{
+					writer.Write(utf8Bom);
+				}
+				using (StreamWriter w = File.AppendText(MainFolder + "\\BookMaker.csv"))
+				{
+					w.WriteLine("날짜,북,서,동,남,랭킹",args);
+				}
+			}
+
+			using (StreamWriter w = File.AppendText(MainFolder + "\\BookMaker.csv"))
+			{
+				w.WriteLine(str,args);
+			}
 		}
 	}
 	public class AreaInfo

@@ -72,7 +72,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BookmakerHooker.cs" />
-    <Compile Include="AssetsHooker.cs" />
     <Compile Include="EnhancementHooker.cs" />
     <Compile Include="GrandcypherClient.cs" />
     <Compile Include="GrandcypherProxy.cs" />
