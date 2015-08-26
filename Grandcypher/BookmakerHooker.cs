@@ -52,7 +52,7 @@ namespace Grandcypher
 			{
 				stbr.Append(AreaList[i].ranking);
 			}
-			this.Logger("{0},{1},{2},{3},{4},{5}",today.ToLongDateString(),AreaList[0].point,AreaList[1].point,AreaList[2].point,AreaList[3].point,stbr.ToString());
+			this.Logger("{0},{1},{2},{3},{4},{5}",today.ToString(),AreaList[0].point,AreaList[1].point,AreaList[2].point,AreaList[3].point,stbr.ToString());
 		}
 		private void Logger(string str, params object[] args)
 		{
