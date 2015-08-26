@@ -49,6 +49,13 @@ namespace Grandcypher
 						var temp = oS.PathAndQuery.Split('?');
 						Console.WriteLine(temp[0]);
 						Console.WriteLine(oS.oResponse.MIMEType);
+					} 
+					if (!oS.PathAndQuery.StartsWith("/security"))
+					{
+						Console.WriteLine("--------------------------------------------------------------------");
+						var temp = oS.PathAndQuery.Split('?');
+						Console.WriteLine(temp[0]);
+						Console.WriteLine(oS.oResponse.MIMEType);
 					}
 				}
 #endif
@@ -59,6 +66,7 @@ namespace Grandcypher
 					GrandcypherClient.Current.WeaponHooker.SessionReader(oS);
 					GrandcypherClient.Current.NoticeHooker.SessionReader(oS);
 					GrandcypherClient.Current.EnhancementHooker.SessionReader(oS);
+					GrandcypherClient.Current.BookmakerHooker.SessionReader(oS);
 				}
 			};
 		}
