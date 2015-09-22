@@ -709,6 +709,7 @@ namespace Grandcypher
 		{
 			string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 			var binPath = Path.Combine(MainFolder, "Data", "MasterWeapon.bin");
+			if (!Directory.Exists(Path.Combine(MainFolder, "Data"))) Directory.CreateDirectory(Path.Combine(MainFolder, "Data"));
 
 			var items = new Dictionary<int, WeaponInfo>(this.MasterBinList);
 
