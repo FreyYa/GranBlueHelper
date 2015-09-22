@@ -98,6 +98,10 @@
 				<Run Text="코드의 경우, 기반은 KanColleViewer를 많이 따르고있으나 세세한 부분이나 라이브러리 채택등의 일부 구성은 다르게 되어있습니다."/> 
 				<LineBreak/>
 				<LineBreak/>
+						<metro2:HyperlinkEx Uri="http://goo.gl/NmaJF8">
+							<Run Text="그랑블루 판타지 유용한 게시글 모음" FontFamily="Meiryo UI"/>
+						</metro2:HyperlinkEx>
+				<LineBreak/>
 				<LineBreak/>
 				<TextBlock Text="Build With" Width="Auto" HorizontalAlignment="Left"/>
 			<metro:BindableTextBlock TextSource="{Binding Libraries}"

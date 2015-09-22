@@ -62,7 +62,7 @@
 				<TextBlock Text="{Binding RemainingExp}"/>
 			</StackPanel>
 		</StackPanel>
-        <Rectangle Width="2" Height="Auto" Margin="30,5" Grid.Column="1"/>
+        <Rectangle Width="2" Height="Auto" Margin="10,5" Grid.Column="1"/>
         <StackPanel Grid.Column="2">
             <Grid>
                 <Grid.ColumnDefinitions>
