@@ -100,7 +100,7 @@
             <TextBlock/>
             <TextBlock Text="수동계산에서는 실제 경험치를 반영하지 않습니다."/>
         </StackPanel>
-        <Grid Grid.Row="1">
+        <!--<Grid Grid.Row="1">
             <ItemsControl ItemsSource="{Binding EnhanceList}" HorizontalAlignment="Left">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -138,14 +138,14 @@
 												  ItemsSource="{Binding ElementList}"
 												  SelectedValue="{Binding SelectedElement, Mode=TwoWay}"
 												  />
-                            <!--<TextBlock Text="{Binding Result}"
+                            --><!--<TextBlock Text="{Binding Result}"
 									   Grid.Column="2"
-									   VerticalAlignment="Center"/>-->
+									   VerticalAlignment="Center"/>--><!--
 						</Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </Grid>
+        </Grid>-->
         <Grid Grid.Row="1"
 			  Grid.Column="3"
 			  Margin="10">
@@ -160,7 +160,9 @@
 			</Grid.RowDefinitions>
 			<StackPanel VerticalAlignment="Top"
 						DataContext="{Binding MasterEnhance}"
-						Orientation="Horizontal">
+						Orientation="Horizontal"
+						Grid.ColumnSpan="2">
+				<TextBlock Text="스킬Lv" VerticalAlignment="Center"/>
 				<metro:PromptTextBox Prompt=""
 									 MinWidth="40"
 									 Margin="7,0">
@@ -176,33 +178,78 @@
 					</metro:PromptTextBox.Text>
 
 				</metro:PromptTextBox>
+				<TextBlock Text="아이템Rank"
+						   VerticalAlignment="Center"/>
 				<metro:PromptComboBox Grid.Column="1" 
 												  Prompt=""
 												  MinWidth="70"
-												  Margin="0,0,7,0"
+												  Margin="7,0,7,0"
 												  IsReadOnly="True"
 												  ItemsSource="{Binding RankList}"
 												  SelectedValue="{Binding SelectedRank, Mode=TwoWay}"
 												  />
 			</StackPanel>
-			<Grid Grid.Row="1"
+            <StackPanel Grid.Row="1"
 				  Margin="20">
-				<TextBlock Grid.Column="1" TextAlignment="Center">
-					<Run Text="성공확률" FontWeight="Bold" FontSize="14"/>
+                <TextBlock Grid.Column="1" TextAlignment="Center">
+					<Run Text="필요수치" FontWeight="Bold" FontSize="14"/>
 					<LineBreak/>
-					<Run Text="{Binding Total}" FontSize="50" Foreground="Red" FontWeight="Bold"/>
-					<Run Text="%" FontSize="30"/>
-				</TextBlock>
-			</Grid>
-			<metro2:CallMethodButton Margin="5"
-									 Grid.Row="1"
-									 Grid.Column="1"
-									 VerticalAlignment="Center"
-									 Content="초기화"
-									 MethodName="Clear"/>
-			<Grid Grid.Row="2" Grid.ColumnSpan="2">
-				<TextBlock Text="※확률계산의 경우 게임 내에서는 소수점 이하를 모두 버립니다."/>
-			</Grid>
+					<Run Text="{Binding MasterEnhance.Result}" FontSize="30" Foreground="Red" FontWeight="Bold"/>
+                </TextBlock>
+            </StackPanel>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+				<TextBlock Text="소재 랭크/종류별 보유값"/>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="R"/>
+                    <TextBlock Text="SR"
+						   Grid.Row="1"/>
+                    <TextBlock Text="SSR"
+						   Grid.Row="2"/>
+                    <TextBlock Text="쁘띠"
+						   Grid.Row="3"/>
+                    <TextBlock Text="데빌"
+						   Grid.Row="4"/>
+
+
+                    <TextBlock Text="1"
+						   Grid.Column="1"/>
+                    <TextBlock Text="4"
+						   Grid.Row="1"
+						   Grid.Column="1"/>
+                    <TextBlock Text="40"
+						   Grid.Row="2"
+						   Grid.Column="1"/>
+                    <TextBlock Text="2"
+						   Grid.Row="3"
+						   Grid.Column="1"/>
+                    <TextBlock Text="4.8"
+						   Grid.Row="4"
+						   Grid.Column="1"/>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="2" Grid.ColumnSpan="2">
+                <TextBlock>
+					<Run Text="※계산은 ((필요수치 * 스킬Lv)/(보유값 * 스킬Lv)) 로 이루어지며 각각 개별계산됩니다. 경우에 따라 소수점이 버려집니다"/>
+					<LineBreak/>
+					<Run Text="※계산 예) 필요값: SSR 1Lv = 8, SR보유값 = 4 이므로 SSR 1Lv->2lv로 갈 때는 스킬Lv 1 SR 2개가 소모됩니다"/>
+					<LineBreak/>
+                </TextBlock>
+            </Grid>
 		</Grid>
     </Grid>
 </UserControl>

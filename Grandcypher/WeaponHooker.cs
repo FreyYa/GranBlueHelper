@@ -846,12 +846,12 @@ namespace Grandcypher
 				if (order == 1)
 				{
 					temp.SkillLv1 = Lv;
-					if (temp.SkillLv2 < 1 || temp.SkillLv2 > 10) temp.SkillLv2 = 1;
+					if (temp.SkillLv2 < 1 || temp.SkillLv2 > 15) temp.SkillLv2 = 1;
 				}
 				else
 				{
 					temp.SkillLv2 = Lv;
-					if (temp.SkillLv1 < 1 || temp.SkillLv1 > 10) temp.SkillLv1 = 1;
+					if (temp.SkillLv1 < 1 || temp.SkillLv1 > 15) temp.SkillLv1 = 1;
 				}
 
 				items.Add(Id, temp);
@@ -977,7 +977,7 @@ namespace Grandcypher
 			{
 				if (this._SkillLv1 == value) return;
 				this._SkillLv1 = value;
-				if (this._SkillLv1 < 1 || this._SkillLv1 > 10) this._SkillLv1 = 1;
+				if (this._SkillLv1 < 1 || this._SkillLv1 > 15) this._SkillLv1 = 1;
 				GrandcypherClient.Current.WeaponHooker.Reload();
 				if (this.ParamId != 0)
 				{
@@ -985,7 +985,7 @@ namespace Grandcypher
 					if (vSkillLv2 == Visibility.Visible)
 					{
 						SkillLv2 = value;
-						if (this.SkillLv2 < 1 || this.SkillLv2 > 10) this.SkillLv2 = 1;
+						if (this.SkillLv2 < 1 || this.SkillLv2 > 15) this.SkillLv2 = 1;
 						GrandcypherClient.Current.WeaponHooker.Reload();
 
 						GrandcypherClient.Current.WeaponHooker.WeaponLvSave(this.ParamId, 2, value);

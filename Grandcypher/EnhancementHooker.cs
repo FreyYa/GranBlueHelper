@@ -20,11 +20,8 @@ namespace Grandcypher
 		public EventHandler WeaponReadEnd;
 		public EventHandler CharReadStart;
 		public EventHandler CharReadEnd;
-		public EventHandler CalcEnd;
-		public EventHandler ChangeEnd;
 		#endregion
-
-		public List<EnhanceInfo> EnhanceList { get; set; }
+		
 		public EnhanceInfo MasterInfo { get; set; }
 		public ExpInfo expInfo { get; set; }
 		public void SessionReader(Session oS)
@@ -38,28 +35,8 @@ namespace Grandcypher
 		}
 		public EnhancementHooker()
 		{
-			this.EnhanceList = new List<EnhanceInfo>();
-			for (int i = 0; i < 20; i++)
-			{
-				EnhanceInfo temp = new EnhanceInfo();
-				temp.ID = i;
-				this.EnhanceList.Add(temp);
-			}
 			this.MasterInfo = new EnhanceInfo();
 			this.MasterInfo.ID = -1;
-		}
-		public void Clear()
-		{
-			List<EnhanceInfo> temps = new List<EnhanceInfo>();
-
-			for (int i = 0; i < 20; i++)
-			{
-				EnhanceInfo temp = new EnhanceInfo();
-				temp.ID = i;
-				temps.Add(temp);
-			}
-			this.EnhanceList = new List<EnhanceInfo>(temps);
-			this.ChangeEnd();
 		}
 		private void EnhancementHook(Session oS, bool IsWeapon)
 		{
@@ -79,45 +56,6 @@ namespace Grandcypher
 			};
 			if (IsWeapon) this.WeaponReadEnd();
 			else this.CharReadEnd();
-		}
-		public void ChangeListData(EnhanceInfo data)
-		{
-			if (data.ID == -1)
-			{
-				this.MasterInfo = data;
-			}
-			else
-			{
-				for (int i = 0; i < EnhanceList.Count; i++)
-				{
-					if (EnhanceList[i].ID == data.ID)
-					{
-						data.ID = i;
-						EnhanceList[i] = data;
-						break;
-					}
-				}
-			}
-			this.ChangeEnd();
-		}
-		public void EnhancementCalc()
-		{
-			var bottom = this.MasterInfo.Result;
-			if (bottom > 0)
-			{
-				decimal total = 0;
-				for (int i = 0; i < EnhanceList.Count; i++)
-				{
-					if (EnhanceList[i].Result == 0) continue;
-
-					var temp = EnhanceList[i].Result / bottom;
-					temp = Math.Truncate(temp * 1000);
-					temp = temp / 1000;
-					total += temp;
-				}
-				this.MasterInfo.TotalResult = total;
-			}
-			this.CalcEnd();
 		}
 	}
 	public class ExpInfo
@@ -148,8 +86,6 @@ namespace Grandcypher
 				if (this._SelectedRank == value) return;
 				this._SelectedRank = value;
 				this.CalcResult();
-				GrandcypherClient.Current.EnhancementHooker.ChangeListData(this);
-				GrandcypherClient.Current.EnhancementHooker.EnhancementCalc();
 			}
 		}
 
@@ -167,8 +103,6 @@ namespace Grandcypher
 				if (this._SelectedElement == value) return;
 				this._SelectedElement = value;
 				this.CalcResult();
-				GrandcypherClient.Current.EnhancementHooker.ChangeListData(this);
-				GrandcypherClient.Current.EnhancementHooker.EnhancementCalc();
 			}
 		}
 		#endregion
@@ -183,12 +117,19 @@ namespace Grandcypher
 				if (value == 0) return;
 				this._SkillLv = value;
 				this.CalcResult();
-				GrandcypherClient.Current.EnhancementHooker.ChangeListData(this);
-				GrandcypherClient.Current.EnhancementHooker.EnhancementCalc();
 			}
 		}
-		public decimal Result { get; set; }
-		public decimal TotalResult { get; set; }
+		private decimal _Result;
+		public decimal Result
+		{
+			get { return this._Result; }
+			set
+			{
+				if (this._Result == value) return;
+				this._Result = value;
+				this.RaisePropertyChanged();
+			}
+		}
 		private void CalcResult()
 		{
 			if (this.SelectedElement != null) this.Result = SkillLv * ElementTable[SelectedElement];
