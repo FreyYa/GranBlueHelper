@@ -527,7 +527,7 @@ namespace GranBlueHelper.ViewModels
 				if (Magnapercent > 1)
 				{
 					Magnapercent -= 1;
-					Magnapercent = Magnapercent * (1 + (decimal)this.BlessingPercent / 100m);
+					Magnapercent = Magnapercent * (1 + (decimal)this.FriendBlessingPercent / 100m);
 					Magnapercent += 1;
 				}
 			}
@@ -536,7 +536,7 @@ namespace GranBlueHelper.ViewModels
 				if (Unknownpercent > 1)
 				{
 					Unknownpercent -= 1;
-					Unknownpercent = Unknownpercent * (1 + (decimal)this.BlessingPercent / 100m);
+					Unknownpercent = Unknownpercent * (1 + (decimal)this.FriendBlessingPercent / 100m);
 					Unknownpercent += 1;
 				}
 			}
