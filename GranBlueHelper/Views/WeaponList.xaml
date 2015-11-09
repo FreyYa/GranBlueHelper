@@ -245,7 +245,14 @@
 								<Run Text="{Binding Gap}" Foreground="Red"/>
 								<Run Text=")" Foreground="Red"/>
                             </TextBlock>
-                            <StackPanel Orientation="Horizontal">
+							<TextBlock Visibility="{Binding TargetMagnaVisible}">
+								<Run Text="필요 마그나 배율: "/>
+								<Run Text="{Binding TargetMagna}"/>
+								<TextBlock.ToolTip>
+									<Run Text="현재 세팅에서 추가로 더 필요한 마그나 퍼센트입니다."/>
+								</TextBlock.ToolTip>
+							</TextBlock>
+							<StackPanel Orientation="Horizontal">
                                 <CheckBox Foreground="Black" Content="바하무트 무기 공격력 적용(위스)" IsChecked="{Binding IsvisBaha}" Margin="0,0,10,0"
 										  ToolTip="최저 20% 최대 30%"/>
                                 <metro:PromptTextBox Grid.Column="1"

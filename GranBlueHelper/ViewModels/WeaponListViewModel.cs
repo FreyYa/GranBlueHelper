@@ -3,6 +3,7 @@ using Livet;
 using Livet.Messaging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -373,6 +374,34 @@ namespace GranBlueHelper.ViewModels
 
 		#endregion
 
+		#region TargetMagna
+		private string _TargetMagna;
+		public string TargetMagna
+		{
+			get { return this._TargetMagna; }
+			set
+			{
+				if (this._TargetMagna == value) return;
+				this._TargetMagna = value;
+				this.RaisePropertyChanged();
+			}
+		}
+		#endregion
+		private Visibility _TargetMagnaVisible;
+		public Visibility TargetMagnaVisible
+		{
+			get { return this._TargetMagnaVisible; }
+			set
+			{
+				if (!Equals(this._TargetMagnaVisible, value))
+				{
+					this._TargetMagnaVisible = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+
 		#region IsManualExist
 		private bool _IsManualExist;
 		public bool IsManualExist
@@ -616,6 +645,33 @@ namespace GranBlueHelper.ViewModels
 				tempNPC[i].CalcAtt = Convert.ToInt32(Math.Round(tempNPC[i].attack * percent * Magnapercent * (Unknownpercent + Strangthpercent) * Attributepercent, 0, MidpointRounding.AwayFromZero));
 			}
 			this.NPCList = new List<NpcInfo>(tempNPC);
+			if (this.CalcTargetSkillLv(skillInfo) > 0) this.TargetMagna = this.CalcTargetSkillLv(skillInfo).ToString("##0.##%");
+			else this.TargetMagna = "조건 달성";
+
+#if DEBUG
+			Debug.WriteLine(this.CalcTargetSkillLv(skillInfo));
+#endif
+		}
+		private decimal CalcTargetSkillLv(Skills skillInfo)
+		{
+			if (BlessingTable[this.SelectedFriendBlessing] == 0 && BlessingTable[this.SelectedBlessing] == 0)
+			{
+				var magna = (skillInfo.MagnaL * 6 + skillInfo.MagnaM * 3 + skillInfo.MagnaS * 1 + skillInfo.MagnaSkillLvCount) / 100m;
+
+				var Ans = (magna + 1) * (1 + (this.BlessingPercent / 100m) + (this.FriendBlessingPercent / 100m));
+
+				var targetup = Ans - 1 - (this.FriendBlessingPercent / 100m);
+				var targetdown = 2 * (1 + this.FriendBlessingPercent / 100m);
+				var target = targetup / targetdown;
+
+				this.TargetMagnaVisible = Visibility.Visible;
+				return target - (magna);
+			}
+			else
+			{
+				this.TargetMagnaVisible = Visibility.Collapsed;
+				return -1;
+			}
 		}
 	}
 }

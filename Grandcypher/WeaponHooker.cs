@@ -177,15 +177,22 @@ namespace Grandcypher
 				else temp.vSkillLv2 = Visibility.Visible;
 
 				//1=공격 2=체력Up
-				if (temp.SkillDetail1.Contains("공격력") && !temp.SkillDetail1.Contains("HP상승"))
+				if (temp.SkillName1.Contains("배수"))
+					temp.SkillType1 = 3;
+				else if (temp.SkillDetail1.Contains("공격력") && !temp.SkillDetail1.Contains("HP상승"))
 					temp.SkillType1 = 1;
 				else if (temp.SkillDetail1.Contains("HP상승") && !temp.SkillDetail1.Contains("공격력"))
 					temp.SkillType1 = 2;
 
-				if (temp.SkillDetail2.Contains("공격력") && !temp.SkillDetail2.Contains("HP상승"))
+				if (temp.SkillName2.Contains("배수"))
+					temp.SkillType2 = 3;
+				else if (temp.SkillDetail2.Contains("공격력") && !temp.SkillDetail2.Contains("HP상승"))
 					temp.SkillType2 = 1;
 				else if (temp.SkillDetail2.Contains("HP상승") && !temp.SkillDetail2.Contains("공격력"))
 					temp.SkillType2 = 2;
+
+				temp.SkillAttribute1 = this.SetSkillAttribute(temp.SkillDetail1);
+				temp.SkillAttribute2 = this.SetSkillAttribute(temp.SkillDetail2);
 
 				WeaponLists.Add(temp);
 				this.ProgressStatus.Current++;
@@ -331,13 +338,17 @@ namespace Grandcypher
 
 				deck.ParamId = (int)param["id"];//무기 스킬레벨등을 저장하고 구별하기 위한 부분
 
-				//1=공격 2=체력Up 
-				if (deck.SkillDetail1.Contains("공격력") && !deck.SkillDetail1.Contains("HP상승"))
+				//1=공격 2=체력Up 2=배수
+				if (deck.SkillName1.Contains("배수"))
+					deck.SkillType1 = 3;
+				else if (deck.SkillDetail1.Contains("공격력") && !deck.SkillDetail1.Contains("HP상승"))
 					deck.SkillType1 = 1;
 				else if (deck.SkillDetail1.Contains("HP상승") && !deck.SkillDetail1.Contains("공격력"))
 					deck.SkillType1 = 2;
 
-				if (deck.SkillDetail2.Contains("공격력") && !deck.SkillDetail2.Contains("HP상승"))
+				if (deck.SkillName2.Contains("배수"))
+					deck.SkillType2 = 3;
+				else if (deck.SkillDetail2.Contains("공격력") && !deck.SkillDetail2.Contains("HP상승"))
 					deck.SkillType2 = 1;
 				else if (deck.SkillDetail2.Contains("HP상승") && !deck.SkillDetail2.Contains("공격력"))
 					deck.SkillType2 = 2;
@@ -349,6 +360,8 @@ namespace Grandcypher
 				if (deck.SkillName2 != string.Empty && deck.SkillName2 != null) deck.vSkillLv2 = Visibility.Visible;
 				else deck.vSkillLv2 = Visibility.Collapsed;
 
+				deck.SkillAttribute1 = this.SetSkillAttribute(deck.SkillDetail1);
+				deck.SkillAttribute2 = this.SetSkillAttribute(deck.SkillDetail2);
 
 				if (i == 1)
 				{
@@ -393,87 +406,6 @@ namespace Grandcypher
 				(x.SkillName1 != null || x.SkillName2 != null) && (x.SkillName1.Contains("스트렝스") || x.SkillName2.Contains("스트렝스"))
 				).ToList();
 			StrangthWeapon = StrangthWeapon.Where(x => x.attribute == MasterAttribute).ToList();//스트렝스 분류
-
-
-			switch (MasterAttribute)//일반 공인 분류
-			{
-				case 1://화
-					CollectedWeapon = CollectedWeapon.Where(x =>
-						x.SkillDetail1.Contains("화속성") ||
-						x.SkillDetail2.Contains("화속성"))
-						.ToList();
-					break;
-				case 2://수
-					CollectedWeapon = CollectedWeapon.Where(x =>
-						x.SkillDetail1.Contains("수속성") ||
-						x.SkillDetail2.Contains("수속성"))
-						.ToList();
-					break;
-				case 3://토
-					CollectedWeapon = CollectedWeapon.Where(x =>
-						x.SkillDetail1.Contains("토속성") ||
-						x.SkillDetail2.Contains("토속성"))
-						.ToList();
-					break;
-				case 4://풍
-					CollectedWeapon = CollectedWeapon.Where(x =>
-						x.SkillDetail1.Contains("풍속성") ||
-						x.SkillDetail2.Contains("풍속성"))
-						.ToList();
-					break;
-				case 5://광
-					CollectedWeapon = CollectedWeapon.Where(x =>
-						x.SkillDetail1.Contains("빛속성") ||
-						x.SkillDetail2.Contains("빛속성"))
-						.ToList();
-					break;
-				case 6://암
-					CollectedWeapon = CollectedWeapon.Where(x =>
-						x.SkillDetail1.Contains("암속성") ||
-						x.SkillDetail2.Contains("암속성"))
-						.ToList();
-					break;
-			}
-			switch (MasterAttribute)//일반 공인 분류
-			{
-				case 1://화
-					MagnaWeapon = MagnaWeapon.Where(x =>
-						x.SkillDetail1.Contains("화속성") ||
-						x.SkillDetail2.Contains("화속성"))
-						.ToList();
-					break;
-				case 2://수
-					MagnaWeapon = MagnaWeapon.Where(x =>
-						x.SkillDetail1.Contains("수속성") ||
-						x.SkillDetail2.Contains("수속성"))
-						.ToList();
-					break;
-				case 3://토
-					MagnaWeapon = MagnaWeapon.Where(x =>
-						x.SkillDetail1.Contains("토속성") ||
-						x.SkillDetail2.Contains("토속성"))
-						.ToList();
-					break;
-				case 4://풍
-					MagnaWeapon = MagnaWeapon.Where(x =>
-						x.SkillDetail1.Contains("풍속성") ||
-						x.SkillDetail2.Contains("풍속성"))
-						.ToList();
-					break;
-				case 5://광
-					MagnaWeapon = MagnaWeapon.Where(x =>
-						x.SkillDetail1.Contains("빛속성") ||
-						x.SkillDetail2.Contains("빛속성"))
-						.ToList();
-					break;
-				case 6://암
-					MagnaWeapon = MagnaWeapon.Where(x =>
-						x.SkillDetail1.Contains("암속성") ||
-						x.SkillDetail2.Contains("암속성"))
-						.ToList();
-					break;
-			}
-
 
 			var little = CollectedWeapon.Where(x =>//1퍼센트
 						x.SkillDetail1.Contains("小") ||
@@ -529,41 +461,53 @@ namespace Grandcypher
 						.ToList();
 
 
-			var normalSum = little.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
-			normalSum += little.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+			var normalSum = little.Where(x => x.SkillName1 != string.Empty && x.SkillType1 == 1
+			&& x.SkillAttribute1 == MasterAttribute).Sum(y => y.SkillLv1 - 1);
+			normalSum += little.Where(x => x.SkillName2 != string.Empty && x.SkillType2 == 1
+			&& x.SkillAttribute1 == MasterAttribute).Sum(y => y.SkillLv2 - 1);
 
-			normalSum += middle.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
-			normalSum += middle.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+			normalSum += middle.Where(x => x.SkillName1 != string.Empty && x.SkillType1 == 1
+			&& x.SkillAttribute1 == MasterAttribute).Sum(y => y.SkillLv1 - 1);
+			normalSum += middle.Where(x => x.SkillName2 != string.Empty && x.SkillType2 == 1
+			&& x.SkillAttribute1 == MasterAttribute).Sum(y => y.SkillLv2 - 1);
 
-			normalSum += large.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
-			normalSum += large.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+			normalSum += large.Where(x => x.SkillName1 != string.Empty && x.SkillType1 == 1
+			&& x.SkillAttribute1 == MasterAttribute).Sum(y => y.SkillLv1 - 1);
+			normalSum += large.Where(x => x.SkillName2 != string.Empty && x.SkillType2 == 1
+			&& x.SkillAttribute1 == MasterAttribute).Sum(y => y.SkillLv2 - 1);
 
-			var MagnaSum = Mlittle.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
-			MagnaSum += Mlittle.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+			var MagnaSum = Mlittle.Where(x => x.SkillName1 != string.Empty && x.SkillType1 == 1
+			&& x.SkillAttribute1 == MasterAttribute).Sum(y => y.SkillLv1 - 1);
+			MagnaSum += Mlittle.Where(x => x.SkillName2 != string.Empty && x.SkillType2 == 1
+			&& x.SkillAttribute1 == MasterAttribute).Sum(y => y.SkillLv2 - 1);
 
-			MagnaSum += Mmiddle.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
-			MagnaSum += Mmiddle.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+			MagnaSum += Mmiddle.Where(x => x.SkillName1 != string.Empty && x.SkillType1 == 1
+			&& x.SkillAttribute1 == MasterAttribute).Sum(y => y.SkillLv1 - 1);
+			MagnaSum += Mmiddle.Where(x => x.SkillName2 != string.Empty && x.SkillType2 == 1
+			&& x.SkillAttribute1 == MasterAttribute).Sum(y => y.SkillLv2 - 1);
 
-			MagnaSum += Mlarge.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
-			MagnaSum += Mlarge.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+			MagnaSum += Mlarge.Where(x => x.SkillName1 != string.Empty && x.SkillType1 == 1
+			&& x.SkillAttribute1 == MasterAttribute).Sum(y => y.SkillLv1 - 1);
+			MagnaSum += Mlarge.Where(x => x.SkillName2 != string.Empty && x.SkillType2 == 1
+			&& x.SkillAttribute1 == MasterAttribute).Sum(y => y.SkillLv2 - 1);
 
-			var UnknownSum = Ulittle.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
-			UnknownSum += Ulittle.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+			var UnknownSum = Ulittle.Where(x => x.SkillName1 != string.Empty && x.SkillType1 == 1).Sum(y => y.SkillLv1 - 1);
+			UnknownSum += Ulittle.Where(x => x.SkillName2 != string.Empty && x.SkillType2 == 1).Sum(y => y.SkillLv2 - 1);
 
-			UnknownSum += Umiddle.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
-			UnknownSum += Umiddle.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+			UnknownSum += Umiddle.Where(x => x.SkillName1 != string.Empty && x.SkillType1 == 1).Sum(y => y.SkillLv1 - 1);
+			UnknownSum += Umiddle.Where(x => x.SkillName2 != string.Empty && x.SkillType2 == 1).Sum(y => y.SkillLv2 - 1);
 
-			UnknownSum += Ularge.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
-			UnknownSum += Ularge.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+			UnknownSum += Ularge.Where(x => x.SkillName1 != string.Empty && x.SkillType1 == 1).Sum(y => y.SkillLv1 - 1);
+			UnknownSum += Ularge.Where(x => x.SkillName2 != string.Empty && x.SkillType2 == 1).Sum(y => y.SkillLv2 - 1);
 
-			var StrangthSum = Slittle.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
-			StrangthSum += Slittle.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+			var StrangthSum = Slittle.Where(x => x.SkillName1 != string.Empty && x.SkillType1 == 1).Sum(y => y.SkillLv1 - 1);
+			StrangthSum += Slittle.Where(x => x.SkillName2 != string.Empty && x.SkillType2 == 1).Sum(y => y.SkillLv2 - 1);
 
-			StrangthSum += Smiddle.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
-			StrangthSum += Smiddle.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+			StrangthSum += Smiddle.Where(x => x.SkillName1 != string.Empty && x.SkillType1 == 1).Sum(y => y.SkillLv1 - 1);
+			StrangthSum += Smiddle.Where(x => x.SkillName2 != string.Empty && x.SkillType2 == 1).Sum(y => y.SkillLv2 - 1);
 
-			StrangthSum += Slarge.Where(x => x.SkillName1 != string.Empty).Sum(y => y.SkillLv1 - 1);
-			StrangthSum += Slarge.Where(x => x.SkillName2 != string.Empty).Sum(y => y.SkillLv2 - 1);
+			StrangthSum += Slarge.Where(x => x.SkillName1 != string.Empty && x.SkillType1 == 1).Sum(y => y.SkillLv1 - 1);
+			StrangthSum += Slarge.Where(x => x.SkillName2 != string.Empty && x.SkillType2 == 1).Sum(y => y.SkillLv2 - 1);
 
 			//소/중/대 공인으로 분류
 			SkillCounter = new Skills
@@ -874,6 +818,16 @@ namespace Grandcypher
 			}
 		}
 		#endregion
+		private int SetSkillAttribute(string Detail)
+		{
+			if (Detail.Contains("화속성")) return 1;
+			else if (Detail.Contains("수속성")) return 2;
+			else if (Detail.Contains("토속성")) return 3;
+			else if (Detail.Contains("풍속성")) return 4;
+			else if (Detail.Contains("빛속성")) return 5;
+			else if (Detail.Contains("암속성")) return 6;
+			else return -1;
+		}
 	}
 	public class SkillLvTable
 	{
@@ -962,8 +916,10 @@ namespace Grandcypher
 		public string ItemName { get; set; }
 		public string SkillName1 { get; set; }
 		public string SkillDetail1 { get; set; }
+		public int SkillAttribute1 { get; set; }
 		public string SkillName2 { get; set; }
 		public string SkillDetail2 { get; set; }
+		public int SkillAttribute2 { get; set; }
 		public string Element { get; set; }
 		public string Kind { get; set; }
 		public int SkillType1 { get; set; }
