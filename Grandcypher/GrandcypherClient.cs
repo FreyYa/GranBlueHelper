@@ -30,6 +30,7 @@ namespace Grandcypher
 		public NoticeHooker NoticeHooker { get; private set; }
 		public EnhancementHooker EnhancementHooker { get; private set; }
 		public BookmakerHooker BookmakerHooker { get; private set; }
+		public TreasureHooker TreasureHooker { get; private set; }
 
 		private GrandcypherClient()
 		{
@@ -48,6 +49,7 @@ namespace Grandcypher
 			this.NoticeHooker = new NoticeHooker();
 			this.EnhancementHooker = new EnhancementHooker();
 			this.BookmakerHooker = new BookmakerHooker();
+			this.TreasureHooker = new TreasureHooker();
 		}
 		public void PostMan(string str)
 		{

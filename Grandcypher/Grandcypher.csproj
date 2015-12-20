@@ -85,6 +85,7 @@
     <Compile Include="Raw\WeaponInfo.cs" />
     <Compile Include="ScenarioHooker.cs" />
     <Compile Include="Translations.cs" />
+    <Compile Include="TreasureHooker.cs" />
     <Compile Include="Updater.cs" />
     <Compile Include="WeaponHooker.cs" />
   </ItemGroup>
