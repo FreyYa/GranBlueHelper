@@ -14,6 +14,7 @@ namespace Grandcypher
 		public bool JPTRsUpdate { get; set; }
 		public bool SkillListUpdate { get; set; }
 		public bool WeaponListUpdate { get; set; }
+		public bool TenListUpdate { get; set; }
 		/// <summary>
 		/// 업데이트 상태를 구별한다.
 		/// bool값을 조정하며 이는 업데이트 후 바로 퀘스트 로드가 적용되지 않는 문제점을 자체 해결하기 위해 도입한것임.
@@ -35,6 +36,9 @@ namespace Grandcypher
 						break;
 					case TranslationType.WeaponList:
 						this.WeaponListUpdate = true;
+						break;
+					case TranslationType.TenTreasure:
+						this.TenListUpdate = true;
 						break;
 				}
 			}
@@ -70,13 +74,13 @@ namespace Grandcypher
 			int ReturnValue;
 			try
 			{
-				if (File.Exists(Path.Combine(MainFolder, "Translations", Xmlname)))
+				if (File.Exists(Path.Combine(MainFolder, "XMLs", Xmlname)))
 				{
-					if (File.Exists(Path.Combine(MainFolder, "Translations", "Old", Xmlname + ".old")))
-						File.Delete(Path.Combine(MainFolder, "Translations", "Old", Xmlname + ".old"));
-					File.Move(Path.Combine(MainFolder, "Translations", Xmlname), Path.Combine(MainFolder, "Translations", "Old", Xmlname + ".old"));
+					if (File.Exists(Path.Combine(MainFolder, "XMLs", "Old", Xmlname + ".old")))
+						File.Delete(Path.Combine(MainFolder, "XMLs", "Old", Xmlname + ".old"));
+					File.Move(Path.Combine(MainFolder, "XMLs", Xmlname), Path.Combine(MainFolder, "XMLs", "Old", Xmlname + ".old"));
 				}
-				File.Move(Path.Combine(MainFolder, "Translations", "tmp", Xmlname), Path.Combine(MainFolder, "Translations", Xmlname));
+				File.Move(Path.Combine(MainFolder, "XMLs", "tmp", Xmlname), Path.Combine(MainFolder, "XMLs", Xmlname));
 				ReturnValue = 1;
 				UpdateState(ReturnValue, type);
 			}
@@ -103,28 +107,34 @@ namespace Grandcypher
 
 				try
 				{
-					if (!Directory.Exists(Path.Combine(MainFolder, "Translations"))) Directory.CreateDirectory(Path.Combine(MainFolder, "Translations"));
-					if (!Directory.Exists(Path.Combine(MainFolder, "Translations", "tmp"))) Directory.CreateDirectory(Path.Combine(MainFolder, "Translations", "tmp"));
-					if (!Directory.Exists(Path.Combine(MainFolder, "Translations", "Old")))
-						Directory.CreateDirectory(Path.Combine(MainFolder, "Translations", "Old"));
+					if (!Directory.Exists(Path.Combine(MainFolder, "XMLs"))) Directory.CreateDirectory(Path.Combine(MainFolder, "XMLs"));
+					if (!Directory.Exists(Path.Combine(MainFolder, "XMLs", "tmp"))) Directory.CreateDirectory(Path.Combine(MainFolder, "XMLs", "tmp"));
+					if (!Directory.Exists(Path.Combine(MainFolder, "XMLs", "Old")))
+						Directory.CreateDirectory(Path.Combine(MainFolder, "XMLs", "Old"));
 
 					// In every one of these we download it to a temp folder, check if the file works, then move it over.
 					if (IsOnlineVersionGreater(TranslationType.PartTranslate, TranslationsRef.JPTRsVersion))
 					{
-						Client.DownloadFile(BaseTranslationURL + "JPTRs.xml", Path.Combine(MainFolder, "Translations", "tmp", "JPTRs.xml"));
+						Client.DownloadFile(BaseTranslationURL + "JPTRs.xml", Path.Combine(MainFolder, "XMLs", "tmp", "JPTRs.xml"));
 						ReturnValue = XmlFileWizard(MainFolder, "JPTRs.xml", TranslationType.PartTranslate);
 					}
 
 					if (IsOnlineVersionGreater(TranslationType.SkillDetails, TranslationsRef.SkillListVersion))
 					{
-						Client.DownloadFile(BaseTranslationURL + "SkillList.xml", Path.Combine(MainFolder, "Translations", "tmp", "SkillList.xml"));
+						Client.DownloadFile(BaseTranslationURL + "SkillList.xml", Path.Combine(MainFolder, "XMLs", "tmp", "SkillList.xml"));
 						ReturnValue = XmlFileWizard(MainFolder, "SkillList.xml", TranslationType.SkillDetails);
 					}
 
 					if (IsOnlineVersionGreater(TranslationType.WeaponList, TranslationsRef.WeaponListVersion))
 					{
-						Client.DownloadFile(BaseTranslationURL + "WeaponList.xml", Path.Combine(MainFolder, "Translations", "tmp", "WeaponList.xml"));
+						Client.DownloadFile(BaseTranslationURL + "WeaponList.xml", Path.Combine(MainFolder, "XMLs", "tmp", "WeaponList.xml"));
 						ReturnValue = XmlFileWizard(MainFolder, "WeaponList.xml", TranslationType.WeaponList);
+					}
+
+					if (IsOnlineVersionGreater(TranslationType.TenTreasure, TranslationsRef.TenListVersion))
+					{
+						Client.DownloadFile(BaseTranslationURL + "TenList.xml", Path.Combine(MainFolder, "XMLs", "tmp", "TenList.xml"));
+						ReturnValue = XmlFileWizard(MainFolder, "TenList.xml", TranslationType.WeaponList);
 					}
 
 				}
@@ -133,8 +143,8 @@ namespace Grandcypher
 					// Failed to download files.
 					return -1;
 				}
-				if (Directory.Exists(Path.Combine(MainFolder, "Translations", "tmp")))
-					Directory.Delete(Path.Combine(MainFolder, "Translations", "tmp"), true);
+				if (Directory.Exists(Path.Combine(MainFolder, "XMLs", "tmp")))
+					Directory.Delete(Path.Combine(MainFolder, "XMLs", "tmp"), true);
 
 				return ReturnValue;
 			}
@@ -162,6 +172,9 @@ namespace Grandcypher
 					return Versions.Where(x => x.Element("Name").Value.Equals("Skills")).FirstOrDefault().Element(ElementName).Value;
 				case TranslationType.WeaponList:
 					return Versions.Where(x => x.Element("Name").Value.Equals("Weapons")).FirstOrDefault().Element(ElementName).Value;
+				case TranslationType.TenTreasure:
+					return Versions.Where(x => x.Element("Name").Value.Equals("Treasures")).FirstOrDefault().Element(ElementName).Value;
+
 			}
 			return "";
 		}
@@ -192,6 +205,9 @@ namespace Grandcypher
 					return LocalVersion.CompareTo(new Version(Versions.Where(x => x.Element("Name").Value.Equals("Weapons")).FirstOrDefault().Element(ElementName).Value)) < 0;
 				case TranslationType.PartTranslate:
 					return LocalVersion.CompareTo(new Version(Versions.Where(x => x.Element("Name").Value.Equals("JPTRs")).FirstOrDefault().Element(ElementName).Value)) < 0;
+				case TranslationType.TenTreasure:
+					return LocalVersion.CompareTo(new Version(Versions.Where(x => x.Element("Name").Value.Equals("Treasures")).FirstOrDefault().Element(ElementName).Value)) < 0;
+
 			}
 
 			return false;

@@ -15,6 +15,7 @@ namespace Grandcypher
 		private XDocument Scenarios;
 		private XDocument WeaponLists;
 		private XDocument WeaponSkills;
+		private XDocument TenLists;
 		string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
 
@@ -75,13 +76,33 @@ namespace Grandcypher
 
 		#endregion
 
+		#region TenListVersion
+
+		private string _TenListVersion;
+
+		public string TenListVersion
+		{
+			get { return _TenListVersion; }
+			set
+			{
+				if (_TenListVersion != value)
+				{
+					_TenListVersion = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
 		internal Translations()
 		{
 			try
 			{
-				if (File.Exists(Path.Combine(MainFolder, "Translations", "JPTRs.xml"))) JPTRs = XDocument.Load(Path.Combine(MainFolder, "Translations", "JPTRs.xml"));
-				if (File.Exists(Path.Combine(MainFolder, "Translations", "WeaponList.xml"))) WeaponLists = XDocument.Load(Path.Combine(MainFolder, "Translations", "WeaponList.xml"));
-				if (File.Exists(Path.Combine(MainFolder, "Translations", "SkillList.xml"))) WeaponSkills = XDocument.Load(Path.Combine(MainFolder, "Translations", "SkillList.xml"));
+				if (File.Exists(Path.Combine(MainFolder, "XMLs", "JPTRs.xml"))) JPTRs = XDocument.Load(Path.Combine(MainFolder, "XMLs", "JPTRs.xml"));
+				if (File.Exists(Path.Combine(MainFolder, "XMLs", "WeaponList.xml"))) WeaponLists = XDocument.Load(Path.Combine(MainFolder, "XMLs", "WeaponList.xml"));
+				if (File.Exists(Path.Combine(MainFolder, "XMLs", "SkillList.xml"))) WeaponSkills = XDocument.Load(Path.Combine(MainFolder, "XMLs", "SkillList.xml"));
+				if (File.Exists(Path.Combine(MainFolder, "XMLs", "TenList.xml"))) TenLists = XDocument.Load(Path.Combine(MainFolder, "XMLs", "TenList.xml"));
 
 				GetVersions();
 			}
@@ -110,8 +131,11 @@ namespace Grandcypher
 				if (WeaponSkills.Root.Attribute("Version") != null) SkillListVersion = WeaponSkills.Root.Attribute("Version").Value;
 				else SkillListVersion = "알 수 없음";
 			}
-			else
-				SkillListVersion = "없음";
+			if (TenLists != null)
+			{
+				if (TenLists.Root.Attribute("Version") != null) TenListVersion = WeaponSkills.Root.Attribute("Version").Value;
+				else TenListVersion = "알 수 없음";
+			}
 		}
 		private IEnumerable<XElement> GetTranslationList(TranslationType type, TranslateKind sitetype = TranslateKind.Google)
 		{
@@ -121,7 +145,7 @@ namespace Grandcypher
 				{
 					if (GrandcypherClient.Current.Updater.JPTRsUpdate)
 					{
-						this.JPTRs = XDocument.Load(Path.Combine(MainFolder, "Translations", "JPTRs.xml"));
+						this.JPTRs = XDocument.Load(Path.Combine(MainFolder, "XMLs", "JPTRs.xml"));
 						GrandcypherClient.Current.Updater.JPTRsUpdate = false;
 					}
 					return JPTRs.Descendants("JPTR");
@@ -132,13 +156,13 @@ namespace Grandcypher
 			{
 				string siteKind = "Google";
 				if (sitetype == TranslateKind.Naver) siteKind = "Naver";
-				if (File.Exists(Path.Combine(MainFolder, "Translations", "Scenarios", siteKind, GrandcypherClient.Current.ScenarioHooker.PathName + ".xml")))
-					Scenarios = XDocument.Load(Path.Combine(MainFolder, "Translations", "Scenarios", siteKind, GrandcypherClient.Current.ScenarioHooker.PathName + ".xml"));
+				if (File.Exists(Path.Combine(MainFolder, "XMLs", "Scenarios", siteKind, GrandcypherClient.Current.ScenarioHooker.PathName + ".xml")))
+					Scenarios = XDocument.Load(Path.Combine(MainFolder, "XMLs", "Scenarios", siteKind, GrandcypherClient.Current.ScenarioHooker.PathName + ".xml"));
 				if (Scenarios != null)
 				{
 					if (GrandcypherClient.Current.Updater.JPTRsUpdate)
 					{
-						this.Scenarios = XDocument.Load(Path.Combine(MainFolder, "Translations", "Scenarios", siteKind, GrandcypherClient.Current.ScenarioHooker.PathName + ".xml"));
+						this.Scenarios = XDocument.Load(Path.Combine(MainFolder, "XMLs", "Scenarios", siteKind, GrandcypherClient.Current.ScenarioHooker.PathName + ".xml"));
 						GrandcypherClient.Current.Updater.JPTRsUpdate = false;
 					}
 					return Scenarios.Descendants("Scenario");
@@ -151,7 +175,7 @@ namespace Grandcypher
 				{
 					if (GrandcypherClient.Current.Updater.WeaponListUpdate)
 					{
-						this.WeaponLists = XDocument.Load(Path.Combine(MainFolder, "Translations", "WeaponList.xml"));
+						this.WeaponLists = XDocument.Load(Path.Combine(MainFolder, "XMLs", "WeaponList.xml"));
 						GrandcypherClient.Current.Updater.WeaponListUpdate = false;
 					}
 					return WeaponLists.Descendants("Weapon");
@@ -164,10 +188,23 @@ namespace Grandcypher
 				{
 					if (GrandcypherClient.Current.Updater.JPTRsUpdate)
 					{
-						this.WeaponSkills = XDocument.Load(Path.Combine(MainFolder, "Translations", "SkillList.xml"));
+						this.WeaponSkills = XDocument.Load(Path.Combine(MainFolder, "XMLs", "SkillList.xml"));
 						GrandcypherClient.Current.Updater.SkillListUpdate = false;
 					}
 					return WeaponSkills.Descendants("Skill");
+				}
+				return null;
+			}
+			else if (TranslationType.TenTreasure == type)
+			{
+				if (TenLists != null)
+				{
+					if (GrandcypherClient.Current.Updater.TenListUpdate)
+					{
+						this.TenLists = XDocument.Load(Path.Combine(MainFolder, "XMLs", "TenList.xml"));
+						GrandcypherClient.Current.Updater.TenListUpdate = false;
+					}
+					return TenLists.Descendants("Treasure");
 				}
 				return null;
 			}
@@ -187,6 +224,36 @@ namespace Grandcypher
 				return x.CompareTo(y);
 			});
 			return temp;
+		}
+		public List<TenTreasureInfo> GetTreasureList()
+		{
+			List<TenTreasureInfo> templist = new List<TenTreasureInfo>();
+			IEnumerable<XElement> TranslationList = GetTranslationList(TranslationType.TenTreasure);
+			foreach (var item in TranslationList)
+			{
+				TenTreasureInfo temp = new TenTreasureInfo();
+
+				temp.Name = ElementOutput(item, "ItemName");
+				temp.Proto = Convert.ToInt32(ElementOutput(item, "Proto"));
+				temp.Rust = Convert.ToInt32(ElementOutput(item, "Rust"));
+				temp.Element = Convert.ToInt32(ElementOutput(item, "Element"));
+				temp.First = Convert.ToInt32(ElementOutput(item, "First"));
+				temp.Second = Convert.ToInt32(ElementOutput(item, "Second"));
+				temp.Third = Convert.ToInt32(ElementOutput(item, "Third"));
+				temp.Fourth = Convert.ToInt32(ElementOutput(item, "Fourth"));
+				temp.Fifth = Convert.ToInt32(ElementOutput(item, "Fifth"));
+				temp.Sixth = Convert.ToInt32(ElementOutput(item, "Sixth"));
+
+				templist.Add(temp);
+			}
+
+			return templist;
+		}
+		private string ElementOutput(XElement item, string ElementName)
+		{
+			if (item.Element(ElementName) != null)
+				return item.Element(ElementName).Value;
+			else return "0";
 		}
 		public string GetSkillInfo(string SkillDetail, bool IsDetailFind = false)
 		{
@@ -330,25 +397,25 @@ namespace Grandcypher
 			XmlNode Source = NewXmlDoc.CreateElement("", "Scenarios", "");
 			NewXmlDoc.AppendChild(Source);
 
-			if (!Directory.Exists(Path.Combine(MainFolder, "Translations")))
-				Directory.CreateDirectory(Path.Combine(MainFolder, "Translations"));
-			if (!Directory.Exists(Path.Combine(MainFolder, "Translations", "Scenarios")))
-				Directory.CreateDirectory(Path.Combine(MainFolder, "Translations", "Scenarios"));
-			if (!Directory.Exists(Path.Combine(MainFolder, "Translations", "Scenarios", "Google")))
-				Directory.CreateDirectory(Path.Combine(MainFolder, "Translations", "Scenarios", "Google"));
-			if (!Directory.Exists(Path.Combine(MainFolder, "Translations", "Scenarios", "Naver")))
-				Directory.CreateDirectory(Path.Combine(MainFolder, "Translations", "Scenarios", "Naver"));
+			if (!Directory.Exists(Path.Combine(MainFolder, "XMLs")))
+				Directory.CreateDirectory(Path.Combine(MainFolder, "XMLs"));
+			if (!Directory.Exists(Path.Combine(MainFolder, "XMLs", "Scenarios")))
+				Directory.CreateDirectory(Path.Combine(MainFolder, "XMLs", "Scenarios"));
+			if (!Directory.Exists(Path.Combine(MainFolder, "XMLs", "Scenarios", "Google")))
+				Directory.CreateDirectory(Path.Combine(MainFolder, "XMLs", "Scenarios", "Google"));
+			if (!Directory.Exists(Path.Combine(MainFolder, "XMLs", "Scenarios", "Naver")))
+				Directory.CreateDirectory(Path.Combine(MainFolder, "XMLs", "Scenarios", "Naver"));
 
-			if (File.Exists(Path.Combine(MainFolder, "Translations", "Scenarios", context[0].PathName + ".xml")))
+			if (File.Exists(Path.Combine(MainFolder, "XMLs", "Scenarios", context[0].PathName + ".xml")))
 			{
-				File.Copy(Path.Combine(MainFolder, "Translations", "Scenarios", context[0].PathName + ".xml"), Path.Combine(MainFolder, "Translations", "Scenarios", context[0].PathName + ".xml.bak"), true);
-				File.Delete(Path.Combine(MainFolder, "Translations", "Scenarios", context[0].PathName + ".xml"));
+				File.Copy(Path.Combine(MainFolder, "XMLs", "Scenarios", context[0].PathName + ".xml"), Path.Combine(MainFolder, "XMLs", "Scenarios", context[0].PathName + ".xml.bak"), true);
+				File.Delete(Path.Combine(MainFolder, "XMLs", "Scenarios", context[0].PathName + ".xml"));
 			}
 
-			NewXmlDoc.Save(Path.Combine(MainFolder, "Translations", "Scenarios", context[0].PathName + ".xml"));
+			NewXmlDoc.Save(Path.Combine(MainFolder, "XMLs", "Scenarios", context[0].PathName + ".xml"));
 
 			XmlDocument XmlDoc = new XmlDocument();
-			XmlDoc.Load(Path.Combine(MainFolder, "Translations", "Scenarios", context[0].PathName + ".xml"));
+			XmlDoc.Load(Path.Combine(MainFolder, "XMLs", "Scenarios", context[0].PathName + ".xml"));
 			foreach (var item in context)
 			{
 				XmlNode FristNode = XmlDoc.DocumentElement;
@@ -364,9 +431,9 @@ namespace Grandcypher
 			}
 
 			if (type == TranslateKind.Google)
-				XmlDoc.Save(Path.Combine(MainFolder, "Translations", "Scenarios", "Google", context[0].PathName + ".xml"));
+				XmlDoc.Save(Path.Combine(MainFolder, "XMLs", "Scenarios", "Google", context[0].PathName + ".xml"));
 			else if (type == TranslateKind.Naver)
-				XmlDoc.Save(Path.Combine(MainFolder, "Translations", "Scenarios", "Naver", context[0].PathName + ".xml"));
+				XmlDoc.Save(Path.Combine(MainFolder, "XMLs", "Scenarios", "Naver", context[0].PathName + ".xml"));
 		}
 		protected XmlNode CreateNode(XmlDocument xmlDoc, string name, string innerXml)
 		{
@@ -386,6 +453,7 @@ namespace Grandcypher
 			Element,
 			WeaponType,
 			SkillDetails,
+			TenTreasure,
 		}
 	}
 }

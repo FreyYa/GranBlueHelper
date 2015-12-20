@@ -13,15 +13,83 @@
 				xmlns:viewmodels="clr-namespace:GranBlueHelper.ViewModels"
 				xmlns:models="clr-namespace:GranBlueHelper.Models"
 				mc:Ignorable="d">
-    <StackPanel>
-		<TextBlock Text="십천중 재료계산"/>
-		<TextBlock Text="※해당 항목은 십천중의 재료를 자동으로 카운팅하고 남은 재료를 표시합니다"/>
-		<TextBlock Text="※메뉴=>아이템(アイテム)항목으로 들어가면 자동갱신됩니다"/>
-		<TextBlock Text="※트레저 개수는 bin 폴더에 저장됩니다"/>
-		<Border BorderThickness="1" BorderBrush="#7F808080">
-			<StackPanel Orientation="Horizontal">
-				
-			</StackPanel>
-		</Border>
-	</StackPanel>
+	<UserControl.DataContext>
+		<viewmodels:CalcTenViewModel/>
+	</UserControl.DataContext>
+	<ScrollViewer VerticalScrollBarVisibility="Auto"
+					  HorizontalScrollBarVisibility="Auto"
+				  Margin="10">
+		<StackPanel>
+			<TextBlock Text="십천중 재료계산"/>
+			<TextBlock Text="※해당 항목은 십천중의 재료를 자동으로 카운팅하고 남은 재료를 표시합니다"/>
+			<TextBlock Text="※메뉴=>아이템(アイテム)항목으로 들어가면 자동갱신됩니다"/>
+			<TextBlock/>
+			<TextBlock Text="제작이 완료된 부분에 채크를 하시기 바랍니다."/>
+
+			<Border BorderThickness="1" BorderBrush="#7F808080"
+				Padding="5"
+				Margin="5">
+				<StackPanel Orientation="Horizontal">
+					<CheckBox
+				  Content="真제작" Foreground="Black"
+				  IsChecked="{Binding Source={x:Static models:Settings.Current}, Path=Proto}" />
+					<CheckBox
+				  Content="녹슨무기 변환" Foreground="Black"
+				  IsChecked="{Binding Source={x:Static models:Settings.Current}, Path=Rust}" 
+					Margin="10,0,0,0"/>
+					<CheckBox
+				  Content="속성변환" Foreground="Black"
+				  IsChecked="{Binding Source={x:Static models:Settings.Current}, Path=Element}" 
+					Margin="10,0,0,0"/>
+					<CheckBox
+				  Content="1단계" Foreground="Black"
+				  IsChecked="{Binding Source={x:Static models:Settings.Current}, Path=First}" 
+					Margin="10,0,0,0"/>
+					<CheckBox
+				  Content="2단계" Foreground="Black"
+				  IsChecked="{Binding Source={x:Static models:Settings.Current}, Path=Second}" 
+					Margin="10,0,0,0"/>
+					<CheckBox
+				  Content="3단계" Foreground="Black"
+				  IsChecked="{Binding Source={x:Static models:Settings.Current}, Path=Third}" 
+					Margin="10,0,0,0"/>
+					<CheckBox
+				  Content="4단계" Foreground="Black"
+				  IsChecked="{Binding Source={x:Static models:Settings.Current}, Path=Fourth}" 
+					Margin="10,0,0,0"/>
+					<CheckBox
+				  Content="5단계" Foreground="Black"
+				  IsChecked="{Binding Source={x:Static models:Settings.Current}, Path=Fifth}" 
+					Margin="10,0,0,0"/>
+				</StackPanel>
+			</Border>
+			<Grid>
+				<!-- 목록 시작-->
+				<ItemsControl x:Name="Treasure" ItemsSource="{Binding TreasureList}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<UniformGrid Columns="4" />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Horizontal">
+								<Image HorizontalAlignment="Left" 
+									   Source="{Binding LocalImage}" 
+									   Width="40" 
+									   Height="40"
+									   Margin="2"/>
+								<StackPanel>
+									<TextBlock Text="{Binding Name}" FontSize="12" FontWeight="Bold"/>
+									<TextBlock Text="{Binding count}"
+										   Margin="0,2,0,0"/>
+								</StackPanel>
+							</StackPanel>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+				<!-- 목록 끝-->
+			</Grid>
+		</StackPanel>
+	</ScrollViewer>
 </UserControl>

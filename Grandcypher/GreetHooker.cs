@@ -109,27 +109,33 @@ namespace Grandcypher
 		/// 이미지파일을 인터넷에서 읽어옵니다
 		/// http://jmsoft.tistory.com/47
 		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void FileDownloader(string uri, string StampFileName)
+		/// <param name="uri">받아올 그림의 주소입니다</param>
+		/// <param name="FileName">저장할 이름입니다</param>
+		/// <param name="IsStamp">스탬프 파일인지 아닌지를 구별합니다</param>
+		public void FileDownloader(string uri, string FileName, bool IsStamp = true)
 		{
-			WebRequest req = WebRequest.Create(new Uri(uri));
-
-			WebResponse result = req.GetResponse();
-
-
-			Stream ReceiveStream = result.GetResponseStream();
-
-			Byte[] read = new Byte[512];
-
-			int bytes = ReceiveStream.Read(read, 0, 512);
-
-			Encoding encode;
-			encode = System.Text.Encoding.Default;
-			if (!Directory.Exists(Path.Combine(MainFolder, "Stamps"))) Directory.CreateDirectory(Path.Combine(MainFolder, "Stamps"));
-			if (!File.Exists(Path.Combine(MainFolder, "Stamps", StampFileName)))
+			string FolderName = "Stamps";
+			if (!IsStamp) FolderName = "Treasures";
+			
+			if (!Directory.Exists(Path.Combine(MainFolder, FolderName))) Directory.CreateDirectory(Path.Combine(MainFolder, FolderName));
+			if (!File.Exists(Path.Combine(MainFolder, FolderName, FileName)))
 			{
-				FileStream FileStr = new FileStream(Path.Combine(MainFolder, "Stamps", StampFileName), FileMode.OpenOrCreate, FileAccess.Write);
+				WebRequest req = WebRequest.Create(new Uri(uri));
+
+				WebResponse result = req.GetResponse();
+
+
+
+				Stream ReceiveStream = result.GetResponseStream();
+
+				Byte[] read = new Byte[512];
+
+				int bytes = ReceiveStream.Read(read, 0, 512);
+
+				Encoding encode;
+				encode = System.Text.Encoding.Default;
+
+				FileStream FileStr = new FileStream(Path.Combine(MainFolder, FolderName, FileName), FileMode.OpenOrCreate, FileAccess.Write);
 
 				while (bytes > 0)
 				{

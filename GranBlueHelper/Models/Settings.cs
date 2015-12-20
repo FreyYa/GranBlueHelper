@@ -169,6 +169,108 @@ namespace GranBlueHelper.Models
 		}
 		#endregion
 
+		#region 십천중 계산 설정
+
+
+		private bool _Proto;
+		public bool Proto
+		{
+			get { return this._Proto; }
+			set
+			{
+				if (this._Proto == value) return;
+				this._Proto = value;
+
+				this.RaisePropertyChanged();
+			}
+		}
+		private bool _Rust;
+		public bool Rust
+		{
+			get { return this._Rust; }
+			set
+			{
+				if (this._Rust == value) return;
+				this._Rust = value;
+
+				this.RaisePropertyChanged();
+			}
+		}
+		private bool _Element;
+		public bool Element
+		{
+			get { return this._Element; }
+			set
+			{
+				if (this._Element == value) return;
+				this._Element = value;
+
+				this.RaisePropertyChanged();
+			}
+		}
+		private bool _First;
+		public bool First
+		{
+			get { return this._First; }
+			set
+			{
+				if (this._First == value) return;
+				this._First = value;
+
+				this.RaisePropertyChanged();
+			}
+		}
+		private bool _Second;
+		public bool Second
+		{
+			get { return this._Second; }
+			set
+			{
+				if (this._Second == value) return;
+				this._Second = value;
+
+				this.RaisePropertyChanged();
+			}
+		}
+		private bool _Third;
+		public bool Third
+		{
+			get { return this._Third; }
+			set
+			{
+				if (this._Third == value) return;
+				this._Third = value;
+
+				this.RaisePropertyChanged();
+			}
+		}
+		private bool _Fourth;
+		public bool Fourth
+		{
+			get { return this._Fourth; }
+			set
+			{
+				if (this._Fourth == value) return;
+				this._Fourth = value;
+
+				this.RaisePropertyChanged();
+			}
+		}
+		private bool _Fifth;
+		public bool Fifth
+		{
+			get { return this._Fifth; }
+			set
+			{
+				if (this._Fifth == value) return;
+				this._Fifth = value;
+
+				this.RaisePropertyChanged();
+			}
+		}
+
+		#endregion
+
 		public void Save()
 		{
 			try

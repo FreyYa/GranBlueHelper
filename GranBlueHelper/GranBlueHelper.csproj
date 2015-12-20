@@ -120,6 +120,7 @@
     <Compile Include="Models\WindowInformation.cs" />
     <Compile Include="Models\WindowSetter.cs" />
     <Compile Include="ViewModels\BindableTextViewModel.cs" />
+    <Compile Include="ViewModels\CalcTenViewModel.cs" />
     <Compile Include="ViewModels\ExpCalViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MasterInfoModifyViewModel.cs" />
