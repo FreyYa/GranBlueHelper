@@ -387,6 +387,8 @@ namespace GranBlueHelper.ViewModels
 			}
 		}
 		#endregion
+
+		#region TargetMagna Visible
 		private Visibility _TargetMagnaVisible;
 		public Visibility TargetMagnaVisible
 		{
@@ -400,7 +402,7 @@ namespace GranBlueHelper.ViewModels
 				}
 			}
 		}
-
+		#endregion
 
 		#region IsManualExist
 		private bool _IsManualExist;
