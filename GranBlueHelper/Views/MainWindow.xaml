@@ -193,6 +193,12 @@
                 </TabItem.Header>
                 <views:ExpCal/>
             </TabItem>
+			<TabItem>
+				<TabItem.Header>
+					<TextBlock Text="십천중" Width="70" Height="25" FontSize="16" TextAlignment="Center" FontWeight="Bold"/>
+				</TabItem.Header>
+				<views:CalcTen/>
+			</TabItem>
             <TabItem x:Name="Settings" IsSelected="{Binding HassanSettings}">
 				<TabItem.Header>
 					<TextBlock Text="설정" Width="70" Height="25" FontSize="16" TextAlignment="Center" FontWeight="Bold"/>

@@ -10,41 +10,31 @@ namespace Grandcypher
 {
 	public class TreasureHooker
 	{
-		public List<TreasureInfo> TreasureList { get; set; }
+		public Dictionary<string,int> CurrentTreasureList { get; set; }
 		public void SessionReader(Session oS)
 		{
 			if (oS.PathAndQuery.Contains("/item/article_list/") && oS.oResponse.MIMEType == "application/json")
 				TreasureDetail(oS);
 		}
+		/// <summary>
+		/// 유저 아이템 목록을 수집합니다.
+		/// </summary>
+		/// <param name="oS"></param>
 		private void TreasureDetail(Session oS)
 		{
 			JArray jsonVal = JArray.Parse(oS.GetResponseBodyAsString()) as JArray;
 			dynamic Details = jsonVal;
 
-			TreasureList = new List<TreasureInfo>();
+			CurrentTreasureList = new Dictionary<string, int>();
 
 			foreach (dynamic detail in Details)
 			{
 				string name = detail.name;
-				string comment = detail.comment;
 				int count = detail.number;
 
-				TreasureInfo temp = new TreasureInfo
-				{
-					Name = name,
-					Detail = comment,
-					Count = count
-				};
-				TreasureList.Add(temp);
-
+				CurrentTreasureList.Add(name, count);
 			}
 		}
 
-	}
-	public class TreasureInfo
-	{
-		public string Name { get; set; }
-		public int Count { get; set; }
-		public string Detail { get; set; }
 	}
 }

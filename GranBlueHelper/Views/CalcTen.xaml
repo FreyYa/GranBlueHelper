@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="GranBlueHelper.Views.CalcTen"
+             xmlns:Controls="clr-namespace:Grabacr07.Desktop.Metro.Controls;assembly=Desktop.Metro"  
+				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+				xmlns:metro2="clr-namespace:Grabacr07.Desktop.Metro.Controls;assembly=Desktop.Metro"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+				xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+				xmlns:views="clr-namespace:GranBlueHelper.Views"
+				xmlns:livet="http://schemas.livet-mvvm.net/2011/wpf"
+				xmlns:viewmodels="clr-namespace:GranBlueHelper.ViewModels"
+				xmlns:models="clr-namespace:GranBlueHelper.Models"
+				mc:Ignorable="d">
+    <StackPanel>
+		<TextBlock Text="십천중 재료계산"/>
+		<TextBlock Text="※해당 항목은 십천중의 재료를 자동으로 카운팅하고 남은 재료를 표시합니다"/>
+		<TextBlock Text="※메뉴=>아이템(アイテム)항목으로 들어가면 자동갱신됩니다"/>
+		<TextBlock Text="※트레저 개수는 bin 폴더에 저장됩니다"/>
+		<Border BorderThickness="1" BorderBrush="#7F808080">
+			<StackPanel Orientation="Horizontal">
+				
+			</StackPanel>
+		</Border>
+	</StackPanel>
+</UserControl>

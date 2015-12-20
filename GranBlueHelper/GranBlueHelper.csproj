@@ -126,6 +126,9 @@
     <Compile Include="ViewModels\MessageViewViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\WeaponListViewModel.cs" />
+    <Compile Include="Views\CalcTen.xaml.cs">
+      <DependentUpon>CalcTen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ExpCal.xaml.cs">
       <DependentUpon>ExpCal.xaml</DependentUpon>
     </Compile>
@@ -147,6 +150,10 @@
     <Compile Include="Win32\IViewObject.cs" />
     <Compile Include="Win32\NativeMethods.cs" />
     <Compile Include="Win32\WinInet.cs" />
+    <Page Include="Views\CalcTen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ExpCal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
