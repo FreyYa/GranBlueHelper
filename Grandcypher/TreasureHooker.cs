@@ -96,6 +96,7 @@ namespace Grandcypher
 		public int Fourth { get; set; }
 		public int Fifth { get; set; }
 		public int Sixth { get; set; }
+		public int ElementID { get; set; }
 	}
 
 }

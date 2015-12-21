@@ -141,9 +141,30 @@ namespace GranBlueHelper.ViewModels
 		}
 
 		#endregion
+		public static Dictionary<string, int> ElementTable = new Dictionary<string, int>
+		{
+			{ "화",1 }, {"수",2 },{"토",3 },{"풍",4 },{"광",5 },{"암",6 }
+		};
+		public List<string> ElementKind { get; set; }
+		private string _SelectedElement;
+		public string SelectedElement
+		{
+			get { return this._SelectedElement; }
+			set
+			{
+				if (this._SelectedElement == value) return;
+				this._SelectedElement = value;
+				Settings.Current.ElementSetting = value;
+				this.RemoveCompleteTreasure();
 
+				this.RaisePropertyChanged();
+			}
+		}
 		public CalcTenViewModel()
 		{
+			this.ElementKind = new List<string>(ElementTable.Keys.ToList());
+			if (Settings.Current.ElementSetting == null) Settings.Current.ElementSetting = "화";
+			this.SelectedElement = Settings.Current.ElementSetting;
 			this.Read();
 		}
 		private void Read()
@@ -161,10 +182,37 @@ namespace GranBlueHelper.ViewModels
 
 			List<TreasureInfo> temp = new List<TreasureInfo>(GrandcypherClient.Current.TreasureHooker.CurrentTreasureList.Values);
 			List<TreasureInfo> result = new List<TreasureInfo>();
-			
-
 
 			List<TenTreasureInfo> targetList = new List<TenTreasureInfo>(GrandcypherClient.Current.Translations.GetTreasureList());
+			List<TenTreasureInfo> ElementList = targetList.Where(x => x.ElementID != 0).ToList();
+			List<TenTreasureInfo> AnotherList = targetList.Where(x => x.ElementID == 0).ToList();
+
+
+			switch (ElementTable[this.SelectedElement])
+			{
+				case 1:
+					ElementList = ElementList.Where(x => x.ElementID == 1).ToList();
+					break;
+				case 2:
+					ElementList = ElementList.Where(x => x.ElementID == 2).ToList();
+					break;
+				case 3:
+					ElementList = ElementList.Where(x => x.ElementID == 3).ToList();
+					break;
+				case 4:
+					ElementList = ElementList.Where(x => x.ElementID == 4).ToList();
+					break;
+				case 5:
+					ElementList = ElementList.Where(x => x.ElementID == 5).ToList();
+					break;
+				case 6:
+					ElementList = ElementList.Where(x => x.ElementID == 6).ToList();
+					break;
+			}
+			targetList = new List<TenTreasureInfo>();
+			targetList = AnotherList.Concat(ElementList).ToList();
+
+
 
 			foreach (var item in targetList)
 			{

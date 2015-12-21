@@ -271,6 +271,20 @@ namespace GranBlueHelper.Models
 
 		#endregion
 
+		#region 속성 저장
+		private string _ElementSetting;
+		public string ElementSetting
+		{
+			get { return this._ElementSetting; }
+			set
+			{
+				if (this._ElementSetting == value) return;
+				this._ElementSetting = value;
+				this.RaisePropertyChanged();
+			}
+		}
+		#endregion
+
 		public void Save()
 		{
 			try

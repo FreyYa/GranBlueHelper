@@ -62,7 +62,15 @@
 				  Content="5단계" Foreground="Black"
 				  IsChecked="{Binding Fifth}" 
 					Margin="10,0,0,0"/>
-					
+
+					<metro:PromptComboBox Prompt=""
+									  MinWidth="50"
+									  HorizontalAlignment="Right"
+										  Margin="30,0,0,0"
+									  ItemsSource="{Binding ElementKind}"
+									  SelectedValue="{Binding SelectedElement, Mode=TwoWay}"
+									  IsReadOnly="True"
+									  />
 				</StackPanel>
 			</Border>
 			<Grid>
