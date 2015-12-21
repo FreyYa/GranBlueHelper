@@ -65,7 +65,9 @@ namespace Grandcypher
 		string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 		public string Name { get; set; }
 		public int ItemID { get; set; }
-		public int count { get; set; }
+		public int count { get; set; }//current
+		public int max { get; set; }//
+		public int result { get; set; }//max-current
 		public ImageSource LocalImage
 		{
 			get
