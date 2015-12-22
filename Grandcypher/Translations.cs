@@ -133,9 +133,11 @@ namespace Grandcypher
 			}
 			if (TenLists != null)
 			{
-				if (TenLists.Root.Attribute("Version") != null) TenListVersion = WeaponSkills.Root.Attribute("Version").Value;
+				if (TenLists.Root.Attribute("Version") != null) TenListVersion = TenLists.Root.Attribute("Version").Value;
 				else TenListVersion = "알 수 없음";
 			}
+			else
+				TenListVersion = "없음";
 		}
 		private IEnumerable<XElement> GetTranslationList(TranslationType type, TranslateKind sitetype = TranslateKind.Google)
 		{
