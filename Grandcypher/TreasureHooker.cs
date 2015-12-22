@@ -72,13 +72,18 @@ namespace Grandcypher
 		{
 			get
 			{
-				if (this.ItemID != 0)
+				if (this.ItemID > 0)
 				{
 					if (File.Exists(Path.Combine(MainFolder, "Treasures", this.ItemID + ".jpg")))
 						return new BitmapImage(new Uri(Path.Combine(MainFolder, "Treasures", this.ItemID + ".jpg"), UriKind.Absolute));
 					else return null;
 				}
-				else return null;
+				else
+				{
+					if (File.Exists(Path.Combine(MainFolder, "Treasures", "null.jpg")))
+						return new BitmapImage(new Uri(Path.Combine(MainFolder, "Treasures", "null.jpg"), UriKind.Absolute));
+					else return null;
+				}
 			}
 		}
 

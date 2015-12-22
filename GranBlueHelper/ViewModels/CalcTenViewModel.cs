@@ -183,6 +183,7 @@ namespace GranBlueHelper.ViewModels
 			List<TreasureInfo> temp = new List<TreasureInfo>(GrandcypherClient.Current.TreasureHooker.CurrentTreasureList.Values);
 			List<TreasureInfo> result = new List<TreasureInfo>();
 
+
 			List<TenTreasureInfo> targetList = new List<TenTreasureInfo>(GrandcypherClient.Current.Translations.GetTreasureList());
 			List<TenTreasureInfo> ElementList = targetList.Where(x => x.ElementID != 0).ToList();
 			List<TenTreasureInfo> AnotherList = targetList.Where(x => x.ElementID == 0).ToList();
@@ -230,41 +231,53 @@ namespace GranBlueHelper.ViewModels
 			}
 			targetList = new List<TenTreasureInfo>(AnotherList.Concat(ElementList).Concat(Magna).Concat(Origin).ToList());
 
-
+			//temp=현재 보유하고 있는 아이템목록
+			//targetlist=정리된 십천중 필요목록
 			foreach (var item in targetList)
 			{
 				var search = temp.Where(x => x.Name == item.Name).ToList();
+				TreasureInfo target = new TreasureInfo();
+
+				//아이템 보유목록에 필요목록에 있는 아이템이 존재하는 경우
 				if (search.Count > 0)
 				{
-					var target = search[0];
-
-					target.max = 0;//max값을 초기화
-
-					//max값에 필요 아이템값을 모두 합산
-					if (!Proto)
-						target.max += item.Proto;
-					if (!Rust)
-						target.max += item.Rust;
-					if (!Element)
-						target.max += item.Element;
-					if (!First)
-						target.max += item.First;
-					if (!Second)
-						target.max += item.Second;
-					if (!Third)
-						target.max += item.Third;
-					if (!Fourth)
-						target.max += item.Fourth;
-					if (!Fifth)
-						target.max += item.Fifth;
-
-					target.max += item.Sixth;
-
-					target.result = target.max - target.count;
-
-					if (target.result > 0)
-						result.Add(target);
+					target = search[0];
 				}
+				else//아이템이 비활성화인 경우 기초값으로 생성
+				{
+					target = new TreasureInfo
+					{
+						Name = item.Name,
+						count = 0,
+						ItemID = -1,
+					};
+				}
+				if (target.Name == null || target.Name == string.Empty) continue;
+				target.max = 0;//max값을 초기화
+
+				//max값에 필요 아이템값을 모두 합산
+				if (!Proto)
+					target.max += item.Proto;
+				if (!Rust)
+					target.max += item.Rust;
+				if (!Element)
+					target.max += item.Element;
+				if (!First)
+					target.max += item.First;
+				if (!Second)
+					target.max += item.Second;
+				if (!Third)
+					target.max += item.Third;
+				if (!Fourth)
+					target.max += item.Fourth;
+				if (!Fifth)
+					target.max += item.Fifth;
+
+				target.max += item.Sixth;
+				target.result = target.max - target.count;
+
+				if (target.result > 0)
+					result.Add(target);
 			}
 			this.TreasureList = new List<TreasureInfo>(result);
 		}
