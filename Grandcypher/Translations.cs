@@ -244,6 +244,7 @@ namespace Grandcypher
 				temp.Fifth = Convert.ToInt32(ElementOutput(item, "Fifth"));
 				temp.Sixth = Convert.ToInt32(ElementOutput(item, "Sixth"));
 				temp.ElementID = Convert.ToInt32(ElementOutput(item, "ElementID"));
+				temp.Origin = Convert.ToInt32(ElementOutput(item, "Origin"));
 
 				templist.Add(temp);
 			}

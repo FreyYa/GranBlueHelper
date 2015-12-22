@@ -187,31 +187,48 @@ namespace GranBlueHelper.ViewModels
 			List<TenTreasureInfo> ElementList = targetList.Where(x => x.ElementID != 0).ToList();
 			List<TenTreasureInfo> AnotherList = targetList.Where(x => x.ElementID == 0).ToList();
 
+			var Origin = ElementList.Where(x => x.Origin == 1).ToList();
+			var Magna = ElementList.Where(x => x.Origin == 2).ToList();
+
+
+			for (int i = 0; i < Origin.Count; i++)
+			{
+				if (Origin[i].ElementID == ElementTable[this.SelectedElement])
+				{
+					Origin[i].Element += 3;
+					Origin[i].Second += 3;
+					Origin[i].Fourth += 3;
+				}
+			}
+
+			for (int i = 0; i < Magna.Count; i++)
+			{
+				if (Magna[i].ElementID == ElementTable[this.SelectedElement])
+					Magna[i].Fifth += 60;
+			}
 
 			switch (ElementTable[this.SelectedElement])
 			{
 				case 1:
-					ElementList = ElementList.Where(x => x.ElementID == 1).ToList();
+					ElementList = ElementList.Where(x => x.ElementID == 1 && x.Origin == 0).ToList();
 					break;
 				case 2:
-					ElementList = ElementList.Where(x => x.ElementID == 2).ToList();
+					ElementList = ElementList.Where(x => x.ElementID == 2 && x.Origin == 0).ToList();
 					break;
 				case 3:
-					ElementList = ElementList.Where(x => x.ElementID == 3).ToList();
+					ElementList = ElementList.Where(x => x.ElementID == 3 && x.Origin == 0).ToList();
 					break;
 				case 4:
-					ElementList = ElementList.Where(x => x.ElementID == 4).ToList();
+					ElementList = ElementList.Where(x => x.ElementID == 4 && x.Origin == 0).ToList();
 					break;
 				case 5:
-					ElementList = ElementList.Where(x => x.ElementID == 5).ToList();
+					ElementList = ElementList.Where(x => x.ElementID == 5 && x.Origin == 0).ToList();
 					break;
 				case 6:
-					ElementList = ElementList.Where(x => x.ElementID == 6).ToList();
+					ElementList = ElementList.Where(x => x.ElementID == 6 && x.Origin == 0).ToList();
 					break;
 			}
-			targetList = new List<TenTreasureInfo>();
-			targetList = AnotherList.Concat(ElementList).ToList();
-
+			targetList = new List<TenTreasureInfo>(AnotherList.Concat(ElementList).Concat(Magna).Concat(Origin).ToList());
 
 
 			foreach (var item in targetList)
