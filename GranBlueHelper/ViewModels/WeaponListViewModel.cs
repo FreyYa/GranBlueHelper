@@ -418,7 +418,28 @@ namespace GranBlueHelper.ViewModels
 		}
 		#endregion
 
+		#region SelectedSynastry
+
+		private string _SelectedSynastry;
+
+		public string SelectedSynastry
+		{
+			get { return this._SelectedSynastry; }
+			set
+			{
+				if (_SelectedSynastry != value)
+				{
+					this._SelectedSynastry = value;
+					this.RaisePropertyChanged();
+					CalcAttack(this.SkillCounter);
+				}
+			}
+		}
+
+		#endregion
+
 		public IEnumerable<string> BlessingList { get; private set; }
+		public IEnumerable<string> SynastryList { get; private set; }
 
 		/// <summary>
 		/// 통상 0  언노운 1 마그나 2 캐릭터 3
@@ -426,6 +447,14 @@ namespace GranBlueHelper.ViewModels
 		public static Dictionary<string, int> BlessingTable = new Dictionary<string, int>
 		{
 			{"속성", 0}, {"언노운", 1}, {"마그나", 2},{"캐릭터",3},{"일반공인강화",4}
+		};
+
+		/// <summary>
+		/// 유리 1.5 통상 1 불리 0.75
+		/// </summary>
+		public static Dictionary<string, decimal> SynastryTable = new Dictionary<string, decimal>
+		{
+			{"유리", 1.5m}, {"통상", 1}, {"불리", 0.75m}
 		};
 		public void ShowMasterInfoModify()
 		{
@@ -436,6 +465,7 @@ namespace GranBlueHelper.ViewModels
 		public WeaponListViewModel()
 		{
 			this.BlessingList = BlessingTable.Keys.ToList();
+			this.SynastryList = SynastryTable.Keys.ToList();
 
 			this.DeckWeapon = Visibility.Collapsed;
 			this.ListWeapon = Visibility.Collapsed;
@@ -446,6 +476,8 @@ namespace GranBlueHelper.ViewModels
 
 			SelectedBlessing = BlessingTable.Keys.FirstOrDefault();
 			SelectedFriendBlessing = BlessingTable.Keys.FirstOrDefault();
+			SelectedSynastry = SynastryTable.Keys.FirstOrDefault();
+
 			this.BlessingPercent = 40;
 			this.FriendBlessingPercent = 40;
 		}
@@ -509,7 +541,7 @@ namespace GranBlueHelper.ViewModels
 			decimal Strangthpercent = (skillInfo.StrL * 6 + skillInfo.StrM * 3 + skillInfo.StrS * 1 + skillInfo.StrangthSkillCount) / 100m;
 
 
-			decimal Attributepercent = 1;
+			decimal Attributepercent = SynastryTable[this.SelectedSynastry];
 
 			//자신의 가호
 			if (BlessingTable[this.SelectedBlessing] == 3)//캐릭터
@@ -650,9 +682,12 @@ namespace GranBlueHelper.ViewModels
 			if (this.CalcTargetSkillLv(skillInfo) > 0) this.TargetMagna = this.CalcTargetSkillLv(skillInfo).ToString("##0.##%");
 			else this.TargetMagna = "조건 달성";
 
+			#region DEBUG
 #if DEBUG
 			Debug.WriteLine(this.CalcTargetSkillLv(skillInfo));
 #endif
+			#endregion
+
 		}
 		private decimal CalcTargetSkillLv(Skills skillInfo)
 		{
