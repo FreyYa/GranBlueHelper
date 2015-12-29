@@ -303,8 +303,10 @@
                                     <ColumnDefinition Width="30"/>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
+									<ColumnDefinition Width="Auto"/>
+									<ColumnDefinition Width="Auto"/>
+									<ColumnDefinition Width="Auto"/>
+								</Grid.ColumnDefinitions>
                                 <TextBlock Text="가호: " VerticalAlignment="Center"/>
                                 <metro:PromptComboBox  ItemsSource="{Binding BlessingList}"
 														HorizontalAlignment="Left"
@@ -350,8 +352,15 @@
                                         </Binding>
                                     </metro:PromptTextBox.Text>
                                 </metro:PromptTextBox>
-
-                            </Grid>
+								<TextBlock Text="상성: " Grid.Column="7" VerticalAlignment="Center"/>
+								<metro:PromptComboBox  ItemsSource="{Binding SynastryList}"
+														HorizontalAlignment="Left"
+														Prompt=""
+														SelectedValue="{Binding SelectedSynastry, Mode=TwoWay}"
+														IsReadOnly="True"
+														MinWidth="50"
+														Grid.Column="8" />
+							</Grid>
                             <metro2:CallMethodButton Content="이전 공격력과 비교"
 													 Padding="20,4"
 													 Margin="4"

@@ -695,10 +695,10 @@ namespace GranBlueHelper.ViewModels
 			{
 				var magna = (skillInfo.MagnaL * 6 + skillInfo.MagnaM * 3 + skillInfo.MagnaS * 1 + skillInfo.MagnaSkillLvCount) / 100m;
 
-				var Ans = (magna + 1) * (1 + (this.BlessingPercent / 100m) + (this.FriendBlessingPercent / 100m));
+				var Ans = (magna + 1) * (SynastryTable[this.SelectedSynastry] + (this.BlessingPercent / 100m) + (this.FriendBlessingPercent / 100m));
 
-				var targetup = Ans - 1 - (this.FriendBlessingPercent / 100m);
-				var targetdown = 2 * (1 + this.FriendBlessingPercent / 100m);
+				var targetup = (SynastryTable[this.SelectedSynastry] + (this.BlessingPercent / 100m) + (this.FriendBlessingPercent / 100m)) * magna + (this.BlessingPercent / 100m);
+				var targetdown = 2 * (SynastryTable[this.SelectedSynastry] + this.FriendBlessingPercent / 100m);
 				var target = targetup / targetdown;
 
 				this.TargetMagnaVisible = Visibility.Visible;
