@@ -190,6 +190,7 @@ namespace GranBlueHelper.ViewModels
 
 			var Origin = ElementList.Where(x => x.Origin == 1).ToList();
 			var Magna = ElementList.Where(x => x.Origin == 2).ToList();
+			List<TenTreasureInfo> ProtoList = new List<TenTreasureInfo>();
 
 
 			for (int i = 0; i < Origin.Count; i++)
@@ -207,6 +208,8 @@ namespace GranBlueHelper.ViewModels
 				if (Magna[i].ElementID == ElementTable[this.SelectedElement])
 					Magna[i].Fifth += 60;
 			}
+
+			ProtoList = ElementList.Where(x => x.Proto > 0).ToList();
 
 			switch (ElementTable[this.SelectedElement])
 			{
@@ -230,7 +233,20 @@ namespace GranBlueHelper.ViewModels
 					break;
 			}
 			targetList = new List<TenTreasureInfo>(AnotherList.Concat(ElementList).Concat(Magna).Concat(Origin).ToList());
-
+			if (ElementTable[this.SelectedElement] != 5)
+			{
+				List<TenTreasureInfo> outputList = new List<TenTreasureInfo>();
+				foreach (var item in ProtoList)
+				{
+					TenTreasureInfo tempoutput = new TenTreasureInfo
+					{
+						Name = item.Name,
+						Proto = item.Proto
+					};
+					outputList.Add(tempoutput);
+				}
+				targetList = new List<TenTreasureInfo>(outputList.Concat(targetList).ToList());
+			}
 			//temp=현재 보유하고 있는 아이템목록
 			//targetlist=정리된 십천중 필요목록
 			foreach (var item in targetList)
@@ -256,21 +272,21 @@ namespace GranBlueHelper.ViewModels
 				target.max = 0;//max값을 초기화
 
 				//max값에 필요 아이템값을 모두 합산
-				if (!Proto)
+				if (!Proto && item.Proto > 0)
 					target.max += item.Proto;
-				if (!Rust)
+				if (!Rust && item.Rust > 0)
 					target.max += item.Rust;
-				if (!Element)
+				if (!Element && item.Element > 0)
 					target.max += item.Element;
-				if (!First)
+				if (!First && item.First > 0)
 					target.max += item.First;
-				if (!Second)
+				if (!Second && item.Second > 0)
 					target.max += item.Second;
-				if (!Third)
+				if (!Third && item.Third > 0)
 					target.max += item.Third;
-				if (!Fourth)
+				if (!Fourth && item.Fourth > 0)
 					target.max += item.Fourth;
-				if (!Fifth)
+				if (!Fifth && item.Fifth > 0)
 					target.max += item.Fifth;
 
 				target.max += item.Sixth;
