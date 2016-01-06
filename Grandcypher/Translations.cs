@@ -259,7 +259,7 @@ namespace Grandcypher
 				return item.Element(ElementName).Value;
 			else return "0";
 		}
-		public string GetSkillInfo(string SkillDetail, bool IsDetailFind = false)
+		public string GetSkillInfo(string SkillDetail, bool IsDetailFind = false,bool IsDataFind=false)
 		{
 			var start = "Detail";
 			var Target = "KrName";
@@ -267,6 +267,11 @@ namespace Grandcypher
 			{
 				start = "KrName";
 				Target = "Detail";
+			}
+			else if(IsDataFind)
+			{
+				start = "KrName";
+				Target = "SkillData";
 			}
 
 			IEnumerable<XElement> TranslationList = GetTranslationList(TranslationType.SkillDetails);
