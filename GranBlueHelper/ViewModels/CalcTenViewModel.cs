@@ -165,6 +165,16 @@ namespace GranBlueHelper.ViewModels
 			this.ElementKind = new List<string>(ElementTable.Keys.ToList());
 			if (Settings.Current.ElementSetting == null) Settings.Current.ElementSetting = "화";
 			this.SelectedElement = Settings.Current.ElementSetting;
+
+			this.Proto = Settings.Current.Proto;
+			this.Rust = Settings.Current.Rust;
+			this.Element = Settings.Current.Element;
+			this.First = Settings.Current.First;
+			this.Second = Settings.Current.Second;
+			this.Third = Settings.Current.Third;
+			this.Fourth = Settings.Current.Fourth;
+			this.Fifth = Settings.Current.Fifth;
+
 			this.Read();
 		}
 		private void Read()
