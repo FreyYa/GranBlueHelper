@@ -452,6 +452,7 @@ namespace Grandcypher
 		}
 		public enum TranslationType
 		{
+			App,
 			ScenarioDetail,
 			PartTranslate,
 			WeaponList,

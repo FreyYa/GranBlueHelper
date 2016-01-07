@@ -166,6 +166,8 @@ namespace Grandcypher
 
 			switch (Type)
 			{
+				case TranslationType.App:
+					return Versions.Where(x => x.Element("Name").Value.Equals("App")).FirstOrDefault().Element(ElementName).Value;
 				case TranslationType.PartTranslate:
 					return Versions.Where(x => x.Element("Name").Value.Equals("JPTRs")).FirstOrDefault().Element(ElementName).Value;
 				case TranslationType.SkillDetails:

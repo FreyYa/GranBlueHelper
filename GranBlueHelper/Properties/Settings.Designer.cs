@@ -12,7 +12,7 @@ namespace GranBlueHelper.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "12.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -38,6 +38,16 @@ namespace GranBlueHelper.Properties {
         public global::System.Uri XMLTransUrl {
             get {
                 return ((global::System.Uri)(this["XMLTransUrl"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://raw.githubusercontent.com/FreyYa/KCVKrTranslation/master/GranBlue/Version" +
+            ".xml")]
+        public global::System.Uri XMLUpdateUrl {
+            get {
+                return ((global::System.Uri)(this["XMLUpdateUrl"]));
             }
         }
     }

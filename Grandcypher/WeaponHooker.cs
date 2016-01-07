@@ -107,7 +107,7 @@ namespace Grandcypher
 		#region List
 		private void ListDetail(Session oS)
 		{
-			this.WeaponListLoad();
+			//this.WeaponListLoad();
 			this.ListIsEnd = false;
 			this.DeckIsEnd = false;
 			if (this.WeaponLists == null)
@@ -134,7 +134,7 @@ namespace Grandcypher
 			this.ProgressStatus.Min = 0;
 			this.ProgressStatus.Current = 0;
 
-			this.ProgressBar();
+			//this.ProgressBar();
 
 			for (int i = 0; i < weaponList.Count; i++)
 			{
@@ -174,10 +174,10 @@ namespace Grandcypher
 
 				WeaponLists.Add(temp);
 				this.ProgressStatus.Current++;
-				this.ProgressBar();
+				//this.ProgressBar();
 			}
 			this.ListIsEnd = true;
-			this.LoadingEnd();
+			//this.LoadingEnd();
 		}
 		#endregion
 
@@ -191,8 +191,11 @@ namespace Grandcypher
 			this.ListIsEnd = false;
 			this.DeckIsEnd = false;
 
-			this.WeaponListLoad();
+			//this.WeaponListLoad();
 			int MasterAttribute = 0;
+
+			this.SkillCounter = new Skills();
+
 			if (this.WeaponLists == null)
 				this.WeaponLists = new List<WeaponInfo>();
 			else
@@ -261,7 +264,7 @@ namespace Grandcypher
 				npc.attack = (int)param["attack"];
 				this.NPCList.Add(npc);
 				this.ProgressStatus.Current++;
-				this.ProgressBar();
+				//this.ProgressBar();
 			}
 
 			for (int i = 1; i < 11; i++)
@@ -302,6 +305,8 @@ namespace Grandcypher
 				else
 				{
 					deck = this.InputSkillInfo(deck);
+					deck.attribute = (int)master["attribute"];
+					deck.Kind = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponType, "", TranslateKind.Google, deck.MasterId);
 				}
 
 				deck.ParamId = (int)param["id"];//무기 스킬레벨등을 저장하고 구별하기 위한 부분
@@ -314,10 +319,163 @@ namespace Grandcypher
 				else WeaponLists.Add(deck);
 
 				this.ProgressStatus.Current++;
-				this.ProgressBar();
+				//this.ProgressBar();
 			}
 
-			this.DeckLoadingEnd();
+
+			for (int i = 0; i < WeaponLists.Count; i++)
+			{
+				if (WeaponLists[i].SkillAttribute1 == MasterAttribute
+					|| WeaponLists[i].SkillAttribute1 >= 7)
+					this.SumAtt(WeaponLists[i].GeneralType1, WeaponLists[i]);
+				if (WeaponLists[i].SkillAttribute2 == MasterAttribute
+					|| WeaponLists[i].SkillAttribute2 >= 7)
+					this.SumAtt(WeaponLists[i].GeneralType2, WeaponLists[i]);
+			}
+
+			//this.DeckLoadingEnd();
+		}
+		/// <summary>
+		/// 무기 정보를 받아 무기의 스킬배수를 계산
+		/// 바하무트 무기 계산과 언노운 무기 계산에 오류 발생.
+		/// </summary>
+		/// <param name="General"></param>
+		/// <param name="weapon"></param>
+		/// <param name="IsSecond"></param>
+		private void SumAtt(int General, WeaponInfo weapon, bool IsSecond = false)
+		{
+			if (!IsSecond)
+			{
+				switch (General)
+				{
+					case 1://공격
+						switch (weapon.AttackType1)
+						{
+							case 1://일반
+								this.SkillCounter.Noramal += this.RaiseSkillLevel(weapon.Skill_Rank1, weapon.SkillLv1, weapon.Is_Double1);
+								break;
+							case 2://언노운
+								this.SkillCounter.Unknown += this.RaiseSkillLevel(weapon.Skill_Rank1, weapon.SkillLv1, weapon.Is_Double1);
+								break;
+							case 3://스트렝스
+								this.SkillCounter.Str += this.RaiseSkillLevel(weapon.Skill_Rank1, weapon.SkillLv1, weapon.Is_Double1);
+								break;
+							case 4://세이빙
+								this.SkillCounter.Saving += this.RaiseSkillLevel(weapon.Skill_Rank1, weapon.SkillLv1, weapon.Is_Double1);
+								break;
+							case 5://마그나
+								this.SkillCounter.Magna += this.RaiseSkillLevel(weapon.Skill_Rank1, weapon.SkillLv1, weapon.Is_Double1);
+								break;
+							case 6://절대치 상승
+								this.SkillCounter.staticAtt += weapon.Skill_Rank1;
+								break;
+							case 7://vis
+								if (weapon.SkillLv1 == 10) this.SkillCounter.Baha += 30;
+								else
+								{
+									this.SkillCounter.Baha += 20;//기본
+									this.SkillCounter.Baha += weapon.SkillLv1;//스킬레벨
+								}
+								break;
+							case 8://con
+								if (weapon.SkillLv1 == 10) this.SkillCounter.Baha += 15;
+								else
+								{
+									this.SkillCounter.Baha += 10;//기본
+									this.SkillCounter.Baha += weapon.SkillLv1 * 0.5;//스킬레벨 * 0.5
+								}
+								break;
+						}
+						break;
+					case 3://배수
+						break;
+				}
+			}
+			else
+			{
+				switch (General)
+				{
+					case 1://공격
+						switch (weapon.AttackType2)
+						{
+							case 1://일반
+								this.SkillCounter.Noramal += this.RaiseSkillLevel(weapon.Skill_Rank2, weapon.SkillLv2, weapon.Is_Double2);
+								break;
+							case 2://언노운
+								this.SkillCounter.Unknown += this.RaiseSkillLevel(weapon.Skill_Rank2, weapon.SkillLv2, weapon.Is_Double2);
+								break;
+							case 3://스트렝스
+								this.SkillCounter.Str += this.RaiseSkillLevel(weapon.Skill_Rank2, weapon.SkillLv2, weapon.Is_Double2);
+								break;
+							case 4://세이빙
+								this.SkillCounter.Saving += this.RaiseSkillLevel(weapon.Skill_Rank2, weapon.SkillLv2, weapon.Is_Double2);
+								break;
+							case 5://마그나
+								this.SkillCounter.Magna += this.RaiseSkillLevel(weapon.Skill_Rank2, weapon.SkillLv2, weapon.Is_Double2);
+								break;
+							case 6://절대치 상승
+								this.SkillCounter.staticAtt += weapon.Skill_Rank2;
+								break;
+							case 7://vis
+								if (weapon.SkillLv2 == 10) this.SkillCounter.Baha += 30;
+								else
+								{
+									this.SkillCounter.Baha += 20;
+									this.SkillCounter.Baha += weapon.SkillLv2;
+								}
+								break;
+							case 8://con
+								if (weapon.SkillLv2 == 10) this.SkillCounter.Baha += 15;
+								else
+								{
+									this.SkillCounter.Baha += 10;
+									this.SkillCounter.Baha += weapon.SkillLv2 * 0.5;
+								}
+								break;
+						}
+						break;
+					case 3://배수
+						break;
+				}
+			}
+		}
+		private double RaiseSkillLevel(int Rank, int SkillLv, bool IsDouble)
+		{
+			double ans = 0;
+			switch (Rank)//기본값 설정
+			{
+				case 1:
+					ans = 0;
+					break;
+				case 2:
+					ans = 2;
+					break;
+				case 3:
+					if (IsDouble) ans = 6;
+					else ans = 5;
+					break;
+			}
+			if (SkillLv < 11)//스킬레벨이 10이하인 경우엔 모든 증가폭이 1이다
+			{
+				return ans + SkillLv;
+			}
+			else//스킬레벨이 11이상인 경우엔 증가폭이 다르게 나타난다
+			{
+				ans += 10;
+				switch (Rank)//추가치를 더한다.
+				{
+					case 1:
+						return ans += SkillLv * 0.4;
+					case 2:
+						return ans += SkillLv * 0.5;
+					case 3:
+						if (IsDouble)
+							return ans += SkillLv * 0.8;
+						else
+							return ans += SkillLv * 0.6;
+				}
+			}
+			return 0;
 		}
 		public void Reload()
 		{
@@ -620,19 +778,40 @@ namespace Grandcypher
 			WeaponInfo temp = new WeaponInfo();
 			temp = info;
 
-			var spl_data = GrandcypherClient.Current.Translations.GetSkillInfo(temp.ItemName, false, true).Split(';');
+			var skill_name1 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.FirstSkillName, temp.ItemName, 0, temp.MasterId);
+			var skill_name2 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.LastSkillDetail, temp.ItemName, 0, temp.MasterId);
+			var spl_data1 = GrandcypherClient.Current.Translations.GetSkillInfo(skill_name1, false, true).Split(';');
+			var spl_data2 = GrandcypherClient.Current.Translations.GetSkillInfo(skill_name2, false, true).Split(';');
+
+			temp.SkillName1 = skill_name1;
+			temp.SkillName2 = skill_name2;
+			temp.SkillDetail1 = GrandcypherClient.Current.Translations.GetSkillInfo(skill_name1, true);
+			temp.SkillDetail2 = GrandcypherClient.Current.Translations.GetSkillInfo(skill_name2, true);
+
+			temp.SkillLv1 = WeaponLvLoad(temp.ParamId,1);
+			temp.SkillLv2 = temp.SkillLv1;
+
+
 			List<int> data = new List<int>();
-			for (int i = 0; i < spl_data.Count(); i++)
+			for (int i = 0; i < spl_data1.Count(); i++)
 			{
-				data.Add(Convert.ToInt32(spl_data[i]));
+				if (spl_data1[i] != string.Empty) data.Add(Convert.ToInt32(spl_data1[i]));
 			}
 			for (int i = 0; i < data.Count; i++)
 			{
 				switch (i)
 				{
 					case 0:
-						if (info.SkillName1 != string.Empty) info.GeneralType1 = data[i];
-						if (info.SkillName2 != string.Empty) info.GeneralType2 = data[i];
+						if (info.SkillName1 != string.Empty)
+						{
+							info.GeneralType1 = data[i];
+							info.vSkillLv1 = Visibility.Visible;
+						}
+						if (info.SkillName2 != string.Empty)
+						{
+							info.GeneralType2 = data[i];
+							info.vSkillLv2 = Visibility.Visible;
+						}
 						break;
 					case 1:
 						if (info.SkillName1 != string.Empty) info.AttackType1 = data[i];
@@ -650,6 +829,10 @@ namespace Grandcypher
 						if (info.SkillName1 != string.Empty) info.Skill_Rank1 = data[i];
 						if (info.SkillName2 != string.Empty) info.Skill_Rank2 = data[i];
 						break;
+					case 5:
+						if (info.SkillName1 != string.Empty) info.Is_Double1 = Convert.ToBoolean(data[i]);
+						if (info.SkillName2 != string.Empty) info.Is_Double2 = Convert.ToBoolean(data[i]);
+						break;
 				}
 			}
 
@@ -664,33 +847,26 @@ namespace Grandcypher
 	}
 	public class Skills
 	{
-		public int TotalAttack { get; set; }
-		public int NovelWeaponCount { get; set; }
+		public double TotalAttack { get; set; }
 
 		//normal
-		public int Small { get; set; }
-		public int Middle { get; set; }
-		public int Large { get; set; }
+		public double Noramal { get; set; }
+
+		public double Baha { get; set; }
 
 		//unknown
-		public int UnknownS { get; set; }
-		public int UnknownM { get; set; }
-		public int UnknownL { get; set; }
+		public double Unknown { get; set; }
 
 		//magna
-		public int MagnaS { get; set; }
-		public int MagnaM { get; set; }
-		public int MagnaL { get; set; }
+		public double Magna { get; set; }
 
 		//strength
-		public int StrS { get; set; }
-		public int StrM { get; set; }
-		public int StrL { get; set; }
+		public double Str { get; set; }
 
-		public int NormalSkillLvCount { get; set; }
-		public int MagnaSkillLvCount { get; set; }
-		public int UnknownSkillLvCount { get; set; }
-		public int StrangthSkillCount { get; set; }
+		//saving
+		public double Saving { get; set; }
+
+		public double staticAtt { get; set; }
 	}
 	public class NpcInfo
 	{
@@ -754,6 +930,7 @@ namespace Grandcypher
 		public int SkillAttribute1 { get; set; }
 		public bool Is_Unlimited1 { get; set; }
 		public int Skill_Rank1 { get; set; }
+		public bool Is_Double1 { get; set; }
 
 		#region Skill Level 1
 		private int _SkillLv1;
@@ -790,6 +967,7 @@ namespace Grandcypher
 		public int SkillAttribute2 { get; set; }
 		public bool Is_Unlimited2 { get; set; }
 		public int Skill_Rank2 { get; set; }
+		public bool Is_Double2 { get; set; }
 
 		#region Skill Level 2
 		public int SkillLv2 { get; set; }

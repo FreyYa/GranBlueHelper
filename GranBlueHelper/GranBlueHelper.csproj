@@ -130,7 +130,6 @@
     <Compile Include="ViewModels\MasterInfoModifyViewModel.cs" />
     <Compile Include="ViewModels\MessageViewViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
-    <Compile Include="ViewModels\WeaponListViewModel.cs" />
     <Compile Include="Views\CalcTen.xaml.cs">
       <DependentUpon>CalcTen.xaml</DependentUpon>
     </Compile>
@@ -145,9 +144,6 @@
     </Compile>
     <Compile Include="Views\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\WeaponList.xaml.cs">
-      <DependentUpon>WeaponList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Win32\DVTARGETDEVICE.cs" />
     <Compile Include="Win32\INTERNET_CACHE_ENTRY_INFOA.cs" />
@@ -185,10 +181,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Settings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\WeaponList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

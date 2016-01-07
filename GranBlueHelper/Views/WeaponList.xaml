@@ -324,7 +324,7 @@
 													 Mode="TwoWay"
 													 UpdateSourceTrigger="PropertyChanged">
                                             <Binding.ValidationRules>
-                                                <metro:Int32Rule Min="0" />
+                                                <metro:Int32Rule Min="10" />
                                             </Binding.ValidationRules>
                                         </Binding>
                                     </metro:PromptTextBox.Text>
@@ -347,7 +347,7 @@
 													 Mode="TwoWay"
 													 UpdateSourceTrigger="PropertyChanged">
                                             <Binding.ValidationRules>
-                                                <metro:Int32Rule Min="0" />
+                                                <metro:Int32Rule Min="10" />
                                             </Binding.ValidationRules>
                                         </Binding>
                                     </metro:PromptTextBox.Text>
