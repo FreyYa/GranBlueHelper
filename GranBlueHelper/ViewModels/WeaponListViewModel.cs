@@ -99,8 +99,8 @@ namespace GranBlueHelper.ViewModels
 				}
 			}
 		}
-		private int _CalcAtt;
-		public int CalcAtt
+		private decimal _CalcAtt;
+		public decimal CalcAtt
 		{
 			get { return this._CalcAtt; }
 			set
@@ -112,8 +112,8 @@ namespace GranBlueHelper.ViewModels
 				}
 			}
 		}
-		private int _BeforeCalcAtt;
-		public int BeforeCalcAtt
+		private decimal _BeforeCalcAtt;
+		public decimal BeforeCalcAtt
 		{
 			get { return this._BeforeCalcAtt; }
 			set
@@ -281,8 +281,8 @@ namespace GranBlueHelper.ViewModels
 				this.RaisePropertyChanged();
 			}
 		}
-		private int _Total;
-		public int Total
+		private decimal _Total;
+		public decimal Total
 		{
 			get { return this._Total; }
 			set
@@ -530,16 +530,19 @@ namespace GranBlueHelper.ViewModels
 		private void CalcAttack(Skills skillInfo)
 		{
 			if (skillInfo == null) return;
-			int total = skillInfo.TotalAttack;
-			decimal baha = 0;
-			decimal percent = (skillInfo.Large * 6 + skillInfo.Middle * 3 + skillInfo.Small * 1 + skillInfo.NormalSkillLvCount) / 100m + 1;
+			decimal total = skillInfo.BasicAttack;
 
-			decimal Magnapercent = (skillInfo.MagnaL * 6 + skillInfo.MagnaM * 3 + skillInfo.MagnaS * 1 + skillInfo.MagnaSkillLvCount) / 100m + 1;
+			decimal baha = skillInfo.Baha / 100m;
 
-			decimal Unknownpercent = (skillInfo.UnknownL * 6 + skillInfo.UnknownM * 3 + skillInfo.UnknownS * 1 + skillInfo.UnknownSkillLvCount) / 100m + 1;
+			decimal percent = skillInfo.Noramal / 100m + 1;
 
-			decimal Strangthpercent = (skillInfo.StrL * 6 + skillInfo.StrM * 3 + skillInfo.StrS * 1 + skillInfo.StrangthSkillCount) / 100m;
+			decimal Magnapercent = skillInfo.Magna / 100m + 1;
 
+			decimal Unknownpercent = skillInfo.Unknown / 100m;
+
+			decimal Strangthpercent = skillInfo.Str / 100m;
+
+			decimal Savingpercent = skillInfo.Saving / 100m;
 
 			decimal Attributepercent = SynastryTable[this.SelectedSynastry];
 
@@ -596,12 +599,7 @@ namespace GranBlueHelper.ViewModels
 			}
 			else if (BlessingTable[this.SelectedFriendBlessing] == 1)//언노운
 			{
-				if (Unknownpercent > 1)
-				{
-					Unknownpercent -= 1;
-					Unknownpercent = Unknownpercent * (1 + (decimal)this.FriendBlessingPercent / 100m);
-					Unknownpercent += 1;
-				}
+				Unknownpercent = Unknownpercent * (1 + (decimal)this.FriendBlessingPercent / 100m);
 			}
 			else if (BlessingTable[this.SelectedFriendBlessing] == 4)//제우스 티탄 등 일반공인 부스트
 			{
@@ -614,34 +612,15 @@ namespace GranBlueHelper.ViewModels
 				Attributepercent += (decimal)this.FriendBlessingPercent / 100m;
 			}
 
-			if (this.IsvisBaha)
+			if (this.IsvisBaha || this.IsconcilioBaha)
 			{
-				if (Settings.Current.visLv == 10)
-				{
-					percent += 0.3m;
-					baha += 0.3m;
-				}
-				else
-				{
-					percent += 0.2m + Convert.ToDecimal((decimal)(Settings.Current.visLv - 1) / 100m);
-					baha += 0.2m + Convert.ToDecimal((decimal)(Settings.Current.visLv - 1) / 100m);
-				}
-			}
-			if (this.IsconcilioBaha)
-			{
-				if (Settings.Current.concilioLv == 10)
-				{
-					percent += 0.15m;
-					baha += 0.15m;
-				}
-				else
-				{
-					percent += 0.1m + Convert.ToDecimal((decimal)(Settings.Current.concilioLv - 1) / 200m);
-					baha += 0.1m + Convert.ToDecimal((decimal)(Settings.Current.concilioLv - 1) / 200m);
-				}
+				decimal temp = (percent - 1);
+				temp += baha;
+				temp++;
+				percent = temp;
 			}
 
-			this.CalcAtt = Convert.ToInt32(Math.Round(total * percent * Magnapercent * (Unknownpercent + Strangthpercent) * Attributepercent, 0, MidpointRounding.AwayFromZero));
+			this.CalcAtt = Convert.ToInt32(Math.Round(total * percent * Magnapercent * (1 + Unknownpercent + Strangthpercent + Savingpercent) * Attributepercent, 0, MidpointRounding.AwayFromZero));
 
 			StringBuilder stbr = new StringBuilder();
 
@@ -657,26 +636,36 @@ namespace GranBlueHelper.ViewModels
 
 			if (Magnapercent > 1) this.MagnaWeapon = "×" + string.Format("{0:F2}", Magnapercent);
 
-			if (Unknownpercent > 1) this.UnknownWeapon = "×" + string.Format("{0:F2}", Unknownpercent);
+			if (Unknownpercent > 0) this.UnknownWeapon = "×" + string.Format("{0:F2}", 1 + Unknownpercent);
 			this.UnknownWeaponTooltip = "언노운 무기 배율";
-			if (Strangthpercent > 0)
+			if (Strangthpercent > 0 && Savingpercent == 0)
 			{
-				this.UnknownWeapon = "×(" + string.Format("{0:F2}", Unknownpercent) + "+" + string.Format("{0:F2}", Strangthpercent) + ")";
+				this.UnknownWeapon = "×(" + string.Format("{0:F2}", 1 + Unknownpercent) + "+" + string.Format("{0:F2}", Strangthpercent) + ")";
 				this.UnknownWeaponTooltip = "언노운 & 스트렝스 무기 배율";
+			}
+			else if (Strangthpercent == 0 && Savingpercent > 0)
+			{
+				this.UnknownWeapon = "×(" + string.Format("{0:F2}", 1 + Unknownpercent) + "+" + string.Format("{0:F2}", Savingpercent) + ")";
+				this.UnknownWeaponTooltip = "언노운 & 세이빙 무기 배율";
+			}
+			else if (Strangthpercent > 0 && Savingpercent > 0)
+			{
+				this.UnknownWeapon = "×(" + string.Format("{0:F2}", 1 + Unknownpercent) + "+" + string.Format("{0:F2}", Strangthpercent) + "+" + string.Format("{0:F2}", Savingpercent) + ")";
+				this.UnknownWeaponTooltip = "언노운 & 스트렝스 & 세이빙 무기 배율";
 			}
 
 			if (Attributepercent > 1) this.Attribute = "×" + string.Format("{0:F2}", Attributepercent);
 
 
-			this.CalcAtt += skillInfo.NovelWeaponCount * 1000;
-			if (skillInfo.NovelWeaponCount > 0) this.NovelWeapon = "+" + (1000 * skillInfo.NovelWeaponCount);
+			this.CalcAtt += skillInfo.staticAtt;
+			if (skillInfo.staticAtt > 0) this.NovelWeapon = "+" + (skillInfo.staticAtt);
 
 
 			var tempNPC = new List<NpcInfo>(GrandcypherClient.Current.WeaponHooker.NPCList);
 
 			for (int i = 0; i < tempNPC.Count; i++)
 			{
-				tempNPC[i].CalcAtt = Convert.ToInt32(Math.Round(tempNPC[i].attack * percent * Magnapercent * (Unknownpercent + Strangthpercent) * Attributepercent, 0, MidpointRounding.AwayFromZero));
+				tempNPC[i].CalcAtt = Convert.ToInt32(Math.Round(tempNPC[i].attack * percent * Magnapercent * (1 + Unknownpercent + Strangthpercent + Savingpercent) * Attributepercent, 0, MidpointRounding.AwayFromZero));
 			}
 			this.NPCList = new List<NpcInfo>(tempNPC);
 			if (this.CalcTargetSkillLv(skillInfo) > 0) this.TargetMagna = this.CalcTargetSkillLv(skillInfo).ToString("##0.##%");
@@ -693,7 +682,7 @@ namespace GranBlueHelper.ViewModels
 		{
 			if (BlessingTable[this.SelectedFriendBlessing] == 0 && BlessingTable[this.SelectedBlessing] == 0)
 			{
-				var magna = (skillInfo.MagnaL * 6 + skillInfo.MagnaM * 3 + skillInfo.MagnaS * 1 + skillInfo.MagnaSkillLvCount) / 100m;
+				var magna = skillInfo.Magna / 100m;
 
 				var Ans = (magna + 1) * (SynastryTable[this.SelectedSynastry] + (this.BlessingPercent / 100m) + (this.FriendBlessingPercent / 100m));
 

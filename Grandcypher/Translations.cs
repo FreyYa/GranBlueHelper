@@ -373,7 +373,9 @@ namespace Grandcypher
 				}
 
 			}
-			catch { }
+			catch {
+				return "";
+			}
 
 			return JPString;
 		}

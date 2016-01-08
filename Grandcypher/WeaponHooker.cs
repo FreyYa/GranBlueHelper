@@ -34,6 +34,8 @@ namespace Grandcypher
 
 		private bool DeckIsEnd { get; set; }
 		private bool ListIsEnd { get; set; }
+		private List<decimal> ConBahaList { get; set; }
+		private List<decimal> VisBahaList { get; set; }
 		public void SessionReader(Session oS)
 		{
 			if (oS.PathAndQuery.StartsWith("/weapon/list") && oS.oResponse.MIMEType == "application/json")
@@ -100,14 +102,15 @@ namespace Grandcypher
 				}
 			}
 		}
+		#region List
 		/// <summary>
 		/// 기본 무기 리스트. 강화/리스트/창고가 포함됨
 		/// </summary>
 		/// <param name="oS"></param>
-		#region List
+
 		private void ListDetail(Session oS)
 		{
-			//this.WeaponListLoad();
+			this.WeaponListLoad();
 			this.ListIsEnd = false;
 			this.DeckIsEnd = false;
 			if (this.WeaponLists == null)
@@ -134,7 +137,7 @@ namespace Grandcypher
 			this.ProgressStatus.Min = 0;
 			this.ProgressStatus.Current = 0;
 
-			//this.ProgressBar();
+			this.ProgressBar();
 
 			for (int i = 0; i < weaponList.Count; i++)
 			{
@@ -143,11 +146,11 @@ namespace Grandcypher
 				WeaponInfo temp = new WeaponInfo();
 
 				temp.MasterId = tempIndex.id;
+				temp.ParamId = tempparam.id;//무기 스킬레벨등을 저장하고 구별하기 위한 부분
 
 				temp.ItemName = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponList, "", TranslateKind.Google, temp.MasterId);
 				if (temp.ItemName != string.Empty)
 				{
-					temp = this.InputSkillInfo(temp);
 					temp.Element = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.Element, "", TranslateKind.Google, temp.MasterId);
 					temp.Kind = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponType, "", TranslateKind.Google, temp.MasterId);
 				}
@@ -155,6 +158,9 @@ namespace Grandcypher
 				{
 					int msid = temp.MasterId;
 					temp = MasterInfoLoad(temp.MasterId);
+					temp.MasterId = msid;
+					temp.ParamId = tempparam.id;//무기 스킬레벨등을 저장하고 구별하기 위한 부분
+					temp.IsManual = true;
 
 					if (temp.SkillName1 != string.Empty) temp.SkillDetail1 = GrandcypherClient.Current.Translations.GetSkillInfo(temp.SkillName1, true);
 					else temp.SkillDetail1 = string.Empty;
@@ -162,7 +168,8 @@ namespace Grandcypher
 					else temp.SkillDetail2 = string.Empty;
 				}
 				temp.is_used = weaponList[i].is_used;
-				temp.ParamId = tempparam.id;//무기 스킬레벨등을 저장하고 구별하기 위한 부분
+
+				temp = this.InputSkillInfo(temp);
 
 				temp.SkillLv1 = WeaponLvLoad(temp.ParamId, 1);
 				temp.SkillLv2 = WeaponLvLoad(temp.ParamId, 2);
@@ -174,27 +181,29 @@ namespace Grandcypher
 
 				WeaponLists.Add(temp);
 				this.ProgressStatus.Current++;
-				//this.ProgressBar();
+				this.ProgressBar();
 			}
 			this.ListIsEnd = true;
-			//this.LoadingEnd();
+			this.LoadingEnd();
 		}
 		#endregion
 
+		#region 덱 편성
 		/// <summary>
 		/// 덱 편성 화면. 공인계산기 포함
 		/// </summary>
 		/// <param name="oS"></param>
-		#region 덱 편성
 		private void DeckDetail(Session oS)
 		{
 			this.ListIsEnd = false;
 			this.DeckIsEnd = false;
 
-			//this.WeaponListLoad();
+			this.WeaponListLoad();
 			int MasterAttribute = 0;
 
 			this.SkillCounter = new Skills();
+			this.ConBahaList = new List<decimal>();
+			this.VisBahaList = new List<decimal>();
 
 			if (this.WeaponLists == null)
 				this.WeaponLists = new List<WeaponInfo>();
@@ -264,7 +273,7 @@ namespace Grandcypher
 				npc.attack = (int)param["attack"];
 				this.NPCList.Add(npc);
 				this.ProgressStatus.Current++;
-				//this.ProgressBar();
+				this.ProgressBar();
 			}
 
 			for (int i = 1; i < 11; i++)
@@ -304,14 +313,9 @@ namespace Grandcypher
 				deck.vSkillLv1 = Visibility.Collapsed;
 				deck.vSkillLv2 = Visibility.Collapsed;
 
-
-
 				deck = this.InputSkillInfo(deck);
 				deck.attribute = (int)master["attribute"];
 				deck.Kind = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponType, "", TranslateKind.Google, deck.MasterId);
-
-
-
 
 				if (i == 1)
 				{
@@ -320,7 +324,7 @@ namespace Grandcypher
 				else WeaponLists.Add(deck);
 
 				this.ProgressStatus.Current++;
-				//this.ProgressBar();
+				this.ProgressBar();
 			}
 
 
@@ -339,8 +343,24 @@ namespace Grandcypher
 			if (MainWeapon.SkillAttribute2 == MasterAttribute
 				|| MainWeapon.SkillAttribute2 >= 7)
 				this.SumAtt(MainWeapon.GeneralType2, MainWeapon, true);
+
+			this.SkillCounter.Baha += this.TotalBaha(this.ConBahaList);
+			this.SkillCounter.Baha += this.TotalBaha(this.VisBahaList);
+
 			this.DeckIsEnd = true;
-			//this.DeckLoadingEnd();
+			if (test.deck.pc.param != null) SkillCounter.BasicAttack = test.deck.pc.param.attack;
+			this.DeckLoadingEnd();
+		}
+		private decimal TotalBaha(List<decimal> target)
+		{
+			if (target.Count == 0) return 0;
+
+			decimal result = target[0];
+			for (int i = 1; i < target.Count; i++)
+			{
+				if (result < target[i]) result = target[i];
+			}
+			return result;
 		}
 		/// <summary>
 		/// 무기 정보를 받아 무기의 스킬배수를 계산
@@ -350,6 +370,7 @@ namespace Grandcypher
 		/// <param name="IsSecond"></param>
 		private void SumAtt(int General, WeaponInfo weapon, bool IsSecond = false)
 		{
+			decimal att = 0;
 			if (!IsSecond)
 			{
 				switch (General)
@@ -378,24 +399,28 @@ namespace Grandcypher
 							case 7://vis
 								if (weapon.SkillLv1 == 10)
 								{
-									this.SkillCounter.Baha += 30;
+									att += 30;
 								}
 								else
 								{
-									this.SkillCounter.Baha += 20;//기본
-									this.SkillCounter.Baha += weapon.SkillLv1;//스킬레벨
+									att += 20;//기본
+									att += weapon.SkillLv1;//스킬레벨
 								}
+								this.VisBahaList.Add(att);
+								this.IsVisExist = true;
 								break;
 							case 8://con
 								if (weapon.SkillLv1 == 10)
 								{
-									this.SkillCounter.Baha += 15;
+									att += 15;
 								}
 								else
 								{
-									this.SkillCounter.Baha += 10;//기본
-									this.SkillCounter.Baha += weapon.SkillLv1 * 0.5;//스킬레벨 * 0.5
+									att += 10;//기본
+									att += weapon.SkillLv1 * 0.5m;//스킬레벨 * 0.5
 								}
+								this.ConBahaList.Add(att);
+								this.IsConcilioExist = true;
 								break;
 						}
 						break;
@@ -429,20 +454,24 @@ namespace Grandcypher
 								this.SkillCounter.staticAtt += weapon.Skill_Rank2;
 								break;
 							case 7://vis
-								if (weapon.SkillLv2 == 10) this.SkillCounter.Baha += 30;
+								if (weapon.SkillLv2 == 10) att += 30;
 								else
 								{
-									this.SkillCounter.Baha += 20;
-									this.SkillCounter.Baha += weapon.SkillLv2;
+									att += 20;
+									att += weapon.SkillLv2;
 								}
+								this.VisBahaList.Add(att);
+								this.IsVisExist = true;
 								break;
 							case 8://con
-								if (weapon.SkillLv2 == 10) this.SkillCounter.Baha += 15;
+								if (weapon.SkillLv2 == 10) att += 15;
 								else
 								{
-									this.SkillCounter.Baha += 10;
-									this.SkillCounter.Baha += weapon.SkillLv2 * 0.5;
+									att += 10;
+									att += weapon.SkillLv2 * 0.5m;
 								}
+								this.ConBahaList.Add(att);
+								this.IsConcilioExist = true;
 								break;
 						}
 						break;
@@ -451,9 +480,9 @@ namespace Grandcypher
 				}
 			}
 		}
-		private double RaiseSkillLevel(int Rank, int SkillLv, bool IsDouble)
+		private decimal RaiseSkillLevel(int Rank, int SkillLv, bool IsDouble)
 		{
-			double ans = 0;
+			decimal ans = 0;
 			switch (Rank)//기본값 설정
 			{
 				case 1:
@@ -477,22 +506,22 @@ namespace Grandcypher
 				switch (Rank)//추가치를 더한다.
 				{
 					case 1:
-						return ans += SkillLv * 0.4;
+						return ans += SkillLv * 0.4m;
 					case 2:
-						return ans += SkillLv * 0.5;
+						return ans += SkillLv * 0.5m;
 					case 3:
 						if (IsDouble)
-							return ans += SkillLv * 0.8;
+							return ans += SkillLv * 0.8m;
 						else
-							return ans += SkillLv * 0.6;
+							return ans += SkillLv * 0.6m;
 				}
 			}
 			return 0;
 		}
 		public void Reload()
 		{
-			//if (this.DeckIsEnd) this.DeckLoadingEnd();
-			//if (this.ListIsEnd) this.LoadingEnd();
+			if (this.DeckIsEnd) this.DeckLoadingEnd();
+			if (this.ListIsEnd) this.LoadingEnd();
 		}
 		/// <summary>
 		/// 마스터 리스트를 불러온다
@@ -758,17 +787,19 @@ namespace Grandcypher
 			WeaponInfo temp = new WeaponInfo();
 			temp = info;
 
-			var skill_name1 = info.SkillName1;
-			var skill_name2 = info.SkillName2;
-			if(!info.IsManual)
+			var skill_name1 = "";
+			if (info.SkillName1 != null) skill_name1 = info.SkillName1;
+			var skill_name2 = "";
+			if (info.SkillName2 != null) skill_name2 = info.SkillName2;
+			if (!info.IsManual)
 			{
 				skill_name1 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.FirstSkillName, temp.ItemName, 0, temp.MasterId);
-				skill_name2 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.LastSkillDetail, temp.ItemName, 0, temp.MasterId);
+				skill_name2 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.LastSkillName, temp.ItemName, 0, temp.MasterId);
 			}
 
 			var spl_data1 = GrandcypherClient.Current.Translations.GetSkillInfo(skill_name1, false, true).Split(';');
 			var spl_data2 = GrandcypherClient.Current.Translations.GetSkillInfo(skill_name2, false, true).Split(';');
-
+			
 			temp.SkillName1 = skill_name1;
 			temp.SkillName2 = skill_name2;
 			temp.SkillDetail1 = GrandcypherClient.Current.Translations.GetSkillInfo(skill_name1, true);
@@ -856,26 +887,26 @@ namespace Grandcypher
 	}
 	public class Skills
 	{
-		public double TotalAttack { get; set; }
+		public decimal BasicAttack { get; set; }
 
 		//normal
-		public double Noramal { get; set; }
+		public decimal Noramal { get; set; }
 
-		public double Baha { get; set; }
+		public decimal Baha { get; set; }
 
 		//unknown
-		public double Unknown { get; set; }
+		public decimal Unknown { get; set; }
 
 		//magna
-		public double Magna { get; set; }
+		public decimal Magna { get; set; }
 
 		//strength
-		public double Str { get; set; }
+		public decimal Str { get; set; }
 
 		//saving
-		public double Saving { get; set; }
+		public decimal Saving { get; set; }
 
-		public double staticAtt { get; set; }
+		public decimal staticAtt { get; set; }
 	}
 	public class NpcInfo
 	{

@@ -134,12 +134,12 @@
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding SkillType1}"
+                                                            <DataTrigger Binding="{Binding GeneralType1}"
 																		 Value="1">
                                                                 <Setter Property="Background" Value="#95051D"/>
 																<Setter Property="Foreground" Value="White"/>
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding SkillType1}"
+                                                            <DataTrigger Binding="{Binding GeneralType1}"
 																		 Value="2">
                                                                 <Setter Property="Background" Value="#FF11B61E"/>
 																<Setter Property="Foreground" Value="White"/>
@@ -155,12 +155,12 @@
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding SkillType2}"
+                                                            <DataTrigger Binding="{Binding GeneralType2}"
 																		 Value="1">
                                                                 <Setter Property="Background" Value="#95051D"/>
 																<Setter Property="Foreground" Value="White"/>
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding SkillType2}"
+                                                            <DataTrigger Binding="{Binding GeneralType2}"
 																		 Value="2">
                                                                 <Setter Property="Background" Value="#1EB82B"/>
 																<Setter Property="Foreground" Value="White"/>
@@ -237,7 +237,7 @@
 								<Run Text="{Binding MagnaWeapon}" Foreground="#FF09A26A" ToolTip="마그나 무기 배율"/>
 								<Run Text="{Binding UnknownWeapon}" Foreground="#FF5B5BE4" ToolTip="{Binding UnknownWeaponTooltip}"/>
 								<Run Text="{Binding Attribute}" ToolTip="속성 배율" Foreground="#FF7727D6"/>
-								<Run Text="{Binding NovelWeapon}" ToolTip="소설무기"/>
+								<Run Text="{Binding NovelWeapon}" ToolTip="공격력 고정상승"/>
 								
 								<Run Text=")"/>
 								
@@ -252,49 +252,7 @@
 									<Run Text="현재 세팅에서 추가로 더 필요한 마그나 퍼센트입니다."/>
 								</TextBlock.ToolTip>
 							</TextBlock>
-							<StackPanel Orientation="Horizontal">
-                                <CheckBox Foreground="Black" Content="바하무트 무기 공격력 적용(위스)" IsChecked="{Binding IsvisBaha}" Margin="0,0,10,0"
-										  ToolTip="최저 20% 최대 30%"/>
-                                <metro:PromptTextBox Grid.Column="1"
-													 TextAlignment="Center"
-													 Width="23"
-													 Height="21"
-															 >
-                                    <metro:PromptTextBox.Text>
-                                        <Binding Source="{x:Static models:Settings.Current}"
-								 Path="visLv"
-								 UpdateSourceTrigger="PropertyChanged">
-                                            <Binding.ValidationRules>
-                                                <metro:Int32Rule Min="1" />
-                                                <metro:Int32Rule Max="10" />
-                                            </Binding.ValidationRules>
-                                        </Binding>
-                                    </metro:PromptTextBox.Text>
-                                </metro:PromptTextBox>
-
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox Foreground="Black" Content="바하무트 무기 공격력 적용(콘킬리오)" IsChecked="{Binding IsconcilioBaha}" Margin="0,0,10,0"
-										  ToolTip="HP/ATK상승 최저 10% 최대 15%"/>
-                                <metro:PromptTextBox Grid.Column="1"
-													 TextAlignment="Center"
-													 Width="23"
-													 Height="21"
-															 >
-                                    <metro:PromptTextBox.Text>
-                                        <Binding Source="{x:Static models:Settings.Current}"
-								 Path="concilioLv"
-								 UpdateSourceTrigger="PropertyChanged">
-                                            <Binding.ValidationRules>
-                                                <metro:Int32Rule Min="1" />
-                                                <metro:Int32Rule Max="10" />
-                                            </Binding.ValidationRules>
-                                        </Binding>
-                                    </metro:PromptTextBox.Text>
-                                </metro:PromptTextBox>
-
-                            </StackPanel>
-                            <TextBlock/>
+							<TextBlock/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -495,12 +453,12 @@
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding SkillType1}"
+                                                            <DataTrigger Binding="{Binding GeneralType1}"
 																		 Value="1">
                                                                 <Setter Property="Background" Value="#95051D"/>
 																<Setter Property="Foreground" Value="White"/>
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding SkillType1}"
+                                                            <DataTrigger Binding="{Binding GeneralType1}"
 																		 Value="2">
                                                                 <Setter Property="Background" Value="#FF11B61E"/>
 																<Setter Property="Foreground" Value="White"/>
@@ -522,12 +480,12 @@
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding SkillType2}"
+                                                            <DataTrigger Binding="{Binding GeneralType2}"
 																		 Value="1">
                                                                 <Setter Property="Background" Value="#95051D"/>
 																<Setter Property="Foreground" Value="White"/>
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding SkillType2}"
+                                                            <DataTrigger Binding="{Binding GeneralType2}"
 																		 Value="2">
                                                                 <Setter Property="Background" Value="#1EB82B"/>
 																<Setter Property="Foreground" Value="White"/>
@@ -616,12 +574,12 @@
 														<TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding SkillType1}"
+                                                            <DataTrigger Binding="{Binding GeneralType1}"
 																		 Value="1">
                                                                 <Setter Property="Background" Value="#95051D"/>
 																<Setter Property="Foreground" Value="White"/>
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding SkillType1}"
+                                                            <DataTrigger Binding="{Binding GeneralType1}"
 																		 Value="2">
                                                                 <Setter Property="Background" Value="#FF11B61E"/>
 																<Setter Property="Foreground" Value="White"/>
@@ -660,12 +618,12 @@
 														<TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding SkillType2}"
+                                                            <DataTrigger Binding="{Binding GeneralType2}"
 																		 Value="1">
                                                                 <Setter Property="Background" Value="#95051D"/>
 																<Setter Property="Foreground" Value="White"/>
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding SkillType2}"
+                                                            <DataTrigger Binding="{Binding GeneralType2}"
 																		 Value="2">
                                                                 <Setter Property="Background" Value="#1EB82B"/>
 																<Setter Property="Foreground" Value="White"/>
