@@ -282,6 +282,7 @@ namespace Grandcypher
 			{
 				if (item.Element(start).Value == SkillDetail) return item.Element(Target).Value;
 			}
+
 			return string.Empty;
 		}
 		public string GetTranslation(TranslationType type, string JPString, TranslateKind sitekind, int MasterId = -1)

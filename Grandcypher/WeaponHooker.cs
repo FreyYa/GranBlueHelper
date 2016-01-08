@@ -287,29 +287,30 @@ namespace Grandcypher
 					continue;
 				}
 				deck.MasterId = (int)master["id"];
+				deck.ParamId = (int)param["id"];//무기 스킬레벨등을 저장하고 구별하기 위한 부분
 				deck.ItemName = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponList, "", TranslateKind.Google, deck.MasterId);
 				if (deck.ItemName == string.Empty)
 				{
 					int msid = deck.MasterId;
 					deck = MasterInfoLoad(deck.MasterId);
 					deck.MasterId = msid;
+					deck.ParamId = (int)param["id"];//무기 스킬레벨등을 저장하고 구별하기 위한 부분
 					deck.IsManual = true;
-					deck.vSkillLv1 = Visibility.Collapsed;
-					deck.vSkillLv2 = Visibility.Collapsed;
-
 					if (deck.SkillName1 != string.Empty) deck.SkillDetail1 = GrandcypherClient.Current.Translations.GetSkillInfo(deck.SkillName1, true);
 					else deck.SkillDetail1 = string.Empty;
 					if (deck.SkillName2 != string.Empty) deck.SkillDetail2 = GrandcypherClient.Current.Translations.GetSkillInfo(deck.SkillName2, true);
 					else deck.SkillDetail2 = string.Empty;
 				}
-				else
-				{
-					deck = this.InputSkillInfo(deck);
-					deck.attribute = (int)master["attribute"];
-					deck.Kind = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponType, "", TranslateKind.Google, deck.MasterId);
-				}
+				deck.vSkillLv1 = Visibility.Collapsed;
+				deck.vSkillLv2 = Visibility.Collapsed;
 
-				deck.ParamId = (int)param["id"];//무기 스킬레벨등을 저장하고 구별하기 위한 부분
+
+
+				deck = this.InputSkillInfo(deck);
+				deck.attribute = (int)master["attribute"];
+				deck.Kind = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponType, "", TranslateKind.Google, deck.MasterId);
+
+
 
 
 				if (i == 1)
@@ -330,14 +331,19 @@ namespace Grandcypher
 					this.SumAtt(WeaponLists[i].GeneralType1, WeaponLists[i]);
 				if (WeaponLists[i].SkillAttribute2 == MasterAttribute
 					|| WeaponLists[i].SkillAttribute2 >= 7)
-					this.SumAtt(WeaponLists[i].GeneralType2, WeaponLists[i]);
+					this.SumAtt(WeaponLists[i].GeneralType2, WeaponLists[i], true);
 			}
-
+			if (MainWeapon.SkillAttribute1 == MasterAttribute
+				|| MainWeapon.SkillAttribute1 >= 7)
+				this.SumAtt(MainWeapon.GeneralType1, MainWeapon);
+			if (MainWeapon.SkillAttribute2 == MasterAttribute
+				|| MainWeapon.SkillAttribute2 >= 7)
+				this.SumAtt(MainWeapon.GeneralType2, MainWeapon, true);
+			this.DeckIsEnd = true;
 			//this.DeckLoadingEnd();
 		}
 		/// <summary>
 		/// 무기 정보를 받아 무기의 스킬배수를 계산
-		/// 바하무트 무기 계산과 언노운 무기 계산에 오류 발생.
 		/// </summary>
 		/// <param name="General"></param>
 		/// <param name="weapon"></param>
@@ -370,7 +376,10 @@ namespace Grandcypher
 								this.SkillCounter.staticAtt += weapon.Skill_Rank1;
 								break;
 							case 7://vis
-								if (weapon.SkillLv1 == 10) this.SkillCounter.Baha += 30;
+								if (weapon.SkillLv1 == 10)
+								{
+									this.SkillCounter.Baha += 30;
+								}
 								else
 								{
 									this.SkillCounter.Baha += 20;//기본
@@ -378,7 +387,10 @@ namespace Grandcypher
 								}
 								break;
 							case 8://con
-								if (weapon.SkillLv1 == 10) this.SkillCounter.Baha += 15;
+								if (weapon.SkillLv1 == 10)
+								{
+									this.SkillCounter.Baha += 15;
+								}
 								else
 								{
 									this.SkillCounter.Baha += 10;//기본
@@ -479,8 +491,8 @@ namespace Grandcypher
 		}
 		public void Reload()
 		{
-			if (this.DeckIsEnd) this.DeckLoadingEnd();
-			if (this.ListIsEnd) this.LoadingEnd();
+			//if (this.DeckIsEnd) this.DeckLoadingEnd();
+			//if (this.ListIsEnd) this.LoadingEnd();
 		}
 		/// <summary>
 		/// 마스터 리스트를 불러온다
@@ -737,39 +749,7 @@ namespace Grandcypher
 		#endregion
 
 		/// <summary>
-		/// -1: 카테고리화 되지 않는 무기들이 포함
-		//1: 공격력 상승 카테고리의 무기가 모두 여기에 포함
-		//2: HP 상승 카테고리의 무기가 모두 여기에 포함
-		//3. 배수 카테고리의 무기가 모두 여기에 포함
-		//
-		//0. 미분류.기본적으로 계산에 포함되지않는다
-		//1. 일반공인.바하무기도 여기에 포함
-		//2. 언노운.신데렐라 콜라보 무기만 여기에 포함된다
-		//3. 스트렝스.테일즈 콜라보 무기만 여기에 포함된다
-		//4. 세이빙 어택.스트리트 파이터 무기만 여기에 포함된다
-		//5. 마그나.마그나 드랍 무기만 여기에 포함된다
-		//6. 절대 공격력 상승 무기가 여기에 추가
-		//7. 바하무트 웨폰 위스
-		//8. 바하무트 웨폰 콘킬리오
-		//
-		//1. 화
-		//2. 수
-		//3. 풍
-		//4. 토
-		//5. 광
-		//6. 암
-		//7. 이벤트무기중 메인 무기의 속성을 따라가는 경우
-		//8. 속성무관
-		//
-		//0. 기본.최대 스킬레벨은 10이다
-		//1. 최종상한무기.최대 스킬레벨은 15다
-		//
-		//0. 미분류.공인이 아닌 무기는 모두 여기에 포함
-		//1. 소
-		//2. 중
-		//3. 대
-		//4. 위스
-		//5. 콘킬리오
+		/// 스킬 정보를 분해하여 플래그를 작성해준다
 		/// </summary>
 		/// <param name="info"></param>
 		/// <returns></returns>
@@ -778,8 +758,14 @@ namespace Grandcypher
 			WeaponInfo temp = new WeaponInfo();
 			temp = info;
 
-			var skill_name1 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.FirstSkillName, temp.ItemName, 0, temp.MasterId);
-			var skill_name2 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.LastSkillDetail, temp.ItemName, 0, temp.MasterId);
+			var skill_name1 = info.SkillName1;
+			var skill_name2 = info.SkillName2;
+			if(!info.IsManual)
+			{
+				skill_name1 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.FirstSkillName, temp.ItemName, 0, temp.MasterId);
+				skill_name2 = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.LastSkillDetail, temp.ItemName, 0, temp.MasterId);
+			}
+
 			var spl_data1 = GrandcypherClient.Current.Translations.GetSkillInfo(skill_name1, false, true).Split(';');
 			var spl_data2 = GrandcypherClient.Current.Translations.GetSkillInfo(skill_name2, false, true).Split(';');
 
@@ -788,54 +774,77 @@ namespace Grandcypher
 			temp.SkillDetail1 = GrandcypherClient.Current.Translations.GetSkillInfo(skill_name1, true);
 			temp.SkillDetail2 = GrandcypherClient.Current.Translations.GetSkillInfo(skill_name2, true);
 
-			temp.SkillLv1 = WeaponLvLoad(temp.ParamId,1);
+			temp.SkillLv1 = WeaponLvLoad(temp.ParamId, 1);
 			temp.SkillLv2 = temp.SkillLv1;
 
 
 			List<int> data = new List<int>();
+			List<int> data2 = new List<int>();
+
 			for (int i = 0; i < spl_data1.Count(); i++)
 			{
 				if (spl_data1[i] != string.Empty) data.Add(Convert.ToInt32(spl_data1[i]));
+			}
+			for (int i = 0; i < spl_data2.Count(); i++)
+			{
+				if (spl_data2[i] != string.Empty) data2.Add(Convert.ToInt32(spl_data2[i]));
 			}
 			for (int i = 0; i < data.Count; i++)
 			{
 				switch (i)
 				{
-					case 0:
+					case 0://General
 						if (info.SkillName1 != string.Empty)
 						{
 							info.GeneralType1 = data[i];
 							info.vSkillLv1 = Visibility.Visible;
 						}
+						break;
+					case 1://Attack
+						if (info.SkillName1 != string.Empty) info.AttackType1 = data[i];
+						break;
+					case 2://Attribute
+						if (info.SkillName1 != string.Empty) info.SkillAttribute1 = data[i];
+						break;
+					case 3://IsUnlimited
+						if (info.SkillName1 != string.Empty) info.Is_Unlimited1 = Convert.ToBoolean(data[i]);
+						break;
+					case 4://SkillRank
+						if (info.SkillName1 != string.Empty) info.Skill_Rank1 = data[i];
+						break;
+					case 5://IsDouble
+						if (info.SkillName1 != string.Empty) info.Is_Double1 = Convert.ToBoolean(data[i]);
+						break;
+				}
+			}
+			for (int i = 0; i < data2.Count; i++)
+			{
+				switch (i)
+				{
+					case 0:
 						if (info.SkillName2 != string.Empty)
 						{
-							info.GeneralType2 = data[i];
+							info.GeneralType2 = data2[i];
 							info.vSkillLv2 = Visibility.Visible;
 						}
 						break;
 					case 1:
-						if (info.SkillName1 != string.Empty) info.AttackType1 = data[i];
-						if (info.SkillName2 != string.Empty) info.AttackType2 = data[i];
+						if (info.SkillName2 != string.Empty) info.AttackType2 = data2[i];
 						break;
 					case 2:
-						if (info.SkillName1 != string.Empty) info.SkillAttribute1 = data[i];
-						if (info.SkillName2 != string.Empty) info.SkillAttribute2 = data[i];
+						if (info.SkillName2 != string.Empty) info.SkillAttribute2 = data2[i];
 						break;
 					case 3:
-						if (info.SkillName1 != string.Empty) info.Is_Unlimited1 = Convert.ToBoolean(data[i]);
-						if (info.SkillName2 != string.Empty) info.Is_Unlimited2 = Convert.ToBoolean(data[i]);
+						if (info.SkillName2 != string.Empty) info.Is_Unlimited2 = Convert.ToBoolean(data2[i]);
 						break;
 					case 4:
-						if (info.SkillName1 != string.Empty) info.Skill_Rank1 = data[i];
-						if (info.SkillName2 != string.Empty) info.Skill_Rank2 = data[i];
+						if (info.SkillName2 != string.Empty) info.Skill_Rank2 = data2[i];
 						break;
 					case 5:
-						if (info.SkillName1 != string.Empty) info.Is_Double1 = Convert.ToBoolean(data[i]);
-						if (info.SkillName2 != string.Empty) info.Is_Double2 = Convert.ToBoolean(data[i]);
+						if (info.SkillName2 != string.Empty) info.Is_Double2 = Convert.ToBoolean(data2[i]);
 						break;
 				}
 			}
-
 
 			return temp;
 		}
