@@ -620,41 +620,41 @@ namespace GranBlueHelper.ViewModels
 				percent = temp;
 			}
 
-			this.CalcAtt = Convert.ToInt32(Math.Round(total * percent * Magnapercent * (1 + Unknownpercent + Strangthpercent + Savingpercent) * Attributepercent, 0, MidpointRounding.AwayFromZero));
+			this.CalcAtt = Convert.ToInt32(Math.Round(total * (percent) * Magnapercent * (1 + Unknownpercent + Strangthpercent + Savingpercent) * Attributepercent, 0, MidpointRounding.AwayFromZero));
 
 			StringBuilder stbr = new StringBuilder();
 
 			this.Total = total;
-			if (!this.IsvisBaha && !this.IsconcilioBaha) stbr.Append("×" + string.Format("{0:F2}", percent));
+			if (!this.IsvisBaha && !this.IsconcilioBaha) stbr.Append("×" + string.Format("{0:0.##}", percent));
 			else
 			{
-				stbr.Append("×(" + string.Format("{0:F2}", percent - baha));
+				stbr.Append("×(" + string.Format("{0:0.##}", percent-baha));
 				stbr.Append("+" + baha + ")");
 			}
 			this.NormalWeapon = stbr.ToString();
 			stbr.Clear();
 
-			if (Magnapercent > 1) this.MagnaWeapon = "×" + string.Format("{0:F2}", Magnapercent);
+			if (Magnapercent > 1) this.MagnaWeapon = "×" + string.Format("{0:0.##}", Magnapercent);
 
-			if (Unknownpercent > 0) this.UnknownWeapon = "×" + string.Format("{0:F2}", 1 + Unknownpercent);
+			if (Unknownpercent > 0) this.UnknownWeapon = "×" + string.Format("{0:0.##}", 1 + Unknownpercent);
 			this.UnknownWeaponTooltip = "언노운 무기 배율";
 			if (Strangthpercent > 0 && Savingpercent == 0)
 			{
-				this.UnknownWeapon = "×(" + string.Format("{0:F2}", 1 + Unknownpercent) + "+" + string.Format("{0:F2}", Strangthpercent) + ")";
+				this.UnknownWeapon = "×(" + string.Format("{0:F2}", 1 + Unknownpercent) + "+" + string.Format("{0:0.##}", Strangthpercent) + ")";
 				this.UnknownWeaponTooltip = "언노운 & 스트렝스 무기 배율";
 			}
 			else if (Strangthpercent == 0 && Savingpercent > 0)
 			{
-				this.UnknownWeapon = "×(" + string.Format("{0:F2}", 1 + Unknownpercent) + "+" + string.Format("{0:F2}", Savingpercent) + ")";
+				this.UnknownWeapon = "×(" + string.Format("{0:F2}", 1 + Unknownpercent) + "+" + string.Format("{0:0.##}", Savingpercent) + ")";
 				this.UnknownWeaponTooltip = "언노운 & 세이빙 무기 배율";
 			}
 			else if (Strangthpercent > 0 && Savingpercent > 0)
 			{
-				this.UnknownWeapon = "×(" + string.Format("{0:F2}", 1 + Unknownpercent) + "+" + string.Format("{0:F2}", Strangthpercent) + "+" + string.Format("{0:F2}", Savingpercent) + ")";
+				this.UnknownWeapon = "×(" + string.Format("{0:F2}", 1 + Unknownpercent) + "+" + string.Format("{0:0.##}", Strangthpercent) + "+" + string.Format("{0:0.##}", Savingpercent) + ")";
 				this.UnknownWeaponTooltip = "언노운 & 스트렝스 & 세이빙 무기 배율";
 			}
 
-			if (Attributepercent > 1) this.Attribute = "×" + string.Format("{0:F2}", Attributepercent);
+			if (Attributepercent > 1) this.Attribute = "×" + string.Format("{0:0.##}", Attributepercent);
 
 
 			this.CalcAtt += skillInfo.staticAtt;
@@ -665,7 +665,7 @@ namespace GranBlueHelper.ViewModels
 
 			for (int i = 0; i < tempNPC.Count; i++)
 			{
-				tempNPC[i].CalcAtt = Convert.ToInt32(Math.Round(tempNPC[i].attack * percent * Magnapercent * (1 + Unknownpercent + Strangthpercent + Savingpercent) * Attributepercent, 0, MidpointRounding.AwayFromZero));
+				tempNPC[i].CalcAtt = Convert.ToInt32(Math.Round(tempNPC[i].attack * (percent) * Magnapercent * (1 + Unknownpercent + Strangthpercent + Savingpercent) * Attributepercent, 0, MidpointRounding.AwayFromZero));
 			}
 			this.NPCList = new List<NpcInfo>(tempNPC);
 			if (this.CalcTargetSkillLv(skillInfo) > 0) this.TargetMagna = this.CalcTargetSkillLv(skillInfo).ToString("##0.##%");
