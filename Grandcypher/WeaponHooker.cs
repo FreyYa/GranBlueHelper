@@ -506,14 +506,14 @@ namespace Grandcypher
 				switch (Rank)//추가치를 더한다.
 				{
 					case 1:
-						return ans += SkillLv * 0.4m;
+						return ans += (SkillLv - 10) * 0.4m;
 					case 2:
-						return ans += SkillLv * 0.5m;
+						return ans += (SkillLv - 10) * 0.5m;
 					case 3:
 						if (IsDouble)
-							return ans += SkillLv * 0.8m;
+							return ans += (SkillLv - 10) * 0.8m;
 						else
-							return ans += SkillLv * 0.6m;
+							return ans += (SkillLv - 10) * 0.6m;
 				}
 			}
 			return 0;
@@ -799,7 +799,7 @@ namespace Grandcypher
 
 			var spl_data1 = GrandcypherClient.Current.Translations.GetSkillInfo(skill_name1, false, true).Split(';');
 			var spl_data2 = GrandcypherClient.Current.Translations.GetSkillInfo(skill_name2, false, true).Split(';');
-			
+
 			temp.SkillName1 = skill_name1;
 			temp.SkillName2 = skill_name2;
 			temp.SkillDetail1 = GrandcypherClient.Current.Translations.GetSkillInfo(skill_name1, true);
