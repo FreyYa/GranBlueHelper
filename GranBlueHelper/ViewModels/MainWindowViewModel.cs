@@ -10,6 +10,9 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Text;
+
+using System.Runtime.InteropServices;
 
 namespace GranBlueHelper.ViewModels
 {
@@ -17,16 +20,14 @@ namespace GranBlueHelper.ViewModels
 	{
 		#region IsFind
 
-		private bool _IsFind;
-
 		public bool IsFind
 		{
-			get { return this._IsFind; }
+			get { return WindowControl.Current.IsFind; }
 			set
 			{
-				if (this._IsFind != value)
+				if (WindowControl.Current.IsFind != value)
 				{
-					this._IsFind = value;
+					WindowControl.Current.IsFind = value;
 					this.RaisePropertyChanged();
 				}
 			}
@@ -34,7 +35,24 @@ namespace GranBlueHelper.ViewModels
 
 		#endregion
 
-		#region Libraries
+		#region isExecuting
+
+		public bool isExecuting
+		{
+			get { return WindowControl.Current.isExecuting; }
+			set
+			{
+				if (WindowControl.Current.isExecuting != value)
+				{
+					WindowControl.Current.isExecuting = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
+		#region Libraries 変更通知プロパティ
 
 		private IEnumerable<BindableTextViewModel> _Libraries;
 
@@ -243,7 +261,7 @@ namespace GranBlueHelper.ViewModels
 		#endregion
 
 		#region 번역기 리스트
-		public static Dictionary<string, TranslateKind> TranslatorListsTable = new Dictionary<string, TranslateKind> 
+		public static Dictionary<string, TranslateKind> TranslatorListsTable = new Dictionary<string, TranslateKind>
 		{
 			{"구글", TranslateKind.Google}, {"네이버", TranslateKind.Naver}
 		};
@@ -272,7 +290,6 @@ namespace GranBlueHelper.ViewModels
 		}
 		#endregion
 
-		private bool isExecuting { get; set; }
 		public MainWindowViewModel()
 		{
 			StatusListener();
@@ -297,33 +314,6 @@ namespace GranBlueHelper.ViewModels
 
 			this.Title = "그랑블루 도우미 " + App.ProductInfo.VersionString;
 		}
-		public void FindGranblue()
-		{
-			this.isExecuting = false;
-			Process[] process = Process.GetProcesses();
-			foreach (Process proc in process)
-			{
-
-				if (proc.ProcessName.Equals("chrome"))
-				//  Pgm_FileName 프로그램의 실행 파일[.exe]를 제외한 파일명
-				{
-					if (proc.MainWindowTitle.Equals("グランブルーファンタジー[ChromeApps版]"))
-					{
-						isExecuting = true;
-						IsFind = true;
-
-						WindowSizeSetter.Current.SetWindowLocation(isExecuting);
-
-						this.AppStatus = "그랑블루 확장 어플리케이션을 찾았습니다. 이제 그랑블루 확장을 종료할때까지 해당 프로세스를 기억합니다.";
-						break;
-					}
-				}
-				else
-					isExecuting = false;
-			}
-			if (!isExecuting)
-				this.AppStatus = "ERROR : 실행되어있는 그랑블루 크롬 확장을 찾을 수 없습니다.";
-		}
 		private void Read()
 		{
 			GrandcypherClient.Current.ScenarioHooker.ScenarioStart += () =>
@@ -347,52 +337,21 @@ namespace GranBlueHelper.ViewModels
 		}
 		public void ScreenShotButton()
 		{
-			FindGranblue();
+			WindowControl.Current.FindGranblue();
 			WindowControl.Current.WindowForeground();
 			Thread.Sleep(300);
 			if (WindowSizeSetter.Current.SetWindowLocation(isExecuting))
 			{
 				if (Settings.Current.ScreenShotFolder != null)
-					ScreenCapture(Path.Combine(Settings.Current.ScreenShotFolder));
-				else ScreenCapture(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
+					WindowControl.Current.ScreenCapture(Path.Combine(Settings.Current.ScreenShotFolder));
+				else WindowControl.Current.ScreenCapture(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
 			}
 			else
 			{
 				AppStatus = "ERROR : 실행되어있는 그랑블루 크롬 확장을 찾을 수 없습니다.";
 			}
 		}
-		private void ScreenCapture(String screenDirectory)
-		{
-			try
-			{
-				var savepoint = screenDirectory;
-				var date = DateTime.Today.ToString("yyyyMMdd");
-				var time = DateTime.Now.ToString("HHmmss");
-				if (!Directory.Exists(savepoint)) savepoint = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-				var filepath = Path.Combine(savepoint, date + "_" + time + ".png");
 
-				int leftf = Convert.ToInt32(WindowSizeSetter.Current.WindowSize.left * (WindowSizeSetter.Current.dpiX) / (96f));
-				int topf = Convert.ToInt32(WindowSizeSetter.Current.WindowSize.top * (WindowSizeSetter.Current.dpiY) / (96f));
-				int widthf = Convert.ToInt32((WindowSizeSetter.Current.WindowSize.right - WindowSizeSetter.Current.WindowSize.left) * (WindowSizeSetter.Current.dpiX) / (96f));
-				int heightf = Convert.ToInt32((WindowSizeSetter.Current.WindowSize.bottom - WindowSizeSetter.Current.WindowSize.top) * (WindowSizeSetter.Current.dpiX) / (96f));
-
-				Bitmap bitmap = new Bitmap(widthf, heightf);
-
-				Graphics g = Graphics.FromImage(bitmap);
-
-
-
-				g.CopyFromScreen(new System.Drawing.Point(leftf, topf), new System.Drawing.Point(0, 0), new System.Drawing.Size(widthf, heightf));
-				bitmap.Save(filepath, ImageFormat.Png);
-				this.AppStatus = "저장성공: " + date + "_" + time + ".png";
-			}
-			catch (Exception ex)
-			{
-				AppStatus = "스크린샷 저장에 실패하였습니다.";
-				Debug.WriteLine(ex);
-			}
-
-		}
 		private void StatusListener()
 		{
 			GrandcypherClient.Current.MessageSend += () =>
@@ -401,7 +360,7 @@ namespace GranBlueHelper.ViewModels
 			};
 			GrandcypherClient.Current.GlobalKeyCore.ScreenShot += () =>
 			{
-				this.ScreenShotButton();
+				WindowControl.Current.TakeScreenShot();
 			};
 		}
 	}
