@@ -315,7 +315,7 @@ namespace Grandcypher
 
 				deck = this.InputSkillInfo(deck);
 				deck.attribute = (int)master["attribute"];
-				deck.Kind = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponType, "", TranslateKind.Google, deck.MasterId);
+				if (!deck.IsManual) deck.Kind = GrandcypherClient.Current.Translations.GetTranslation(Translations.TranslationType.WeaponType, "", TranslateKind.Google, deck.MasterId);
 
 				if (i == 1)
 				{
