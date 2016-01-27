@@ -31,14 +31,7 @@ namespace GranBlueHelper.Models
 		#endregion
 
 		#region singleton
-
-		private static WindowControl current = new WindowControl();
-
-		public static WindowControl Current
-		{
-			get { return current; }
-		}
-
+		public static WindowControl Current { get; } = new WindowControl();
 		#endregion
 
 		public bool isExecuting { get; set; }

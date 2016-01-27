@@ -98,7 +98,7 @@ namespace GranBlueHelper
 		{
 			if (args.Key.ToString() == "F10")
 			{
-				GrandcypherClient.Current.GlobalKeyCore.TakeScreenShot();
+				WindowControl.Current.TakeScreenShot();
 			}
 			#region .Do(debug)
 #if DEBUG

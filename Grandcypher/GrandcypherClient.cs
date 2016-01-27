@@ -21,7 +21,6 @@ namespace Grandcypher
 		public string AppMessage { get; private set; }
 
 		public GrandcypherProxy Proxy { get; private set; }
-		public GlobalKeyCore GlobalKeyCore { get; set; }
 		public GreetHooker GreetHooker { get; private set; }
 		public ScenarioHooker ScenarioHooker { get; private set; }
 		public Updater Updater { get; private set; }
@@ -40,7 +39,6 @@ namespace Grandcypher
 		public void Initialieze()
 		{
 			var proxy = this.Proxy ?? (this.Proxy = new GrandcypherProxy());
-			this.GlobalKeyCore = new GlobalKeyCore();
 			this.GreetHooker = new GreetHooker();
 			this.ScenarioHooker = new ScenarioHooker();
 			this.Updater = new Updater();

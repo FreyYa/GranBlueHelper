@@ -358,10 +358,6 @@ namespace GranBlueHelper.ViewModels
 			{
 				this.AppStatus = GrandcypherClient.Current.AppMessage;
 			};
-			GrandcypherClient.Current.GlobalKeyCore.ScreenShot += () =>
-			{
-				WindowControl.Current.TakeScreenShot();
-			};
 		}
 	}
 }
