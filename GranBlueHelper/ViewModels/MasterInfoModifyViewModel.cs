@@ -204,6 +204,20 @@ namespace GranBlueHelper.ViewModels
 				}
 			}
 		}
+		private List<WeaponInfo> RemoveDuplicateValue(List<WeaponInfo> array)
+		{
+			List<WeaponInfo> list = new List<WeaponInfo>();
+			for (int i = 0; i < array.Count; i++)
+			{
+				if (list.Any(x => x.MasterId == array[i].MasterId))
+				{
+					continue;
+				}
+				list.Add(array[i]);
+			}
+			return list;
+		}
+
 		private List<int> MakeMasterIdList()
 		{
 			List<int> temp = new List<int>();
@@ -211,8 +225,9 @@ namespace GranBlueHelper.ViewModels
 			ManualList = GrandcypherClient.Current.WeaponHooker.WeaponLists.Where(x => x.IsManual).ToList();
 			if (GrandcypherClient.Current.WeaponHooker.MainWeapon.IsManual)
 				ManualList.Add(GrandcypherClient.Current.WeaponHooker.MainWeapon);
+			var t = RemoveDuplicateValue(ManualList);
 
-			foreach (var item in ManualList)
+			foreach (var item in t)
 			{
 				temp.Add(item.MasterId);
 			}

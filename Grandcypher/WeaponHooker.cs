@@ -157,10 +157,7 @@ namespace Grandcypher
 				else
 				{
 					int msid = temp.MasterId;
-					temp = MasterInfoLoad(temp.MasterId);
-					temp.MasterId = msid;
-					temp.ParamId = tempparam.id;//무기 스킬레벨등을 저장하고 구별하기 위한 부분
-					temp.IsManual = true;
+					temp = MasterInfoLoad(temp.MasterId,Convert.ToInt32(tempparam.id));
 
 					if (temp.SkillName1 != string.Empty) temp.SkillDetail1 = GrandcypherClient.Current.Translations.GetSkillInfo(temp.SkillName1, true);
 					else temp.SkillDetail1 = string.Empty;
@@ -301,10 +298,7 @@ namespace Grandcypher
 				if (deck.ItemName == string.Empty)
 				{
 					int msid = deck.MasterId;
-					deck = MasterInfoLoad(deck.MasterId);
-					deck.MasterId = msid;
-					deck.ParamId = (int)param["id"];//무기 스킬레벨등을 저장하고 구별하기 위한 부분
-					deck.IsManual = true;
+					deck = MasterInfoLoad(deck.MasterId, (int)param["id"]);
 					if (deck.SkillName1 != string.Empty) deck.SkillDetail1 = GrandcypherClient.Current.Translations.GetSkillInfo(deck.SkillName1, true);
 					else deck.SkillDetail1 = string.Empty;
 					if (deck.SkillName2 != string.Empty) deck.SkillDetail2 = GrandcypherClient.Current.Translations.GetSkillInfo(deck.SkillName2, true);
@@ -566,7 +560,7 @@ namespace Grandcypher
 		/// </summary>
 		/// <param name="MasterId"></param>
 		/// <returns></returns>
-		private WeaponInfo MasterInfoLoad(int MasterId)
+		private WeaponInfo MasterInfoLoad(int MasterId,int paramId)
 		{
 			if (this.MasterBinList == null)
 			{
@@ -585,7 +579,18 @@ namespace Grandcypher
 			}
 			if (this.MasterBinList.ContainsKey(MasterId))
 			{
-				return this.MasterBinList[MasterId];
+				WeaponInfo t = new WeaponInfo();
+				t.MasterId = MasterId;
+				t.ParamId = paramId;
+				t.IsManual = true;
+				t.attribute = this.MasterBinList[MasterId].attribute;
+				t.WeaponType = this.MasterBinList[MasterId].WeaponType;
+				t.ItemName = this.MasterBinList[MasterId].ItemName;
+				t.SkillName1 = this.MasterBinList[MasterId].SkillName1;
+				t.SkillName2 = this.MasterBinList[MasterId].SkillName2;
+				t.vSkillLv1 = this.MasterBinList[MasterId].vSkillLv1;
+				t.vSkillLv2 = this.MasterBinList[MasterId].vSkillLv2;
+				return t;
 			}
 			else//해당하는 마스터ID가 없는경우 빈 데이터를 출력한다.
 			{
