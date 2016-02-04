@@ -157,7 +157,7 @@ namespace Grandcypher
 				else
 				{
 					int msid = temp.MasterId;
-					temp = MasterInfoLoad(temp.MasterId,Convert.ToInt32(tempparam.id));
+					temp = MasterInfoLoad(temp.MasterId, Convert.ToInt32(tempparam.id));
 
 					if (temp.SkillName1 != string.Empty) temp.SkillDetail1 = GrandcypherClient.Current.Translations.GetSkillInfo(temp.SkillName1, true);
 					else temp.SkillDetail1 = string.Empty;
@@ -398,7 +398,7 @@ namespace Grandcypher
 								else
 								{
 									att += 20;//기본
-									att += weapon.SkillLv1;//스킬레벨
+									att += (weapon.SkillLv1 - 1);//스킬레벨
 								}
 								this.VisBahaList.Add(att);
 								this.IsVisExist = true;
@@ -411,7 +411,7 @@ namespace Grandcypher
 								else
 								{
 									att += 10;//기본
-									att += weapon.SkillLv1 * 0.5m;//스킬레벨 * 0.5
+									att += (weapon.SkillLv1 - 1) * 0.5m;//스킬레벨 * 0.5
 								}
 								this.ConBahaList.Add(att);
 								this.IsConcilioExist = true;
@@ -560,7 +560,7 @@ namespace Grandcypher
 		/// </summary>
 		/// <param name="MasterId"></param>
 		/// <returns></returns>
-		private WeaponInfo MasterInfoLoad(int MasterId,int paramId)
+		private WeaponInfo MasterInfoLoad(int MasterId, int paramId)
 		{
 			if (this.MasterBinList == null)
 			{
