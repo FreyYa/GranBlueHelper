@@ -452,7 +452,7 @@ namespace Grandcypher
 								else
 								{
 									att += 20;
-									att += weapon.SkillLv2;
+									att += weapon.SkillLv2 - 1;
 								}
 								this.VisBahaList.Add(att);
 								this.IsVisExist = true;
@@ -462,7 +462,7 @@ namespace Grandcypher
 								else
 								{
 									att += 10;
-									att += weapon.SkillLv2 * 0.5m;
+									att += (weapon.SkillLv2 - 1) * 0.5m;
 								}
 								this.ConBahaList.Add(att);
 								this.IsConcilioExist = true;
