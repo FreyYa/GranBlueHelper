@@ -549,7 +549,7 @@ namespace GranBlueHelper.ViewModels
 			decimal Attributepercent = SynastryTable[this.SelectedSynastry];
 
 			//퍼센트 저장 변수
-			decimal pNormal = 1, pMagna = 1, pUnknown = 1, pElement = 0, pChar = 1;
+			decimal pNormal = 1, pMagna = 1, pUnknown = 1, pElement = 0, pChar = 0;
 
 			//자신의 가호
 			if (BlessingTable[this.SelectedBlessing] == 3) pChar += this.BlessingPercent / 100m;//캐릭터
@@ -567,7 +567,7 @@ namespace GranBlueHelper.ViewModels
 
 
 
-			this.CalcAtt = Convert.ToInt32(Math.Round(total * (1 + baha + (percent * pNormal)) * (1 + Magnapercent * pMagna) * (1 + (Unknownpercent * pUnknown) + Strangthpercent + Savingpercent) * (Attributepercent + pElement), 0, MidpointRounding.AwayFromZero));
+			this.CalcAtt = Convert.ToInt32(Math.Round(total * (1 + baha + (percent * pNormal) + pChar) * (1 + Magnapercent * pMagna) * (1 + (Unknownpercent * pUnknown) + Strangthpercent + Savingpercent) * (Attributepercent + pElement), 0, MidpointRounding.AwayFromZero));
 
 			StringBuilder stbr = new StringBuilder();
 
@@ -611,7 +611,7 @@ namespace GranBlueHelper.ViewModels
 
 			for (int i = 0; i < tempNPC.Count; i++)
 			{
-				tempNPC[i].CalcAtt = Convert.ToInt32(Math.Round(tempNPC[i].attack * (1 + baha + (percent * pNormal)) * (1 + Magnapercent * pMagna) * (1 + (Unknownpercent * pUnknown) + Strangthpercent + Savingpercent) * (Attributepercent + pElement), 0, MidpointRounding.AwayFromZero));
+				tempNPC[i].CalcAtt = Convert.ToInt32(Math.Round(tempNPC[i].attack * (1 + baha + (percent * pNormal) + pChar) * (1 + Magnapercent * pMagna) * (1 + (Unknownpercent * pUnknown) + Strangthpercent + Savingpercent) * (Attributepercent + pElement), 0, MidpointRounding.AwayFromZero));
 			}
 			this.NPCList = new List<NpcInfo>(tempNPC);
 			if (this.CalcTargetSkillLv(skillInfo) > 0) this.TargetMagna = this.CalcTargetSkillLv(skillInfo).ToString("##0.##%");
