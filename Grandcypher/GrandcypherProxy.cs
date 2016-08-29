@@ -63,7 +63,7 @@ namespace Grandcypher
 				{
 					GrandcypherClient.Current.GreetHooker.SessionReader(oS);
 					GrandcypherClient.Current.ScenarioHooker.SessionReader(oS);
-					GrandcypherClient.Current.WeaponHooker.SessionReader(oS);
+					//GrandcypherClient.Current.WeaponHooker.SessionReader(oS);
 					//GrandcypherClient.Current.NoticeHooker.SessionReader(oS);
 					GrandcypherClient.Current.EnhancementHooker.SessionReader(oS);
 					GrandcypherClient.Current.BookmakerHooker.SessionReader(oS);

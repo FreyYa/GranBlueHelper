@@ -25,7 +25,7 @@ namespace Grandcypher
 		public ScenarioHooker ScenarioHooker { get; private set; }
 		public Updater Updater { get; private set; }
 		public Translations Translations { get; private set; }
-		public WeaponHooker WeaponHooker { get; private set; }
+		//public WeaponHooker WeaponHooker { get; private set; }
 		//public NoticeHooker NoticeHooker { get; private set; }
 		public EnhancementHooker EnhancementHooker { get; private set; }
 		public BookmakerHooker BookmakerHooker { get; private set; }
@@ -44,7 +44,7 @@ namespace Grandcypher
 			this.ScenarioHooker = new ScenarioHooker();
 			this.Updater = new Updater();
 			this.Translations = new Translations();
-			this.WeaponHooker = new WeaponHooker();
+			//this.WeaponHooker = new WeaponHooker();
 			//this.NoticeHooker = new NoticeHooker();
 			this.EnhancementHooker = new EnhancementHooker();
 			this.BookmakerHooker = new BookmakerHooker();

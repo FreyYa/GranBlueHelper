@@ -42,7 +42,7 @@ namespace GranBlueHelper
 			ProductInfo = new ProductInfo();
 
 			GrandcypherClient.Current.Proxy.StartUp(Settings.Current.portNum);
-			GrandcypherClient.Current.WeaponHooker.MasterInfoListLoad();
+			//GrandcypherClient.Current.WeaponHooker.MasterInfoListLoad();
 			if (GrandcypherClient.Current.Updater.LoadVersion(AppSettings.Default.XMLUpdateUrl.AbsoluteUri))
 			{
 				if (GrandcypherClient.Current.Updater.IsOnlineVersionGreater(0, ProductInfo.Version.ToString()))

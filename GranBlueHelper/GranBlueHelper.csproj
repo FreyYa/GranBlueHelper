@@ -129,10 +129,8 @@
     <Compile Include="ViewModels\CalcTenViewModel.cs" />
     <Compile Include="ViewModels\ExpCalViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\MasterInfoModifyViewModel.cs" />
     <Compile Include="ViewModels\MessageViewViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
-    <Compile Include="ViewModels\WeaponListViewModel.cs" />
     <Compile Include="Views\BulletCounter.xaml.cs">
       <DependentUpon>BulletCounter.xaml</DependentUpon>
     </Compile>
@@ -142,17 +140,11 @@
     <Compile Include="Views\ExpCal.xaml.cs">
       <DependentUpon>ExpCal.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MasterInfoModify.xaml.cs">
-      <DependentUpon>MasterInfoModify.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MessageView.xaml.cs">
       <DependentUpon>MessageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\WeaponList.xaml.cs">
-      <DependentUpon>WeaponList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Win32\DVTARGETDEVICE.cs" />
     <Compile Include="Win32\INTERNET_CACHE_ENTRY_INFOA.cs" />
@@ -185,10 +177,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\MasterInfoModify.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\MessageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -196,10 +184,6 @@
     <Page Include="Views\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\WeaponList.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
