@@ -175,12 +175,12 @@
 					</Grid>
 				</Grid>
 			</TabItem>
-			<TabItem x:Name="Weapons">
+			<!--<TabItem x:Name="Weapons">
 				<TabItem.Header>
 					<TextBlock Text="무기목록" Width="70" Height="25" FontSize="16" TextAlignment="Center" FontWeight="Bold"/>
 				</TabItem.Header>
 				<views:WeaponList/>
-			</TabItem>
+			</TabItem>-->
 			<TabItem x:Name="Messages">
 				<TabItem.Header>
 					<TextBlock Text="메시지" Width="70" Height="25" FontSize="16" TextAlignment="Center" FontWeight="Bold"/>
@@ -198,6 +198,12 @@
 					<TextBlock Text="십천중" Width="70" Height="25" FontSize="16" TextAlignment="Center" FontWeight="Bold"/>
 				</TabItem.Header>
 				<views:CalcTen/>
+			</TabItem>
+			<TabItem>
+				<TabItem.Header>
+					<TextBlock Text="총알계산" Width="70" Height="25" FontSize="16" TextAlignment="Center" FontWeight="Bold"/>
+				</TabItem.Header>
+				<views:BulletCounter/>
 			</TabItem>
             <TabItem x:Name="Settings" IsSelected="{Binding HassanSettings}">
 				<TabItem.Header>

@@ -15,6 +15,7 @@ namespace Grandcypher
 		public bool SkillListUpdate { get; set; }
 		public bool WeaponListUpdate { get; set; }
 		public bool TenListUpdate { get; set; }
+		public bool BulletListUpdate { get; set; }
 		/// <summary>
 		/// 업데이트 상태를 구별한다.
 		/// bool값을 조정하며 이는 업데이트 후 바로 퀘스트 로드가 적용되지 않는 문제점을 자체 해결하기 위해 도입한것임.
@@ -39,6 +40,9 @@ namespace Grandcypher
 						break;
 					case TranslationType.TenTreasure:
 						this.TenListUpdate = true;
+						break;
+					case TranslationType.BulletMake:
+						this.BulletListUpdate = true;
 						break;
 				}
 			}
@@ -134,7 +138,13 @@ namespace Grandcypher
 					if (IsOnlineVersionGreater(TranslationType.TenTreasure, TranslationsRef.TenListVersion))
 					{
 						Client.DownloadFile(BaseTranslationURL + "TenList.xml", Path.Combine(MainFolder, "XMLs", "tmp", "TenList.xml"));
-						ReturnValue = XmlFileWizard(MainFolder, "TenList.xml", TranslationType.WeaponList);
+						ReturnValue = XmlFileWizard(MainFolder, "TenList.xml", TranslationType.TenTreasure);
+					}
+
+					if (IsOnlineVersionGreater(TranslationType.BulletMake, TranslationsRef.BulletListVersion))
+					{
+						Client.DownloadFile(BaseTranslationURL + "BulletList.xml", Path.Combine(MainFolder, "XMLs", "tmp", "BulletList.xml"));
+						ReturnValue = XmlFileWizard(MainFolder, "BulletList.xml", TranslationType.BulletMake);
 					}
 
 				}
@@ -176,6 +186,8 @@ namespace Grandcypher
 					return Versions.Where(x => x.Element("Name").Value.Equals("Weapons")).FirstOrDefault().Element(ElementName).Value;
 				case TranslationType.TenTreasure:
 					return Versions.Where(x => x.Element("Name").Value.Equals("Treasures")).FirstOrDefault().Element(ElementName).Value;
+				case TranslationType.BulletMake:
+					return Versions.Where(x => x.Element("Name").Value.Equals("Bullets")).FirstOrDefault().Element(ElementName).Value;
 
 			}
 			return "";
@@ -209,6 +221,8 @@ namespace Grandcypher
 					return LocalVersion.CompareTo(new Version(Versions.Where(x => x.Element("Name").Value.Equals("JPTRs")).FirstOrDefault().Element(ElementName).Value)) < 0;
 				case TranslationType.TenTreasure:
 					return LocalVersion.CompareTo(new Version(Versions.Where(x => x.Element("Name").Value.Equals("Treasures")).FirstOrDefault().Element(ElementName).Value)) < 0;
+				case TranslationType.BulletMake:
+					return LocalVersion.CompareTo(new Version(Versions.Where(x => x.Element("Name").Value.Equals("Bullets")).FirstOrDefault().Element(ElementName).Value)) < 0;
 
 			}
 

@@ -75,9 +75,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BookmakerHooker.cs" />
+    <Compile Include="BulletMaster.cs" />
     <Compile Include="EnhancementHooker.cs" />
     <Compile Include="GrandcypherClient.cs" />
     <Compile Include="GrandcypherProxy.cs" />
+    <Compile Include="Models\Bullet.cs" />
     <Compile Include="Models\KeyboardListener.cs" />
     <Compile Include="Models\WhileBreaker.cs" />
     <Compile Include="NoticeHooker.cs" />

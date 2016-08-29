@@ -92,7 +92,7 @@
 							</metro:PromptTextBox.Text>
 						</metro:PromptTextBox>
 						<Rectangle Height="1" Margin="0,7" Fill="Gray"/>
-						<TextBlock Text="FiddlerCore On/Off" FontWeight="Bold"/>
+						<!--<TextBlock Text="FiddlerCore On/Off" FontWeight="Bold"/>
 						<TextBlock TextWrapping="Wrap" Text="통신캡쳐의 On/Off를 설정합니다. 중지할경우 스크린샷 기능을 제외한 모든 기능이 정지됩니다"/>
 						<TextBlock/>
 						<StackPanel Orientation="Horizontal">
@@ -103,7 +103,7 @@
 										 MethodName="Startup"
 													 IsEnabled="{Binding StartFiddler}"/>
 						</StackPanel>
-						<Rectangle Height="1" Margin="4,7" Fill="Gray"/>
+						<Rectangle Height="1" Margin="4,7" Fill="Gray"/>-->
 					</StackPanel>
 				</TabItem>
 			</TabControl>

@@ -13,6 +13,10 @@ namespace Grandcypher
 {
 	public class TreasureHooker
 	{
+		public TreasureHooker()
+		{
+			LoadingEnd = false;
+		}
 		#region EventHandler
 		/// <summary>
 		/// 이벤트 핸들러
@@ -21,6 +25,7 @@ namespace Grandcypher
 		public EventHandler TreasureReadStart;
 		public EventHandler TreasureReadEnd;
 		#endregion
+		public bool LoadingEnd { get; private set; }
 
 		public Dictionary<string, TreasureInfo> CurrentTreasureList { get; set; }
 		public void SessionReader(Session oS)
@@ -34,6 +39,7 @@ namespace Grandcypher
 		/// <param name="oS"></param>
 		private void TreasureDetail(Session oS)
 		{
+			LoadingEnd = false;
 			JArray jsonVal = JArray.Parse(oS.GetResponseBodyAsString()) as JArray;
 			dynamic Details = jsonVal;
 
@@ -57,6 +63,7 @@ namespace Grandcypher
 				CurrentTreasureList.Add(name, temp);
 			}
 			this.TreasureReadEnd();
+			LoadingEnd = true;
 		}
 
 	}
@@ -65,8 +72,17 @@ namespace Grandcypher
 		string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 		public string Name { get; set; }
 		public int ItemID { get; set; }
-		public int count { get; set; }//current
-		public int max { get; set; }//
+		/// <summary>
+		/// 현재 개수
+		/// </summary>
+		public int count { get; set; }
+		/// <summary>
+		/// 필요개수
+		/// </summary>
+		public int max { get; set; }
+		/// <summary>
+		/// 계산결과
+		/// </summary>
 		public int result { get; set; }//max-current
 		public ImageSource LocalImage
 		{

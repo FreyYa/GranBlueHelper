@@ -1,4 +1,5 @@
-﻿using Livet;
+﻿using Grandcypher.Models;
+using Livet;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,6 +17,7 @@ namespace Grandcypher
 		private XDocument WeaponLists;
 		private XDocument WeaponSkills;
 		private XDocument TenLists;
+		private XDocument BulletLists;
 		string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
 
@@ -95,6 +97,25 @@ namespace Grandcypher
 
 		#endregion
 
+		#region BulletListVersion
+
+		private string _BulletListVersion;
+
+		public string BulletListVersion
+		{
+			get { return _BulletListVersion; }
+			set
+			{
+				if (_BulletListVersion != value)
+				{
+					_BulletListVersion = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
 		internal Translations()
 		{
 			try
@@ -103,6 +124,7 @@ namespace Grandcypher
 				if (File.Exists(Path.Combine(MainFolder, "XMLs", "WeaponList.xml"))) WeaponLists = XDocument.Load(Path.Combine(MainFolder, "XMLs", "WeaponList.xml"));
 				if (File.Exists(Path.Combine(MainFolder, "XMLs", "SkillList.xml"))) WeaponSkills = XDocument.Load(Path.Combine(MainFolder, "XMLs", "SkillList.xml"));
 				if (File.Exists(Path.Combine(MainFolder, "XMLs", "TenList.xml"))) TenLists = XDocument.Load(Path.Combine(MainFolder, "XMLs", "TenList.xml"));
+				if (File.Exists(Path.Combine(MainFolder, "XMLs", "BulletList.xml"))) BulletLists = XDocument.Load(Path.Combine(MainFolder, "XMLs", "BulletList.xml"));
 
 				GetVersions();
 			}
@@ -136,8 +158,13 @@ namespace Grandcypher
 				if (TenLists.Root.Attribute("Version") != null) TenListVersion = TenLists.Root.Attribute("Version").Value;
 				else TenListVersion = "알 수 없음";
 			}
+			if (BulletLists != null)
+			{
+				if (BulletLists.Root.Attribute("Version") != null) BulletListVersion = BulletLists.Root.Attribute("Version").Value;
+				else BulletListVersion = "알 수 없음";
+			}
 			else
-				TenListVersion = "없음";
+				BulletListVersion = "없음";
 		}
 		private IEnumerable<XElement> GetTranslationList(TranslationType type, TranslateKind sitetype = TranslateKind.Google)
 		{
@@ -210,6 +237,19 @@ namespace Grandcypher
 				}
 				return null;
 			}
+			else if (TranslationType.BulletMake == type)
+			{
+				if (BulletLists != null)
+				{
+					if (GrandcypherClient.Current.Updater.BulletListUpdate)
+					{
+						this.BulletLists = XDocument.Load(Path.Combine(MainFolder, "XMLs", "BulletList.xml"));
+						GrandcypherClient.Current.Updater.BulletListUpdate = false;
+					}
+					return BulletLists.Descendants("Bullet");
+				}
+				return null;
+			}
 			else return null;
 		}
 		public List<string> GetSkillList()
@@ -253,13 +293,60 @@ namespace Grandcypher
 
 			return templist;
 		}
+		public List<Bullet> GetBulletList()
+		{
+			List<Bullet> templist = new List<Bullet>();
+			IEnumerable<XElement> TranslationList = GetTranslationList(TranslationType.BulletMake);
+			foreach (var item in TranslationList)
+			{
+				Bullet temp = new Bullet();
+				temp.MaterialList = new List<TreasureInfo>();
+
+				temp.Name = ElementOutput(item, "Name");
+				temp.TrName = ElementOutput(item, "TrName");
+				temp.MasterID = Convert.ToInt32(ElementOutput(item, "ID"));
+				temp.BulletKind = Convert.ToInt32(ElementOutput(item, "BulletKind"));
+				temp.Rank = Convert.ToInt32(ElementOutput(item, "Rank"));
+
+				int Count = 1;
+				bool Checker = true;
+
+				while (Checker)
+				{
+					//이름작성
+					string Materialstr = "Material";
+					var strtemp = Materialstr + Count.ToString();
+
+					TreasureInfo material = new TreasureInfo();
+
+					if (item.Element(strtemp) != null)
+					{
+						material.Name = item.Element(strtemp).Value;
+						strtemp = "MaterialCount" + Count.ToString();
+						material.max = Convert.ToInt32(item.Element(strtemp).Value);
+
+						temp.MaterialList.Add(material);
+						Count++;
+					}
+					else
+					{
+						break;
+					}
+
+				}//while구문 종료
+
+				templist.Add(temp);
+			}
+
+			return templist;
+		}
 		private string ElementOutput(XElement item, string ElementName)
 		{
 			if (item.Element(ElementName) != null)
 				return item.Element(ElementName).Value;
 			else return "0";
 		}
-		public string GetSkillInfo(string SkillDetail, bool IsDetailFind = false,bool IsDataFind=false)
+		public string GetSkillInfo(string SkillDetail, bool IsDetailFind = false, bool IsDataFind = false)
 		{
 			var start = "Detail";
 			var Target = "KrName";
@@ -268,7 +355,7 @@ namespace Grandcypher
 				start = "KrName";
 				Target = "Detail";
 			}
-			else if(IsDataFind)
+			else if (IsDataFind)
 			{
 				start = "KrName";
 				Target = "SkillData";
@@ -373,7 +460,8 @@ namespace Grandcypher
 				}
 
 			}
-			catch {
+			catch
+			{
 				return "";
 			}
 
@@ -467,6 +555,7 @@ namespace Grandcypher
 			WeaponType,
 			SkillDetails,
 			TenTreasure,
+			BulletMake,
 		}
 	}
 }

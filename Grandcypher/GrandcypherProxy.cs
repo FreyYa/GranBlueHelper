@@ -68,6 +68,7 @@ namespace Grandcypher
 					GrandcypherClient.Current.EnhancementHooker.SessionReader(oS);
 					GrandcypherClient.Current.BookmakerHooker.SessionReader(oS);
 					GrandcypherClient.Current.TreasureHooker.SessionReader(oS);
+					GrandcypherClient.Current.BulletMaster.SessionReader(oS);
 				}
 			};
 		}

@@ -1,0 +1,132 @@
+﻿<UserControl x:Class="GranBlueHelper.Views.BulletCounter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GranBlueHelper.Views"
+             mc:Ignorable="d" 
+			 xmlns:views="clr-namespace:GranBlueHelper.Views"
+	   	  	 xmlns:livet="http://schemas.livet-mvvm.net/2011/wpf"
+		   	 xmlns:viewmodels="clr-namespace:GranBlueHelper.ViewModels"
+			 xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+			 xmlns:metro2="clr-namespace:Grabacr07.Desktop.Metro.Controls;assembly=Desktop.Metro"
+             d:DesignHeight="1000" d:DesignWidth="1000">
+	<UserControl.DataContext>
+		<viewmodels:BulletCounterViewModel/>
+	</UserControl.DataContext>
+	<ScrollViewer VerticalScrollBarVisibility="Auto"
+					  HorizontalScrollBarVisibility="Auto"
+				  Margin="10">
+		<StackPanel>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="auto"/>
+				</Grid.ColumnDefinitions>
+				<metro2:CallMethodButton Content="┼"
+									 MinWidth="35"
+									 MaxWidth="35"
+									 MinHeight="35"
+									 MaxHeight="35"
+									 FontWeight="Bold"
+										 MethodName="AddBullet"
+										 Margin="8"
+										 ToolTip="계산할 총알을 추가합니다"
+									 FontSize="15"/>
+				<metro2:CallMethodButton Content="―"
+										 Grid.Column="1"
+									 MinWidth="35"
+									 MaxWidth="35"
+									 MinHeight="35"
+									 MaxHeight="35"
+									 FontWeight="Bold"
+										 MethodName="RemoveBullet"
+										 Margin="8"
+										 ToolTip="가장 마지막에 추가한 총알을 제거합니다"
+									 FontSize="15"/>
+			</Grid>
+			
+			<ItemsControl x:Name="Custom" ItemsSource="{Binding CustomList}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<UniformGrid Columns="1" />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<StackPanel Margin="0,0,0,20">
+							<TextBlock Text="{Binding Title}"/>
+							<StackPanel Orientation="Horizontal">
+								<metro:PromptComboBox Prompt="BulletKinds"
+									  MinWidth="250"
+									  MaxWidth="250"
+									  HorizontalAlignment="Left"
+									  ItemsSource="{Binding BulletCatList}"
+									  SelectedValue="{Binding BulletCat, Mode=TwoWay}"
+									  IsReadOnly="True"
+									  Margin="0,0,20,0"
+									  />
+								<metro:PromptComboBox Prompt="First"
+									  MinWidth="250"
+									  MaxWidth="250"
+									  HorizontalAlignment="Left"
+									  ItemsSource="{Binding FirstStrList}"
+									  SelectedValue="{Binding First, Mode=TwoWay}"
+									  IsReadOnly="True"
+									  Margin="0,0,20,0"
+									  />
+								<metro:PromptComboBox Prompt="Second"
+									  MinWidth="250"
+									  MaxWidth="250"
+									  HorizontalAlignment="Left"
+									  ItemsSource="{Binding SecondStrList}"
+									  SelectedValue="{Binding Second, Mode=TwoWay}"
+									  IsReadOnly="True"
+									  Margin="0,0,20,0"
+									  />
+							</StackPanel>
+
+							<StackPanel Orientation="Horizontal">
+								<metro:PromptComboBox Prompt="Remove"
+									  MinWidth="50"
+									  MaxWidth="50"
+									  ItemsSource="{Binding CurrentStatusList}"
+									  SelectedValue="{Binding CurrentStatus, Mode=TwoWay}"
+									  IsReadOnly="True"
+									  Margin="0,10,8,0" 
+									  VerticalAlignment="Center"
+									  />
+								<TextBlock Text="단계" VerticalAlignment="Center" HorizontalAlignment="Center"
+									  Margin="0,10,20,0" />
+							</StackPanel>
+						</StackPanel>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+			<ItemsControl x:Name="Treasure" ItemsSource="{Binding TreasureList}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<UniformGrid Columns="4" />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<StackPanel Orientation="Horizontal">
+							<Image HorizontalAlignment="Left" 
+									   Source="{Binding LocalImage}" 
+									   Width="40" 
+									   Height="40"
+									   Margin="2"/>
+							<StackPanel>
+								<TextBlock Text="{Binding Name}" FontSize="12" FontWeight="Bold"/>
+								<TextBlock Text="{Binding result}"
+										   Margin="0,2,0,0"/>
+							</StackPanel>
+						</StackPanel>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</StackPanel>
+	</ScrollViewer>
+</UserControl>
