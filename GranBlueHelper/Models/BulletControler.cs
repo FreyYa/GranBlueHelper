@@ -12,6 +12,11 @@ namespace GranBlueHelper.Models
 {
 	public class BulletControler : ViewModel
 	{
+		/// <summary>
+		/// 총알 컨트롤러의 ID입니다. 다른 컨트롤러와의 구별을 위해 사용합니다.
+		/// </summary>
+		private int Idx { get; set; }
+
 		#region EventHandler
 		/// <summary>
 		/// 이벤트 핸들러
@@ -19,7 +24,26 @@ namespace GranBlueHelper.Models
 		public delegate void EventHandler();
 		static public EventHandler Changed;
 		#endregion
-		private int Idx { get; set; }
+
+		/// <summary>
+		/// Bullet 종류 Table
+		/// </summary>
+		public static Dictionary<string, int> BulletCatTable = new Dictionary<string, int>
+		{
+			{ "패러벨럼",1 }, {"라이플",2 },{"카트리지",3 },{"에테리얼",4 }
+		};
+
+
+		/// <summary>
+		/// Bullet 데이터 리스트
+		/// </summary>
+		public List<Bullet> MasterBullet { get; set; }
+
+
+		/// <summary>
+		/// Bullet 종류 목록
+		/// </summary>
+		public IEnumerable<string> BulletCatList { get { return BulletCatTable.Keys; } }
 
 		#region Title
 		private string _Title;
@@ -62,57 +86,6 @@ namespace GranBlueHelper.Models
 		}
 		#endregion
 
-		/// <summary>
-		/// Bullet 데이터 리스트
-		/// </summary>
-		public List<Bullet> MasterBullet { get; set; }
-
-		/// <summary>
-		/// 초기화
-		/// </summary>
-		public BulletControler(int index = -1)
-		{
-			this.Idx = index;
-			this.BulletCat = this.BulletCatList.FirstOrDefault();
-		}
-		private void UpdateCurrentStatusList()
-		{
-			if (this.Second == null) return;
-
-			var master_id = this.MasterBullet.Where(x => x.FullName == this.Second).FirstOrDefault().MasterID;
-			var max_rank = this.MasterBullet.Where(x => x.FullName == this.Second).FirstOrDefault().Rank;
-
-			List<int> output = new List<int>();
-			output.Add(0);
-			foreach (var item in this.MasterBullet)
-			{
-				if (item.MasterID == master_id && item.Rank < max_rank)
-					output.Add(item.Rank);
-			}
-			//output.RemoveAt(output.Count - 1);
-
-			this.CurrentStatusList = new List<int>(output);
-			this.CurrentStatus = this.CurrentStatusList.FirstOrDefault();
-		}
-		private void ChangeTitle()
-		{
-			if (Second == null || Idx < 0) this.Title = "";
-			else this.Title = "#" + Idx.ToString() + " " + Second;
-			Changed();
-		}
-		/// <summary>
-		/// Bullet 종류 Table
-		/// </summary>
-		public static Dictionary<string, int> BulletCatTable = new Dictionary<string, int>
-		{
-			{ "패러벨럼",1 }, {"라이플",2 },{"카트리지",3 },{"에테리얼",4 }
-		};
-
-		/// <summary>
-		/// Bullet 종류 목록
-		/// </summary>
-		public IEnumerable<string> BulletCatList { get { return BulletCatTable.Keys; } }
-
 		#region Bullet Cat Selected
 		private string _BulletCat;
 		public string BulletCat
@@ -152,6 +125,7 @@ namespace GranBlueHelper.Models
 		}
 		#endregion
 
+		#region String List
 		private List<string> _FirstStrList;
 		public List<string> FirstStrList
 		{
@@ -175,6 +149,9 @@ namespace GranBlueHelper.Models
 			}
 		}
 
+		#endregion
+
+		#region String
 		private string _First;
 		public string First
 		{
@@ -209,10 +186,55 @@ namespace GranBlueHelper.Models
 
 #endif
 				ChangeTitle();
-				UpdateCurrentStatusList();
+				//UpdateCurrentStatusList();
 				this.RaisePropertyChanged();
 			}
 		}
+		#endregion
+
+		/// <summary>
+		/// 총알 목록 관리 클래스
+		/// </summary>
+		public BulletControler(int index = -1)
+		{
+			this.Idx = index;
+			this.BulletCat = this.BulletCatList.FirstOrDefault();
+		}
+		/// <summary>
+		/// 총알 단계 목록을 생성합니다. 현재 쓰이지 않습니다.
+		/// </summary>
+		private void UpdateCurrentStatusList()
+		{
+			if (this.Second == null) return;
+
+			var master_id = this.MasterBullet.Where(x => x.FullName == this.Second).FirstOrDefault().MasterID;
+			var max_rank = this.MasterBullet.Where(x => x.FullName == this.Second).FirstOrDefault().Rank;
+
+			List<int> output = new List<int>();
+			output.Add(0);
+			foreach (var item in this.MasterBullet)
+			{
+				if (item.MasterID == master_id && item.Rank < max_rank)
+					output.Add(item.Rank);
+			}
+			//output.RemoveAt(output.Count - 1);
+
+			this.CurrentStatusList = new List<int>(output);
+			this.CurrentStatus = this.CurrentStatusList.FirstOrDefault();
+		}
+		/// <summary>
+		/// 선택된 총알이 변경될 때 총알의 텍스트를 변경합니다.
+		/// </summary>
+		private void ChangeTitle()
+		{
+			if (Second == null || Idx < 0) this.Title = "";
+			else this.Title = "#" + Idx.ToString() + " " + Second;
+			Changed();
+		}
+		/// <summary>
+		/// 트레저 목록을 가져옵니다.
+		/// </summary>
+		/// <returns></returns>
 		public List<TreasureInfo> GetMaterialList()
 		{
 			if (this.Second == null) return new List<TreasureInfo>();
@@ -250,6 +272,11 @@ namespace GranBlueHelper.Models
 			}
 			return output;
 		}
+		/// <summary>
+		/// 목록 안의 FullName을 string List 형태로 출력해줍니다.
+		/// </summary>
+		/// <param name="list"></param>
+		/// <returns></returns>
 		private List<string> ConvertString(IEnumerable<Bullet> list)
 		{
 			List<string> temp = new List<string>();
