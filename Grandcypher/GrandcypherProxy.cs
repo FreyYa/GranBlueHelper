@@ -38,10 +38,10 @@ namespace Grandcypher
 		#endregion
 		public GrandcypherProxy()
 		{
-			FiddlerApplication.AfterSessionComplete += delegate(Fiddler.Session oS)
+			FiddlerApplication.AfterSessionComplete += delegate (Fiddler.Session oS)
 			{
 #if DEBUG
-				if (oS.uriContains("gbf"))
+				if (oS.uriContains("gbf") || oS.uriContains("game.granbluefantasy"))
 				{
 					if (!oS.PathAndQuery.StartsWith("/assets") && !oS.PathAndQuery.StartsWith("/security"))
 					{
@@ -49,7 +49,7 @@ namespace Grandcypher
 						var temp = oS.PathAndQuery.Split('?');
 						Console.WriteLine(temp[0]);
 						Console.WriteLine(oS.oResponse.MIMEType);
-					} 
+					}
 					if (!oS.PathAndQuery.StartsWith("/security"))
 					{
 						Console.WriteLine("--------------------------------------------------------------------");
@@ -59,7 +59,7 @@ namespace Grandcypher
 					}
 				}
 #endif
-				if (oS.uriContains("gbf") && !oS.uriContains("/security") && !oS.uriContains("/assets"))
+				if ((oS.uriContains("gbf") || oS.uriContains("game.granbluefantasy")) && !oS.uriContains("/security") && !oS.uriContains("/assets"))
 				{
 					GrandcypherClient.Current.GreetHooker.SessionReader(oS);
 					GrandcypherClient.Current.ScenarioHooker.SessionReader(oS);

@@ -259,9 +259,10 @@ namespace GranBlueHelper.ViewModels
 			}
 			//temp=현재 보유하고 있는 아이템목록
 			//targetlist=정리된 십천중 필요목록
+			targetList = new List<TenTreasureInfo>(GrandcypherClient.Current.Translations.SetItemIdxList(targetList));
 			foreach (var item in targetList)
 			{
-				var search = temp.Where(x => x.Name == item.Name).ToList();
+				var search = temp.Where(x => x.ItemID == item.idx).ToList();
 				TreasureInfo target = new TreasureInfo();
 
 				//아이템 보유목록에 필요목록에 있는 아이템이 존재하는 경우

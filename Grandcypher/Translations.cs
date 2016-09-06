@@ -18,6 +18,9 @@ namespace Grandcypher
 		private XDocument WeaponSkills;
 		private XDocument TenLists;
 		private XDocument BulletLists;
+		private XDocument ItemLists;
+		private Dictionary<string, int> ItemDic { get; set; }
+
 		string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
 
@@ -116,6 +119,26 @@ namespace Grandcypher
 
 		#endregion
 
+		#region ItemListVersion
+
+		private string _ItemListVersion;
+
+		public string ItemListVersion
+		{
+			get { return _ItemListVersion; }
+			set
+			{
+				if (_ItemListVersion != value)
+				{
+					_ItemListVersion = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
+
 		internal Translations()
 		{
 			try
@@ -125,6 +148,7 @@ namespace Grandcypher
 				if (File.Exists(Path.Combine(MainFolder, "XMLs", "SkillList.xml"))) WeaponSkills = XDocument.Load(Path.Combine(MainFolder, "XMLs", "SkillList.xml"));
 				if (File.Exists(Path.Combine(MainFolder, "XMLs", "TenList.xml"))) TenLists = XDocument.Load(Path.Combine(MainFolder, "XMLs", "TenList.xml"));
 				if (File.Exists(Path.Combine(MainFolder, "XMLs", "BulletList.xml"))) BulletLists = XDocument.Load(Path.Combine(MainFolder, "XMLs", "BulletList.xml"));
+				if (File.Exists(Path.Combine(MainFolder, "XMLs", "ItemList.xml"))) ItemLists = XDocument.Load(Path.Combine(MainFolder, "XMLs", "ItemList.xml"));
 
 				GetVersions();
 			}
@@ -165,6 +189,14 @@ namespace Grandcypher
 			}
 			else
 				BulletListVersion = "없음";
+			if (ItemLists != null)
+			{
+				if (ItemLists.Root.Attribute("Version") != null) ItemListVersion = ItemLists.Root.Attribute("Version").Value;
+				else ItemListVersion = "알 수 없음";
+			}
+			else
+				ItemListVersion = "없음";
+
 		}
 		private IEnumerable<XElement> GetTranslationList(TranslationType type, TranslateKind sitetype = TranslateKind.Google)
 		{
@@ -250,6 +282,19 @@ namespace Grandcypher
 				}
 				return null;
 			}
+			else if (TranslationType.ItemIdx == type)
+			{
+				if (ItemLists != null)
+				{
+					if (GrandcypherClient.Current.Updater.ItemListUpdate)
+					{
+						this.ItemLists = XDocument.Load(Path.Combine(MainFolder, "XMLs", "ItemList.xml"));
+						GrandcypherClient.Current.Updater.ItemListUpdate = false;
+					}
+					return ItemLists.Descendants("Item");
+				}
+				return null;
+			}
 			else return null;
 		}
 		public List<string> GetSkillList()
@@ -293,8 +338,40 @@ namespace Grandcypher
 
 			return templist;
 		}
+		private void InitItemIdx()
+		{
+			IEnumerable<XElement> ItemList = GetTranslationList(TranslationType.ItemIdx);
+			ItemDic = new Dictionary<string, int>();
+			foreach (var item in ItemList)
+			{
+				ItemDic.Add(ElementOutput(item, "ItemName"), Convert.ToInt32(ElementOutput(item, "ID")));
+			}
+		}
+		public List<TenTreasureInfo> SetItemIdxList(List<TenTreasureInfo> inputs)
+		{
+			InitItemIdx();
+			List<TenTreasureInfo> list = new List<TenTreasureInfo>(inputs);
+			
+
+			for (int i = 0; i < list.Count; i++)
+			{
+				try
+				{
+					list[i].idx = ItemDic[list[i].Name];
+				}
+				catch
+				{
+					if (GrandcypherClient.Current.TreasureHooker.CurrentTreasureList.Where(x => x.Key == list[i].Name).FirstOrDefault().Value == null)
+						list[i].idx = -1;
+					else
+						list[i].idx = GrandcypherClient.Current.TreasureHooker.CurrentTreasureList.Where(x => x.Key == list[i].Name).FirstOrDefault().Value.ItemID;
+				}
+			}
+			return list;
+		}
 		public List<Bullet> GetBulletList()
 		{
+			InitItemIdx();
 			List<Bullet> templist = new List<Bullet>();
 			IEnumerable<XElement> TranslationList = GetTranslationList(TranslationType.BulletMake);
 			foreach (var item in TranslationList)
@@ -324,6 +401,14 @@ namespace Grandcypher
 						material.Name = item.Element(strtemp).Value;
 						strtemp = "MaterialCount" + Count.ToString();
 						material.max = Convert.ToInt32(item.Element(strtemp).Value);
+						try
+						{
+							material.ItemID = ItemDic[material.Name];
+						}
+						catch
+						{
+							material.ItemID = -1;
+						}
 
 						temp.MaterialList.Add(material);
 						Count++;
@@ -556,6 +641,7 @@ namespace Grandcypher
 			SkillDetails,
 			TenTreasure,
 			BulletMake,
+			ItemIdx,
 		}
 	}
 }

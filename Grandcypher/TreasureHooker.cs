@@ -108,6 +108,7 @@ namespace Grandcypher
 	public class TenTreasureInfo
 	{
 		public string Name { get; set; }
+		public int idx { get; set; }
 		public int Proto { get; set; }
 		public int Rust { get; set; }
 		public int Element { get; set; }

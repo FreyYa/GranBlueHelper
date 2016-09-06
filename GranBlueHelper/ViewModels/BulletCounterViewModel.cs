@@ -95,23 +95,26 @@ namespace GranBlueHelper.ViewModels
 			foreach (var item in temp_lst)
 			{
 				TreasureInfo treasure_temp = new TreasureInfo();
-				if (TreasureList.Any(x => x.Name == item.Name))
+				if (TreasureList.Any(x => x.ItemID == item.ItemID))
 				{
-					TreasureList.Find(x => x.Name == item.Name).max += item.max;
+					TreasureList.Find(x => x.ItemID == item.ItemID).max += item.max;
 				}
 				else
 				{
 					treasure_temp.Name = item.Name;
 					treasure_temp.max = item.max;
+					treasure_temp.ItemID = item.ItemID;
 					TreasureList.Add(treasure_temp);
 				}
 			}
 			List<TreasureInfo> calcList = new List<TreasureInfo>();
+			//GrandcypherClient.Current.TreasureHooker.CurrentTreasureList.Values= 현재 트래저 목록
+			//TreasureList= 설정에 따라 불러온 트래저 목록
 			foreach (var current in GrandcypherClient.Current.TreasureHooker.CurrentTreasureList.Values)
 			{
 				foreach (var target in TreasureList)
 				{
-					if (target.Name == current.Name)
+					if (target.ItemID == current.ItemID)
 					{
 						TreasureInfo temp_t = new TreasureInfo();
 
@@ -123,7 +126,20 @@ namespace GranBlueHelper.ViewModels
 					}
 				}
 			}
-			this.TreasureList = new List<TreasureInfo>(calcList);
+			List<TreasureInfo> modified_list = new List<TreasureInfo>(calcList);
+			foreach (var item in TreasureList)
+			{
+				if (GrandcypherClient.Current.TreasureHooker.CurrentTreasureList.Values.Where(x => x.ItemID == item.ItemID).FirstOrDefault() == default(TreasureInfo))
+				{
+					TreasureInfo temp_t = new TreasureInfo();
+
+					temp_t.Name = item.Name;
+					temp_t.result = item.max;
+					temp_t.ItemID = item.ItemID;
+					if (temp_t.result > 0) modified_list.Add(temp_t);
+				}
+			}
+			this.TreasureList = new List<TreasureInfo>(modified_list);
 		}
 	}
 }

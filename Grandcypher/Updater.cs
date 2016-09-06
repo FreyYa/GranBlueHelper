@@ -16,6 +16,7 @@ namespace Grandcypher
 		public bool WeaponListUpdate { get; set; }
 		public bool TenListUpdate { get; set; }
 		public bool BulletListUpdate { get; set; }
+		public bool ItemListUpdate { get; set; }
 		/// <summary>
 		/// 업데이트 상태를 구별한다.
 		/// bool값을 조정하며 이는 업데이트 후 바로 퀘스트 로드가 적용되지 않는 문제점을 자체 해결하기 위해 도입한것임.
@@ -43,6 +44,9 @@ namespace Grandcypher
 						break;
 					case TranslationType.BulletMake:
 						this.BulletListUpdate = true;
+						break;
+					case TranslationType.ItemIdx:
+						this.ItemListUpdate = true;
 						break;
 				}
 			}
@@ -147,6 +151,11 @@ namespace Grandcypher
 						ReturnValue = XmlFileWizard(MainFolder, "BulletList.xml", TranslationType.BulletMake);
 					}
 
+					if (IsOnlineVersionGreater(TranslationType.ItemIdx, TranslationsRef.BulletListVersion))
+					{
+						Client.DownloadFile(BaseTranslationURL + "ItemList.xml", Path.Combine(MainFolder, "XMLs", "tmp", "ItemList.xml"));
+						ReturnValue = XmlFileWizard(MainFolder, "ItemList.xml", TranslationType.ItemIdx);
+					}
 				}
 				catch
 				{
@@ -188,6 +197,8 @@ namespace Grandcypher
 					return Versions.Where(x => x.Element("Name").Value.Equals("Treasures")).FirstOrDefault().Element(ElementName).Value;
 				case TranslationType.BulletMake:
 					return Versions.Where(x => x.Element("Name").Value.Equals("Bullets")).FirstOrDefault().Element(ElementName).Value;
+				case TranslationType.ItemIdx:
+					return Versions.Where(x => x.Element("Name").Value.Equals("Items")).FirstOrDefault().Element(ElementName).Value;
 
 			}
 			return "";
@@ -223,6 +234,8 @@ namespace Grandcypher
 					return LocalVersion.CompareTo(new Version(Versions.Where(x => x.Element("Name").Value.Equals("Treasures")).FirstOrDefault().Element(ElementName).Value)) < 0;
 				case TranslationType.BulletMake:
 					return LocalVersion.CompareTo(new Version(Versions.Where(x => x.Element("Name").Value.Equals("Bullets")).FirstOrDefault().Element(ElementName).Value)) < 0;
+				case TranslationType.ItemIdx:
+					return LocalVersion.CompareTo(new Version(Versions.Where(x => x.Element("Name").Value.Equals("Items")).FirstOrDefault().Element(ElementName).Value)) < 0;
 
 			}
 

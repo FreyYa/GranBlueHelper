@@ -246,6 +246,7 @@ namespace GranBlueHelper.Models
 				if (this.CurrentStatus == 0)
 				{
 					temp.Name = selcted_item.Name;
+					temp.ItemID = selcted_item.ItemID;
 					temp.max = selcted_item.max;
 				}
 				else
@@ -260,12 +261,13 @@ namespace GranBlueHelper.Models
 
 						foreach (var item in mat_temp)
 						{
-							if (selcted_item.Name == item.Name)
+							if (selcted_item.ItemID == item.ItemID)
 								calc_max -= item.max;
 						}
 					}
 
 					temp.Name = selcted_item.Name;
+					temp.ItemID = selcted_item.ItemID;
 					temp.max = calc_max;
 				}
 				output.Add(temp);
