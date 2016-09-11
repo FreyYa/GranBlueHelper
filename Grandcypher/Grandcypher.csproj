@@ -87,6 +87,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Raw\greet_list.cs" />
     <Compile Include="Raw\quest_scenario.cs" />
+    <Compile Include="ResultHooker.cs" />
     <Compile Include="ScenarioHooker.cs" />
     <Compile Include="Translations.cs" />
     <Compile Include="TreasureHooker.cs" />

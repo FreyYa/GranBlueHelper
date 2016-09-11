@@ -21,7 +21,7 @@ namespace GranBlueHelper.Models
 			"KcvKr.tistory.com",
 			"GrandcypherGear",
 			"Settings.xml");
-		private static readonly string CurrentSettingsVersion = "1.0";
+		private static readonly string CurrentSettingsVersion = "1.1";
 		public static Settings Current { get; set; }
 		public static void Load()
 		{
@@ -47,6 +47,7 @@ namespace GranBlueHelper.Models
 				ResetPortConfig = false,
 				TranslatorSel = TranslateKind.Google,
 				ScreenShotFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
+				NotiOn = true,
 			};
 		}
 
@@ -163,6 +164,21 @@ namespace GranBlueHelper.Models
 			{
 				if (this._concilioLv == value) return;
 				this._concilioLv = value;
+
+				this.RaisePropertyChanged();
+			}
+		}
+		#endregion
+
+		#region 알림설정
+		private bool _NotiOn;
+		public bool NotiOn
+		{
+			get { return this._NotiOn; }
+			set
+			{
+				if (this._NotiOn == value) return;
+				this._NotiOn = value;
 
 				this.RaisePropertyChanged();
 			}
