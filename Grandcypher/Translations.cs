@@ -626,22 +626,22 @@ namespace Grandcypher
 			node.InnerXml = innerXml;
 			return node;
 		}
-		public enum TranslationType
-		{
-			App,
-			ScenarioDetail,
-			PartTranslate,
-			WeaponList,
-			FirstSkillName,
-			FirstSkillDetail,
-			LastSkillName,
-			LastSkillDetail,
-			Element,
-			WeaponType,
-			SkillDetails,
-			TenTreasure,
-			BulletMake,
-			ItemIdx,
-		}
+	}
+	public enum TranslationType
+	{
+		App,
+		ScenarioDetail,
+		PartTranslate,
+		WeaponList,
+		FirstSkillName,
+		FirstSkillDetail,
+		LastSkillName,
+		LastSkillDetail,
+		Element,
+		WeaponType,
+		SkillDetails,
+		TenTreasure,
+		BulletMake,
+		ItemIdx,
 	}
 }

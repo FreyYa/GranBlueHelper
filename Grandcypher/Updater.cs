@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Xml.Linq;
-using TranslationType = Grandcypher.Translations.TranslationType;
+using TranslationType = Grandcypher.TranslationType;
 
 namespace Grandcypher
 {
@@ -224,6 +224,8 @@ namespace Grandcypher
 
 			switch (Type)
 			{
+				case TranslationType.App:
+					return LocalVersion.CompareTo(new Version(Versions.Where(x => x.Element("Name").Value.Equals("App")).FirstOrDefault().Element(ElementName).Value)) < 0;
 				case TranslationType.SkillDetails:
 					return LocalVersion.CompareTo(new Version(Versions.Where(x => x.Element("Name").Value.Equals("Skills")).FirstOrDefault().Element(ElementName).Value)) < 0;
 				case TranslationType.WeaponList:

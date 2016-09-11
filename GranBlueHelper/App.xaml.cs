@@ -38,16 +38,16 @@ namespace GranBlueHelper
 			this.DispatcherUnhandledException += (sender, args) => ReportException(sender, args.Exception);
 
 			Settings.Load();
-			MainNotifier.Current.Initialize();
 			DispatcherHelper.UIDispatcher = this.Dispatcher;
 			ProductInfo = new ProductInfo();
 
+			MainNotifier.Current.Initialize();
 			GrandcypherClient.Current.Proxy.StartUp(Settings.Current.portNum);
 			//GrandcypherClient.Current.WeaponHooker.MasterInfoListLoad();
 
 			GrandcypherClient.Current.PortError += () =>
 			{
-				Settings.Current.portNum= Convert.ToInt32(AppSettings.Default.LocalProxyPort);
+				Settings.Current.portNum = Convert.ToInt32(AppSettings.Default.LocalProxyPort);
 			};
 			GrandcypherClient.Current.ResultHooker.EndBattle += () =>
 			{
@@ -57,13 +57,14 @@ namespace GranBlueHelper
 			{
 				if (GrandcypherClient.Current.Updater.IsOnlineVersionGreater(0, ProductInfo.Version.ToString()))
 				{
-
+					Version temp = new Version(GrandcypherClient.Current.Updater.GetOnlineVersion(TranslationType.App));
+					MainNotifier.Current.Show("업데이트 알림", "상위버전의 어플리케이션이 존재합니다. \n" + temp.Major + "." + temp.Minor + "." + temp.Build + " Rev." + temp.Revision + " Ver", () => App.ViewModelRoot.Activate());
 				}
 			}
-			
+
 			if (GrandcypherClient.Current.Updater.UpdateTranslations(AppSettings.Default.XMLTransUrl.AbsoluteUri, GrandcypherClient.Current.Translations) > 0)
 			{
-
+				MainNotifier.Current.Show("업데이트 알림", "데이터를 성공적으로 업데이트하였습니다.", () => App.ViewModelRoot.Activate());
 			}
 			ViewModelRoot = new MainWindowViewModel();
 
@@ -115,19 +116,19 @@ namespace GranBlueHelper
 #if DEBUG
 			Console.WriteLine(args.Key.ToString());
 #endif
-#endregion
+			#endregion
 		}
 
 		private static void ReportException(object sender, Exception exception)
 		{
-#region const
+			#region const
 			const string messageFormat = @"
 ===========================================================
 ERROR, date = {0}, sender = {1},
 {2}
 ";
 			const string path = "error.log";
-#endregion
+			#endregion
 
 			try
 			{

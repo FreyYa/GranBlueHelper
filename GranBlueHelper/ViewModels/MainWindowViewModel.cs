@@ -334,7 +334,12 @@ namespace GranBlueHelper.ViewModels
 				AppStatus = "ERROR : 실행되어있는 그랑블루 크롬 확장을 찾을 수 없습니다.";
 			}
 		}
-
+		public void Activate()
+		{
+			//this.Messenger.Raise(new WindowActionMessage(WindowAction.Active, "Window/Activate"));
+			WindowControl.Current.FindGranblue();
+			WindowControl.Current.WindowForeground();
+		}
 		private void StatusListener()
 		{
 			GrandcypherClient.Current.MessageSend += () =>
