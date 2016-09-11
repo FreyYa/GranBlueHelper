@@ -1,15 +1,21 @@
 ﻿using Grandcypher;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using Livet;
+using System.Windows;
 
 namespace GranBlueHelper.Models
 {
-	public class WindowControl
+	public class WindowControl : NotificationObject
 	{
 		#region Win32
 		[DllImportAttribute("user32.dll")]
@@ -34,15 +40,135 @@ namespace GranBlueHelper.Models
 		public static WindowControl Current { get; } = new WindowControl();
 		#endregion
 
-		public bool isExecuting { get; set; }
-		public bool IsFind { get; set; }
+		#region isExecuting
+		private bool _isExecuting;
+		/// <summary>
+		/// 그랑블루 확장 상태
+		/// </summary>
+		public bool isExecuting
+		{
+			get { return this._isExecuting; }
+			set
+			{
+				if (this._isExecuting != value)
+				{
+					this._isExecuting = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
 
+		#endregion
+
+		void WIndowControl()
+		{
+			this.isExecuting = false;
+		}
+
+		#region 윈도우관련
+		/// <summary>
+		/// 그랑블루 판타지 어플리케이션을 화면 맨 위로 올린후 활성화한다.
+		/// </summary>
 		public void WindowForeground()
 		{
 			ShowWindow(WindowSizeSetter.Current.procHandler, SW_SHOWNORMAL);
 			SetForegroundWindow(WindowSizeSetter.Current.procHandler);
 		}
-		public void ScreenCapture(string screenDirectory, int UserId = -1, string guid = "")
+		/// <summary>
+		/// 그랑블루 판타지의 프로세스를 찾아낸다. 없으면 오류 메시지 송출
+		/// </summary>
+		public void FindGranblue()
+		{
+			isExecuting = false;
+			while (true)
+			{
+				Process[] process = Process.GetProcesses();
+				List<Process> list = new List<Process>();
+				foreach (Process proc in process)
+				{
+
+					if (proc.MainWindowTitle.Equals("グランブルーファンタジー[ChromeApps版]")
+						|| proc.MainWindowTitle.Equals("グランブル?ファンタジ?[ChromeApps版]"))
+					{
+						isExecuting = true;
+
+						WindowSizeSetter.Current.SetWindowLocation(proc.MainWindowHandle);
+
+						GrandcypherClient.Current.PostMan("그랑블루 확장 어플리케이션을 찾았습니다. 이제 그랑블루 확장을 종료할때까지 해당 프로세스를 기억합니다.");
+
+						return;
+					}
+					else if (proc.MainWindowTitle.Contains("グランブル"))
+					{
+						if (proc.MainWindowTitle.Contains("ファンタジ"))
+							list.Add(proc);
+					}
+					else if (proc.MainWindowTitle.Contains("Granblue Fantasy"))
+					{
+						list.Add(proc);
+					}
+					else
+					{
+						isExecuting = false;
+					}
+				}
+
+				if (list.Count > 1)
+				{
+					var result = MessageBox.Show("[グランブル]와 [ファンタジ]가 모두 포함된 창, 브라우저 탭, 혹은 프로세스가 두개 이상 존재합니다. \n대상이 될 하나의 프로세스를 제외한 나머지 프로세스를 종료하신후 확인을 눌러주시기 바랍니다.", "프로세스 선별", MessageBoxButton.OKCancel);
+					if (result == MessageBoxResult.Cancel)
+					{
+						isExecuting = false;
+					}
+				}
+				else if (list.Count == 1)
+				{
+					isExecuting = true;
+
+					WindowSizeSetter.Current.SetWindowLocation(list[0].MainWindowHandle);
+
+					GrandcypherClient.Current.PostMan("그랑블루 확장 어플리케이션을 찾았습니다. 이제 그랑블루 확장을 종료할때까지 해당 프로세스를 기억합니다.");
+					break;
+				}
+				else
+				{
+					isExecuting = false;
+					break;
+				}
+			}
+
+			if (!isExecuting)
+				GrandcypherClient.Current.PostMan("ERROR : 실행되어있는 그랑블루 크롬 확장을 찾을 수 없습니다. 필독 문서 참조");
+		}
+		#endregion
+
+		#region 스크린샷
+		/// <summary>
+		/// 스크린샷을 촬영한다
+		/// </summary>
+		public void TakeScreenShot()
+		{
+			FindGranblue();
+			WindowForeground();
+			Thread.Sleep(500);
+			if (WindowSizeSetter.Current.procHandler.ToInt32() != 0)
+			{
+				if (Settings.Current.ScreenShotFolder != null)
+					ScreenCaptureCore(Path.Combine(Settings.Current.ScreenShotFolder));
+				else ScreenCaptureCore(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
+			}
+			else
+			{
+				GrandcypherClient.Current.PostMan("ERROR : 실행되어있는 그랑블루 크롬 확장을 찾을 수 없습니다. 필독 문서 참조");
+			}
+		}
+		/// <summary>
+		/// 스크린샷 촬영 코어
+		/// </summary>
+		/// <param name="screenDirectory"></param>
+		/// <param name="UserId"></param>
+		/// <param name="guid"></param>
+		public void ScreenCaptureCore(string screenDirectory)
 		{
 			try
 			{
@@ -51,13 +177,6 @@ namespace GranBlueHelper.Models
 				var time = DateTime.Now.ToString("HHmmss");
 				if (!Directory.Exists(savepoint)) savepoint = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
 				var filepath = Path.Combine(savepoint, date + "_" + time + ".png");
-
-				if (UserId > 0)
-				{
-					string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-					savepoint = Path.Combine(MainFolder);
-					filepath = Path.Combine(savepoint, UserId + "_" + guid + ".png");
-				}
 
 				int leftf = Convert.ToInt32(WindowSizeSetter.Current.WindowSize.left * (WindowSizeSetter.Current.dpiX) / (96f));
 				int topf = Convert.ToInt32(WindowSizeSetter.Current.WindowSize.top * (WindowSizeSetter.Current.dpiY) / (96f));
@@ -71,7 +190,8 @@ namespace GranBlueHelper.Models
 				g.CopyFromScreen(new System.Drawing.Point(leftf, topf), new System.Drawing.Point(0, 0), new System.Drawing.Size(widthf, heightf));
 
 				bitmap.Save(filepath, ImageFormat.Png);
-				if (UserId == -1) GrandcypherClient.Current.PostMan("저장성공: " + date + "_" + time + ".png");
+				bitmap.Dispose();
+				g.Dispose();
 			}
 			catch (Exception ex)
 			{
@@ -80,50 +200,38 @@ namespace GranBlueHelper.Models
 			}
 
 		}
-		public void FindGranblue()
+
+		/// <summary>
+		/// 스크린샷 촬영(하드에 저장하지 않음)
+		/// </summary>
+		/// <param name="screenDirectory"></param>
+		/// <param name="UserId"></param>
+		/// <param name="guid"></param>
+		public Bitmap ScreenCaptureOut()
 		{
-			isExecuting = false;
-			Process[] process = Process.GetProcesses();
-			foreach (Process proc in process)
+			try
 			{
+				int leftf = Convert.ToInt32(WindowSizeSetter.Current.WindowSize.left * (WindowSizeSetter.Current.dpiX) / (96f));
+				int topf = Convert.ToInt32(WindowSizeSetter.Current.WindowSize.top * (WindowSizeSetter.Current.dpiY) / (96f));
+				int widthf = Convert.ToInt32((WindowSizeSetter.Current.WindowSize.right - WindowSizeSetter.Current.WindowSize.left) * (WindowSizeSetter.Current.dpiX) / (96f));
+				int heightf = Convert.ToInt32((WindowSizeSetter.Current.WindowSize.bottom - WindowSizeSetter.Current.WindowSize.top) * (WindowSizeSetter.Current.dpiX) / (96f));
 
-				if (proc.ProcessName.Equals("chrome"))
-				//  Pgm_FileName 프로그램의 실행 파일[.exe]를 제외한 파일명
-				{
-					if (proc.MainWindowTitle.Equals("グランブルーファンタジー[ChromeApps版]")
-						|| proc.MainWindowTitle.Equals("グランブル?ファンタジ?[ChromeApps版]"))
-					{
-						isExecuting = true;
-						IsFind = true;
+				Bitmap bitmap = new Bitmap(widthf, heightf);
 
-						WindowSizeSetter.Current.SetWindowLocation(isExecuting);
+				Graphics g = Graphics.FromImage(bitmap);
 
-						GrandcypherClient.Current.PostMan("그랑블루 확장 어플리케이션을 찾았습니다. 이제 그랑블루 확장을 종료할때까지 해당 프로세스를 기억합니다.");
-						break;
-					}
-				}
-				else
-					isExecuting = false;
+				g.CopyFromScreen(new System.Drawing.Point(leftf, topf), new System.Drawing.Point(0, 0), new System.Drawing.Size(widthf, heightf));
+				return bitmap;
 			}
-			if (!isExecuting)
-				GrandcypherClient.Current.PostMan("ERROR : 실행되어있는 그랑블루 크롬 확장을 찾을 수 없습니다.");
-		}
-		public void TakeScreenShot()
-		{
-			FindGranblue();
-			WindowControl.Current.WindowForeground();
-			Thread.Sleep(1000);
-			if (WindowSizeSetter.Current.SetWindowLocation(isExecuting))
+			catch (Exception ex)
 			{
-				if (Settings.Current.ScreenShotFolder != null)
-					WindowControl.Current.ScreenCapture(Path.Combine(Settings.Current.ScreenShotFolder));
-				else WindowControl.Current.ScreenCapture(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
+				GrandcypherClient.Current.PostMan("스크린샷 촬영에 실패하였습니다.");
+				Debug.WriteLine(ex);
+				return null;
 			}
-			else
-			{
-				GrandcypherClient.Current.PostMan("ERROR : 실행되어있는 그랑블루 크롬 확장을 찾을 수 없습니다.");
-			}
+
 		}
 
+		#endregion
 	}
 }

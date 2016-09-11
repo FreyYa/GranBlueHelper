@@ -18,23 +18,6 @@ namespace GranBlueHelper.ViewModels
 {
 	public class MainWindowViewModel : WindowViewModel
 	{
-		#region IsFind
-
-		public bool IsFind
-		{
-			get { return WindowControl.Current.IsFind; }
-			set
-			{
-				if (WindowControl.Current.IsFind != value)
-				{
-					WindowControl.Current.IsFind = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-
-		#endregion
-
 		#region isExecuting
 
 		public bool isExecuting
@@ -310,7 +293,7 @@ namespace GranBlueHelper.ViewModels
 					   // プロダクト名の途中で改行されないように、space を non-break space に置き換えてあげてるんだからねっっ
 					   return list;
 				   });
-			this.IsFind = false;
+			this.isExecuting = false;
 
 			this.Title = "그랑블루 도우미 " + App.ProductInfo.VersionString;
 		}
@@ -340,11 +323,11 @@ namespace GranBlueHelper.ViewModels
 			WindowControl.Current.FindGranblue();
 			WindowControl.Current.WindowForeground();
 			Thread.Sleep(300);
-			if (WindowSizeSetter.Current.SetWindowLocation(isExecuting))
+			if (WindowControl.Current.isExecuting)
 			{
 				if (Settings.Current.ScreenShotFolder != null)
-					WindowControl.Current.ScreenCapture(Path.Combine(Settings.Current.ScreenShotFolder));
-				else WindowControl.Current.ScreenCapture(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
+					WindowControl.Current.ScreenCaptureCore(Path.Combine(Settings.Current.ScreenShotFolder));
+				else WindowControl.Current.ScreenCaptureCore(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
 			}
 			else
 			{

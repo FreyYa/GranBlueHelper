@@ -1,18 +1,38 @@
 ﻿using Grandcypher;
 using Livet;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
 
 namespace GranBlueHelper.Models
 {
 	public class WindowSizeSetter : NotificationObject
 	{
+		#region singleton
+
+		private static WindowSizeSetter current = new WindowSizeSetter();
+
+		public static WindowSizeSetter Current
+		{
+			get { return current; }
+		}
+
+		#endregion
+
+		#region Win32
+		private RECT stRect;
+
+		[DllImport("user32.dll", CharSet = CharSet.Auto)]
+		public static extern IntPtr FindWindow(string strClassName, string StrWindowName);
+		[DllImport("user32.dll", CharSet = CharSet.Auto)]
+		public static extern int GetWindowRect(int hwnd, ref RECT lpRect);
+		#endregion
+
+		#region public 변수
+		public float dpiX { get; set; }
+		public float dpiY { get; set; }
 		public IntPtr procHandler { get; set; }
 
 		#region WindowSize
@@ -34,79 +54,66 @@ namespace GranBlueHelper.Models
 
 		#endregion
 
-		#region singleton
+		#region SystemWindowSize
 
-		private static WindowSizeSetter current = new WindowSizeSetter();
+		private WindowSize _SystemWindowSize;
 
-		public static WindowSizeSetter Current
+		public WindowSize SystemWindowSize
 		{
-			get { return current; }
+			get { return this._SystemWindowSize; }
+			set
+			{
+				if (this._SystemWindowSize != value)
+				{
+					this._SystemWindowSize = value;
+					this.RaisePropertyChanged();
+				}
+			}
 		}
 
 		#endregion
-
-		#region Win32
-		private RECT stRect;
-
-		[DllImport("user32.dll", CharSet = CharSet.Auto)]
-		public static extern IntPtr FindWindow(string strClassName, string StrWindowName);
-		[DllImport("user32.dll", CharSet = CharSet.Auto)]
-		public static extern int GetWindowRect(int hwnd, ref RECT lpRect);
 		#endregion
-		public float dpiX { get; set; }
-		public float dpiY { get; set; }
 		private WindowSizeSetter()
 		{
 			this.WindowSize = new WindowSize();
+			this.SystemWindowSize = new WindowSize();
 		}
-		public bool SetWindowLocation(bool isExecuting)
+		/// <summary>
+		/// 윈도우의 위치를 찾아낸다. DPI에 따른 계산도 추가로 적용
+		/// </summary>
+		/// <param name="isExecuting">그랑블루 확장을 찾았는가에 대한 변수</param>
+		/// <returns></returns>
+		public void SetWindowLocation(IntPtr handler)
 		{
-			if (isExecuting)
+			//IntPtr procHandler = FindWindow(null, "グランブルーファンタジー[ChromeApps版]");
+			//if(procHandler.ToInt32()==0) procHandler = FindWindow(null, "グランブル?ファンタジ?[ChromeApps版]");
+
+			if (handler.ToInt32() != 0)
 			{
-				IntPtr procHandler = FindWindow(null, "グランブルーファンタジー[ChromeApps版]");
-				if (procHandler.ToInt32() != 0)
-				{
-					WindowSizeSetter.Current.procHandler = procHandler;
-					WindowControl.Current.WindowForeground();
-					stRect = default(RECT);
-					GetWindowRect(procHandler.ToInt32(), ref stRect);
+				this.procHandler = handler;
+				WindowControl.Current.WindowForeground();
+				stRect = default(RECT);
+				GetWindowRect(procHandler.ToInt32(), ref stRect);
 
-					WindowSizeSetter.Current.WindowSize.bottom = stRect.bottom;
-					WindowSizeSetter.Current.WindowSize.left = stRect.left;
-					WindowSizeSetter.Current.WindowSize.top = stRect.top;
-					WindowSizeSetter.Current.WindowSize.right = stRect.right;
+				this.SystemWindowSize.bottom = stRect.bottom;
+				this.SystemWindowSize.left = stRect.left;
+				this.SystemWindowSize.top = stRect.top;
+				this.SystemWindowSize.right = stRect.right;
 
 
-					WindowSizeSetter.Current.WindowSize.left = Convert.ToInt32(WindowSizeSetter.Current.WindowSize.left / (dpiX) * (96f));
-					WindowSizeSetter.Current.WindowSize.right = Convert.ToInt32(WindowSizeSetter.Current.WindowSize.right / (dpiX) * (96f));
-					WindowSizeSetter.Current.WindowSize.top = Convert.ToInt32(WindowSizeSetter.Current.WindowSize.top / (dpiY) * (96f));
-					WindowSizeSetter.Current.WindowSize.bottom = Convert.ToInt32(WindowSizeSetter.Current.WindowSize.bottom / (dpiY) * (96f));
-
-					return true;
-				}
-				else
-				{
-					GrandcypherClient.Current.PostMan("ERROR : 실행되어있는 그랑블루 크롬 확장을 찾을 수 없습니다.");
-					return false;
-				}
+				this.WindowSize.left = Convert.ToInt32(this.SystemWindowSize.left / (dpiX) * (96f));
+				this.WindowSize.right = Convert.ToInt32(this.SystemWindowSize.right / (dpiX) * (96f));
+				this.WindowSize.top = Convert.ToInt32(this.SystemWindowSize.top / (dpiY) * (96f));
+				this.WindowSize.bottom = Convert.ToInt32(this.SystemWindowSize.bottom / (dpiY) * (96f));
+#if DEBUG
+				Debug.WriteLine("left: " + this.WindowSize.left + "right: " + this.WindowSize.right + "top: " + this.WindowSize.top + "bottom: " + this.WindowSize.bottom);
+#endif
 			}
-			else if (!isExecuting)
+			else
 			{
-				GrandcypherClient.Current.PostMan("ERROR : 실행되어있는 그랑블루 크롬 확장을 찾을 수 없습니다.");
-				return false;
+				GrandcypherClient.Current.PostMan("실행되어있는 그랑블루 크롬 확장을 찾을 수 없습니다. 필독 문서 참조");
 			}
-			return false;
 		}
-		public Point Posparser(string PosInfo)
-		{
-			Point xytemp = new Point();
-			var temp = PosInfo.Split('_');
-			xytemp.X = Convert.ToInt32(temp[0]);
-			xytemp.Y = Convert.ToInt32(temp[1]);
-			xytemp.X = Convert.ToInt32(xytemp.X);
-			xytemp.Y = Convert.ToInt32(xytemp.Y);
 
-			return xytemp;
-		}
 	}
 }
