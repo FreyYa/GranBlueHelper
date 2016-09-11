@@ -15,6 +15,7 @@ using Grandcypher;
 using GranBlueHelper.Models;
 using Grandcypher.Models;
 using System.Drawing;
+using GranBlueHelper.Models.Notifier;
 
 namespace GranBlueHelper
 {
@@ -37,15 +38,20 @@ namespace GranBlueHelper
 			this.DispatcherUnhandledException += (sender, args) => ReportException(sender, args.Exception);
 
 			Settings.Load();
-
+			MainNotifier.Current.Initialize();
 			DispatcherHelper.UIDispatcher = this.Dispatcher;
 			ProductInfo = new ProductInfo();
 
 			GrandcypherClient.Current.Proxy.StartUp(Settings.Current.portNum);
 			//GrandcypherClient.Current.WeaponHooker.MasterInfoListLoad();
+
 			GrandcypherClient.Current.PortError += () =>
 			{
 				Settings.Current.portNum= Convert.ToInt32(AppSettings.Default.LocalProxyPort);
+			};
+			GrandcypherClient.Current.ResultHooker.EndBattle += () =>
+			{
+				MainNotifier.Current.Show("전투종료알림", "전투가 종료되었습니다", () => App.ViewModelRoot.Activate());
 			};
 			if (GrandcypherClient.Current.Updater.LoadVersion(AppSettings.Default.XMLUpdateUrl.AbsoluteUri))
 			{
@@ -89,6 +95,7 @@ namespace GranBlueHelper
 		protected override void OnExit(ExitEventArgs e)
 		{
 			base.OnExit(e);
+			MainNotifier.Current.Dispose();
 			#region .Do(debug)
 #if !DEBUG
 			KListener.Dispose();
