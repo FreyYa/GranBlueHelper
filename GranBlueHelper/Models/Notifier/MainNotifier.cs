@@ -64,8 +64,6 @@ namespace GranBlueHelper.Models.Notifier
 		}
 		public void Show(string header, string body, Action activated, Action<Exception> failed = null)
 		{
-			if (!Settings.Current.NotiOn) return;
-
 			if (this.notifyIcon == null)
 				return;
 
@@ -76,7 +74,7 @@ namespace GranBlueHelper.Models.Notifier
 				this.activatedAction = (sender, args) => activated();
 				this.notifyIcon.BalloonTipClicked += this.activatedAction;
 			}
-			sound.SoundOutput(header, false);
+			if (Settings.Current.NotiOn) sound.SoundOutput(header, false);
 			notifyIcon.ShowBalloonTip(1000, header, body, ToolTipIcon.None);
 		}
 	}

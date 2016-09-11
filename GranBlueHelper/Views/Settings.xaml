@@ -92,6 +92,11 @@
 							</metro:PromptTextBox.Text>
 						</metro:PromptTextBox>
 						<Rectangle Height="1" Margin="0,7" Fill="Gray"/>
+						<TextBlock Text="알림설정 " FontWeight="Bold" Width="110" HorizontalAlignment="Left"/>
+						<TextBlock Text="※어플리케이션의 알림음 On/Off 상태를 설정합니다" Margin="0,0,0,10"/>
+						<CheckBox x:Name="CheckBoxNotiSettings"
+				  Content="알림음 ON" Foreground="Black" FontWeight="Bold"
+				  IsChecked="{Binding Source={x:Static models:Settings.Current}, Path=NotiOn}" />
 						<!--<TextBlock Text="FiddlerCore On/Off" FontWeight="Bold"/>
 						<TextBlock TextWrapping="Wrap" Text="통신캡쳐의 On/Off를 설정합니다. 중지할경우 스크린샷 기능을 제외한 모든 기능이 정지됩니다"/>
 						<TextBlock/>
