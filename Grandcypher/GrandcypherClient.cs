@@ -15,9 +15,10 @@ namespace Grandcypher
 		}
 
 		#endregion
-
+		
 		public delegate void EventHandler();
 		public EventHandler MessageSend;
+		public EventHandler PortError;
 		public string AppMessage { get; private set; }
 
 		public GrandcypherProxy Proxy { get; private set; }
@@ -56,5 +57,20 @@ namespace Grandcypher
 			this.AppMessage = str;
 			this.MessageSend();
 		}
+		public void RaiseError(ErrorKind kind)
+		{
+			switch (kind)
+			{
+				case ErrorKind.PortError:
+					this.PortError();
+					break;
+				default:
+					break;
+			}
+		}
+	}
+	public enum ErrorKind
+	{
+		PortError,
 	}
 }

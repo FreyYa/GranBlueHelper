@@ -75,7 +75,12 @@ namespace Grandcypher
 		public void StartUp(int portnum)
 		{
 			IsStarted = true;
-			FiddlerApplication.Startup(portnum, true, false, false);
+			if (portnum < 0 || portnum > 65535)
+			{
+				GrandcypherClient.Current.RaiseError(ErrorKind.PortError);
+				FiddlerApplication.Startup(37564, true, false, false);
+			}
+			else FiddlerApplication.Startup(portnum, true, false, false);
 		}
 		public void Quit()
 		{
