@@ -19,9 +19,10 @@ namespace GranBlueHelper.ViewModels
 		public void SetScreenShotFolder()
 		{
 			string output;
-			if (Settings.Current.ScreenShotFolder == "")
-				output = "기본 사진 폴더";
-			else output = Settings.Current.ScreenShotFolder;
+			if (Settings.Current.ScreenShotFolder != string.Empty)
+				output = Settings.Current.ScreenShotFolder;
+			else
+				output = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
 			System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
 			dialog.Description = "스크린샷을 저장할 폴더를 선택해주세요.\n현재폴더: " + output;
 			dialog.ShowNewFolderButton = true;
