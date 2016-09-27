@@ -58,7 +58,8 @@ namespace GranBlueHelper.ViewModels
 			else output = Settings.Current.ScreenShotFolder;
 			System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
 			dialog.Description = "스크린샷을 저장할 폴더를 선택해주세요.\n현재폴더: " + output;
-			dialog.ShowNewFolderButton = false;
+			dialog.ShowNewFolderButton = true;
+			dialog.SelectedPath = Settings.Current.ScreenShotFolder;
 			dialog.ShowDialog();
 			string selected = dialog.SelectedPath;
 			Settings.Current.ScreenShotFolder = selected;
