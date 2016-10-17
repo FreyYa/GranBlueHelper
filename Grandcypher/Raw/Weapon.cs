@@ -66,7 +66,7 @@ namespace Grandcypher.Raw
 			else if (value.Contains("skill_god"))//신위
 				this.SkillType |= SkillType.신위;
 			else if (value.Contains("skill_whole"))//군신
-				this.SkillType |= SkillType.군신;
+				this.SkillType |= SkillType.혼신;
 			else if (value.Contains("skill_backwater"))//배수
 				this.SkillType |= SkillType.배수;
 			else if (value.Contains("skill_ta"))//삼수
@@ -209,7 +209,7 @@ namespace Grandcypher.Raw
 		바하무트 = 1 << 3,
 		신위 = 1 << 4,
 		배수 = 1 << 5,
-		군신 = 1 << 6,
+		혼신 = 1 << 6,
 		삼수 = 1 << 7,
 		공인 = 1 << 8,
 		수호 = 1 << 9,
