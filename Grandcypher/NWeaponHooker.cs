@@ -4,10 +4,12 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Xml;
 
 namespace Grandcypher
 {
@@ -27,6 +29,7 @@ namespace Grandcypher
 		public int CurrentPage { get; private set; }
 		public int FirstPage { get; private set; }
 		public bool EnableListEdit { get; set; }
+		string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
 		#region CurrentMode
 		private ReadMode _CurrentMode;
@@ -50,6 +53,7 @@ namespace Grandcypher
 			this._WeaponList = new Dictionary<int, List<Weapon>>();
 			this.WeaponList = new List<Weapon>();
 			EnableListEdit = false;
+			this.LocalListLoad();
 		}
 		public void SessionReader(Session oS)
 		{
@@ -121,6 +125,8 @@ namespace Grandcypher
 							int skill = -1;
 							int.TryParse(item["param"]["status"].ToString(), out skill);
 							temp.param.SkillLv = skill;
+							temp.master.skill1_image = item["master"]["skill1_image"].ToString();
+							temp.master.skill2_image = item["master"]["skill2_image"].ToString();
 							break;
 						case ReadMode.공격력:
 							int atk = -1;
@@ -137,8 +143,6 @@ namespace Grandcypher
 							if (nulltest != null) nulltest.param.HPStatus = hp;
 							break;
 					}
-					temp.master.skill1_image = item["master"]["skill1_image"].ToString();
-					temp.master.skill2_image = item["master"]["skill2_image"].ToString();
 
 					temp_weapon_list.Add(temp);
 				}
@@ -165,9 +169,44 @@ namespace Grandcypher
 						break;
 					case ReadMode.HP:
 						this.EnableListEdit = false;
+						this.LocalListSave();
 						break;
 				}
 			}
+		}
+		private void LocalListSave()
+		{
+			XmlDocument NewXmlDoc = new XmlDocument();
+			NewXmlDoc.AppendChild(NewXmlDoc.CreateXmlDeclaration("1.0", "utf-8", "yes"));
+			XmlNode Source = NewXmlDoc.CreateElement("", "Weapons", "");
+			NewXmlDoc.AppendChild(Source);
+
+			if (!Directory.Exists(Path.Combine(MainFolder, "Data")))
+				Directory.CreateDirectory(Path.Combine(MainFolder, "Data"));
+
+			NewXmlDoc.Save(Path.Combine(MainFolder, "Data", "WeaponData.xml"));
+
+			XmlDocument XmlDoc = new XmlDocument();
+			XmlDoc.Load(Path.Combine(MainFolder, "Data", "WeaponData.xml"));
+			foreach (var item in WeaponList)
+			{
+				XmlNode FristNode = XmlDoc.DocumentElement;
+
+				XmlElement root = XmlDoc.CreateElement("Weapon");
+				root.SetAttribute("MasterID", item.master.id.ToString());
+				root.SetAttribute("ParamID", item.param.id.ToString());
+				root.SetAttribute("SkillLv", item.param.SkillLv.ToString());
+				root.SetAttribute("SkillRaw1", item.master.Skill1.RawData);
+				root.SetAttribute("SkillRaw2", item.master.Skill2.RawData);
+				root.SetAttribute("AttackStatus", item.param.AttStatus.ToString());
+				root.SetAttribute("HPStatus", item.param.HPStatus.ToString());
+
+				FristNode.AppendChild(root);
+			}
+			XmlDoc.Save(Path.Combine(MainFolder, "Data", "WeaponData.xml"));
+		}
+		private void LocalListLoad()
+		{
 
 		}
 	}
