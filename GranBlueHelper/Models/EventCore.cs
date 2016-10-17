@@ -38,7 +38,7 @@ namespace GranBlueHelper.Models
 			};
 			GrandcypherClient.Current.WeaponHooker.FinishRead += () =>
 			{
-				MainNotifier.Current.Show("무기 목록 설정", "총 " + GrandcypherClient.Current.WeaponHooker.WeaponList.Count + "개의 무기의 정보를 불러오는데 성공했습니다.", () => App.ViewModelRoot.Activate());
+				MainNotifier.Current.Show("무기 목록 설정", "총 " + GrandcypherClient.Current.WeaponHooker.WeaponList.Count + "개의 무기정보(" + GrandcypherClient.Current.WeaponHooker.CurrentMode.ToString() + ")를 불러오는데 성공했습니다.", () => App.ViewModelRoot.Activate());
 			};
 		}
 	}

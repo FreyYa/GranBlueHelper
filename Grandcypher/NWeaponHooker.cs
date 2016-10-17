@@ -27,6 +27,7 @@ namespace Grandcypher
 		public int CurrentPage { get; private set; }
 		public int FirstPage { get; private set; }
 		public bool EnableListEdit { get; set; }
+
 		#region CurrentMode
 		private ReadMode _CurrentMode;
 		public ReadMode CurrentMode
@@ -36,11 +37,12 @@ namespace Grandcypher
 			{
 				if (this._CurrentMode == value) return;
 				this._CurrentMode = value;
-				GrandcypherClient.Current.PostMan("읽기 모드를 전환합니다: "+value.ToString());
+				GrandcypherClient.Current.PostMan("읽기 모드를 전환합니다: " + value.ToString());
 				_WeaponList = new Dictionary<int, List<Weapon>>();
 			}
 		}
 		#endregion
+
 		private Dictionary<int, List<Weapon>> _WeaponList { get; set; }
 		public List<Weapon> WeaponList { get; private set; }
 		public NWeaponHooker()
@@ -124,7 +126,7 @@ namespace Grandcypher
 							int atk = -1;
 							int.TryParse(item["param"]["status"].ToString(), out atk);
 							temp.param.AttStatus = atk;
-							nulltest=this.WeaponList.Find(x => x.param.id == temp.param.id);
+							nulltest = this.WeaponList.Find(x => x.param.id == temp.param.id);
 							if (nulltest != null) nulltest.param.AttStatus = atk;
 							break;
 						case ReadMode.HP:
