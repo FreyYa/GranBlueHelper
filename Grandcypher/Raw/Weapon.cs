@@ -152,11 +152,11 @@ namespace Grandcypher.Raw
 
 			}
 		}
-		public Attribute Attribute { get; set; }
-		public SkillType SkillType { get; set; }
-		public SkillPhase SkillPhase { get; set; }
+		public Attribute Attribute { get; private set; }
+		public SkillType SkillType { get; private set; }
+		public SkillPhase SkillPhase { get; private set; }
 		//skill1_image
-		public string RawData { get; set; }
+		public string RawData { get; private set; }
 		//skill1_display
 		public string Display { get; set; }
 	}
