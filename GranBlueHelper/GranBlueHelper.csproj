@@ -136,6 +136,7 @@
     <Compile Include="ViewModels\ExpCalViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MessageViewViewModel.cs" />
+    <Compile Include="ViewModels\NWeaponListViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="Views\BulletCounter.xaml.cs">
       <DependentUpon>BulletCounter.xaml</DependentUpon>
@@ -148,6 +149,9 @@
     </Compile>
     <Compile Include="Views\MessageView.xaml.cs">
       <DependentUpon>MessageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NWeaponList.xaml.cs">
+      <DependentUpon>NWeaponList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
@@ -184,6 +188,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\MessageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NWeaponList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -41,22 +41,9 @@ namespace Grandcypher.Raw
 		public int is_locked { get; set; }
 		public bool is_user_level { get; set; }
 		public int quality { get; set; }
-		public void SetStatus(string input)
-		{
-			int temp;
-			if (int.TryParse(input, out temp))
-				this.status = temp;
-			else this.status = -1;
-		}
-
-		/// <summary>
-		/// 무기의 전력이나 공격력, 스킬레벨등의 수치를 표시. 스킬레벨이 없는 경우 -1을 반환
-		/// </summary>
-		public int GetStatus()
-		{
-			return status;
-		}
-		private int status { get; set; }
+		public int SkillLv { get; set; }
+		public int AttStatus { get; set; }
+		public int HPStatus { get; set; }
 	}
 	public class Bullet
 	{

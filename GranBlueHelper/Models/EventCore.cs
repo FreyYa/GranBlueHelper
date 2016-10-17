@@ -24,13 +24,21 @@ namespace GranBlueHelper.Models
 			{
 				MainNotifier.Current.Show("전투종료알림", "전투가 종료되었습니다", () => App.ViewModelRoot.Activate());
 			};
-			GrandcypherClient.Current.WeaponHooker.FilterError += () =>
+			GrandcypherClient.Current.WeaponHooker.SkillError += () =>
 			{
-				MainNotifier.Current.Show("무기 목록 설정","무기 목록 정렬이 스킬레벨로 설정되어있지 않습니다.", () => App.ViewModelRoot.Activate());
+				MainNotifier.Current.Show("무기 목록 설정", "무기 목록 정렬이 스킬레벨로 설정되어있지 않습니다.", () => App.ViewModelRoot.Activate());
+			};
+			GrandcypherClient.Current.WeaponHooker.AtkError += () =>
+			{
+				MainNotifier.Current.Show("무기 목록 설정", "무기 목록 정렬이 공격력으로 설정되어있지 않습니다.", () => App.ViewModelRoot.Activate());
+			};
+			GrandcypherClient.Current.WeaponHooker.HPError += () =>
+			{
+				MainNotifier.Current.Show("무기 목록 설정", "무기 목록 정렬이 HP로 설정되어있지 않습니다.", () => App.ViewModelRoot.Activate());
 			};
 			GrandcypherClient.Current.WeaponHooker.FinishRead += () =>
 			{
-				MainNotifier.Current.Show("무기 목록 설정", "모든 무기목록을 불러오는데 성공했습니다.", () => App.ViewModelRoot.Activate());
+				MainNotifier.Current.Show("무기 목록 설정", "총 " + GrandcypherClient.Current.WeaponHooker.WeaponList.Count + "개의 무기의 정보를 불러오는데 성공했습니다.", () => App.ViewModelRoot.Activate());
 			};
 		}
 	}
