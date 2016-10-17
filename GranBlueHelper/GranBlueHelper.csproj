@@ -122,6 +122,7 @@
     <Compile Include="Models\Data\Xml\XmlFileReader.cs" />
     <Compile Include="Models\Data\Xml\XmlFileWriter.cs" />
     <Compile Include="Models\Data\Xml\XmlSerializableDictionary.cs" />
+    <Compile Include="Models\EventCore.cs" />
     <Compile Include="Models\Notifier\CustomSound.cs" />
     <Compile Include="Models\Notifier\MainNotifier.cs" />
     <Compile Include="Models\ProductInfo.cs" />
