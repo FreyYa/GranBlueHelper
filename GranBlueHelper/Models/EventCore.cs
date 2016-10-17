@@ -28,6 +28,10 @@ namespace GranBlueHelper.Models
 			{
 				MainNotifier.Current.Show("무기 목록 설정","무기 목록 정렬이 스킬레벨로 설정되어있지 않습니다.", () => App.ViewModelRoot.Activate());
 			};
+			GrandcypherClient.Current.WeaponHooker.FinishRead += () =>
+			{
+				MainNotifier.Current.Show("무기 목록 설정", "모든 무기목록을 불러오는데 성공했습니다.", () => App.ViewModelRoot.Activate());
+			};
 		}
 	}
 }
