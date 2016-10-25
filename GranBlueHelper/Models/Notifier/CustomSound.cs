@@ -19,6 +19,8 @@ namespace GranBlueHelper.Models.Notifier
 			try
 			{
 				DisposeWave();//알림이 동시에 여러개가 울릴 경우 소리가 겹치는 문제를 방지
+				if (!Directory.Exists(Path.Combine(Main_folder, "Sounds")))
+					Directory.CreateDirectory(Path.Combine(Main_folder, "Sounds"));
 				List<string> FileList = Directory.GetFiles(Path.Combine(Main_folder, "Sounds"), "*.wav", SearchOption.AllDirectories)
 					.Concat(Directory.GetFiles(Path.Combine(Main_folder, "Sounds"), "*.mp3", SearchOption.AllDirectories)).ToList();//mp3와 wav를 검색하여 추가
 				string Audiofile = string.Empty;
