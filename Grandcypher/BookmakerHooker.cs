@@ -48,11 +48,16 @@ namespace Grandcypher
 				this.AreaList.Add(Info);
 			}
 			StringBuilder stbr = new StringBuilder();
+			string[] ranking = new string[5];
 			for (int i = 0; i < AreaList.Count; i++)
 			{
-				stbr.Append(AreaList[i].ranking);
+				ranking[AreaList[i].ranking] = AreaList[i].name;
 			}
-			this.Logger("{0},{1},{2},{3},{4},{5}",today.ToString(),AreaList[0].point,AreaList[1].point,AreaList[2].point,AreaList[3].point,stbr.ToString());
+			foreach (var item in ranking)
+			{
+				stbr.Append(item);
+			}
+			this.Logger("{0},{1},{2},{3},{4},{5}", today.ToString(), AreaList[0].point, AreaList[1].point, AreaList[2].point, AreaList[3].point, stbr.ToString());
 		}
 		private void Logger(string str, params object[] args)
 		{
@@ -69,13 +74,13 @@ namespace Grandcypher
 				}
 				using (StreamWriter w = File.AppendText(MainFolder + "\\BookMaker.csv"))
 				{
-					w.WriteLine("날짜,북,서,동,남,랭킹",args);
+					w.WriteLine("날짜,북,서,동,남,랭킹", args);
 				}
 			}
 
 			using (StreamWriter w = File.AppendText(MainFolder + "\\BookMaker.csv"))
 			{
-				w.WriteLine(str,args);
+				w.WriteLine(str, args);
 			}
 		}
 	}
