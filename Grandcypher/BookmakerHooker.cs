@@ -51,9 +51,23 @@ namespace Grandcypher
 			string[] ranking = new string[5];
 			for (int i = 0; i < AreaList.Count; i++)
 			{
-				ranking[AreaList[i].ranking] = AreaList[i].name;
+				switch (i)
+				{
+					case 0://북
+						ranking[AreaList[i].ranking] = "N";
+						break;
+					case 1://서
+						ranking[AreaList[i].ranking] = "W";
+						break;
+					case 2://동
+						ranking[AreaList[i].ranking] = "E";
+						break;
+					case 3://남
+						ranking[AreaList[i].ranking] = "S";
+						break;
+				}
 			}
-			foreach (var item in ranking)
+			foreach (var item in ranking)//북서동남
 			{
 				stbr.Append(item);
 			}
