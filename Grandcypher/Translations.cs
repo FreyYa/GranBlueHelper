@@ -351,7 +351,7 @@ namespace Grandcypher
 		{
 			InitItemIdx();
 			List<TenTreasureInfo> list = new List<TenTreasureInfo>(inputs);
-			
+
 
 			for (int i = 0; i < list.Count; i++)
 			{
@@ -590,17 +590,21 @@ namespace Grandcypher
 				Directory.CreateDirectory(Path.Combine(MainFolder, "XMLs", "Scenarios", "Google"));
 			if (!Directory.Exists(Path.Combine(MainFolder, "XMLs", "Scenarios", "Naver")))
 				Directory.CreateDirectory(Path.Combine(MainFolder, "XMLs", "Scenarios", "Naver"));
+			if (!Directory.Exists(Path.Combine(MainFolder, "XMLs", "Scenarios", "raw")))
+				Directory.CreateDirectory(Path.Combine(MainFolder, "XMLs", "Scenarios", "Raw"));
 
-			if (File.Exists(Path.Combine(MainFolder, "XMLs", "Scenarios", context[0].PathName + ".xml")))
-			{
-				File.Copy(Path.Combine(MainFolder, "XMLs", "Scenarios", context[0].PathName + ".xml"), Path.Combine(MainFolder, "XMLs", "Scenarios", context[0].PathName + ".xml.bak"), true);
-				File.Delete(Path.Combine(MainFolder, "XMLs", "Scenarios", context[0].PathName + ".xml"));
-			}
+			string sub_folder = string.Empty;
+			if (type == TranslateKind.Google)
+				sub_folder = "Google";
+			else if (type == TranslateKind.Naver)
+				sub_folder = "Naver";
+			else if (type == TranslateKind.Raw)
+				sub_folder = "Raw";
 
-			NewXmlDoc.Save(Path.Combine(MainFolder, "XMLs", "Scenarios", context[0].PathName + ".xml"));
+			NewXmlDoc.Save(Path.Combine(MainFolder, "XMLs", "Scenarios", sub_folder, context[0].PathName + ".xml"));
 
 			XmlDocument XmlDoc = new XmlDocument();
-			XmlDoc.Load(Path.Combine(MainFolder, "XMLs", "Scenarios", context[0].PathName + ".xml"));
+			XmlDoc.Load(Path.Combine(MainFolder, "XMLs", "Scenarios", sub_folder, context[0].PathName + ".xml"));
 			foreach (var item in context)
 			{
 				XmlNode FristNode = XmlDoc.DocumentElement;
@@ -615,10 +619,7 @@ namespace Grandcypher
 				FristNode.AppendChild(root);
 			}
 
-			if (type == TranslateKind.Google)
-				XmlDoc.Save(Path.Combine(MainFolder, "XMLs", "Scenarios", "Google", context[0].PathName + ".xml"));
-			else if (type == TranslateKind.Naver)
-				XmlDoc.Save(Path.Combine(MainFolder, "XMLs", "Scenarios", "Naver", context[0].PathName + ".xml"));
+			XmlDoc.Save(Path.Combine(MainFolder, "XMLs", "Scenarios", sub_folder, context[0].PathName + ".xml"));
 		}
 		protected XmlNode CreateNode(XmlDocument xmlDoc, string name, string innerXml)
 		{

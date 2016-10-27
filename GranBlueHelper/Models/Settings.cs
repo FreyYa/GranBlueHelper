@@ -48,6 +48,7 @@ namespace GranBlueHelper.Models
 				TranslatorSel = TranslateKind.Google,
 				ScreenShotFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
 				NotiOn = true,
+				ScenarioTransDisabled=false,
 			};
 		}
 
@@ -179,6 +180,22 @@ namespace GranBlueHelper.Models
 			{
 				if (this._NotiOn == value) return;
 				this._NotiOn = value;
+
+				this.RaisePropertyChanged();
+			}
+		}
+		#endregion
+
+		#region 번역 On/Off
+		private bool _ScenarioTransDisabled;
+		public bool ScenarioTransDisabled
+		{
+			get { return this._ScenarioTransDisabled; }
+			set
+			{
+				if (this._ScenarioTransDisabled == value) return;
+				GrandcypherClient.Current.ScenarioHooker.ScenarioTransDisabled = value;
+				this._ScenarioTransDisabled = value;
 
 				this.RaisePropertyChanged();
 			}

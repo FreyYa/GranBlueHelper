@@ -27,14 +27,11 @@ namespace Grandcypher
 		public List<Scenario> ScenarioList { get; private set; }
 		public LimitedValue ProgressStatus { get; set; }
 		public TranslateKind TranslateSite { get; set; }
+		public bool ScenarioTransDisabled { get; set; }
 		public string ScenarioName { get; private set; }
 		public string PathName { get; private set; }
 		string MainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-
-		public ScenarioHooker()
-		{
-
-		}
+		
 		public void SessionReader(Session oS)
 		{
 			if (oS.PathAndQuery.Contains("/scenario") && oS.oResponse.MIMEType == "application/json")
@@ -126,25 +123,25 @@ namespace Grandcypher
 					if (detail.charcter1_name != "null") temp.Name = detail.charcter1_name;
 					else temp.Name = "";
 
-
-					temp.TrName = GrandcypherClient.Current.Translations.ReplaceTranslation(temp.Name);
-
-					temp.TrContext = GrandcypherClient.Current.Translations.ReplaceTranslation(temp.context);
-					temp.TrContext = Translator(temp.TrContext, TranslateSite);
-					if (temp.TrContext != null) temp.TrContext = temp.TrContext.Replace("정액", "");
-
-					if (sel1 != null)
+					if(!ScenarioTransDisabled)
 					{
-						temp.sel1_txt = RemoveWebTag(sel1);
-						temp.Trsel1 = Translator(temp.sel1_txt, TranslateSite);
-					}
-					if (sel2 != null)
-					{
-						temp.sel2_txt = RemoveWebTag(sel2);
-						temp.Trsel2 = Translator(temp.sel2_txt, TranslateSite);
-					}
+						temp.TrName = GrandcypherClient.Current.Translations.ReplaceTranslation(temp.Name);
 
-					#region Debug
+						temp.TrContext = GrandcypherClient.Current.Translations.ReplaceTranslation(temp.context);
+						temp.TrContext = Translator(temp.TrContext, TranslateSite);
+						if (temp.TrContext != null) temp.TrContext = temp.TrContext.Replace("정액", "");
+
+						if (sel1 != null)
+						{
+							temp.sel1_txt = RemoveWebTag(sel1);
+							temp.Trsel1 = Translator(temp.sel1_txt, TranslateSite);
+						}
+						if (sel2 != null)
+						{
+							temp.sel2_txt = RemoveWebTag(sel2);
+							temp.Trsel2 = Translator(temp.sel2_txt, TranslateSite);
+						}
+						#region Debug
 #if DEBUG
 				Console.WriteLine("-----------------------------------------------------------");
 
@@ -162,7 +159,8 @@ namespace Grandcypher
 					Console.WriteLine(temp.Trsel2);
 				}
 #endif
-					#endregion
+						#endregion
+					}
 
 					ScenarioList.Add(temp);
 
@@ -170,7 +168,8 @@ namespace Grandcypher
 					this.ProgressBar();
 				}
 				this.TranslatieEnd();
-				GrandcypherClient.Current.Translations.WriteFile(ScenarioList, TranslateSite);
+				if(!ScenarioTransDisabled) GrandcypherClient.Current.Translations.WriteFile(ScenarioList, TranslateSite);
+				else GrandcypherClient.Current.Translations.WriteFile(ScenarioList, TranslateKind.Raw);
 			}
 		}
 		public string Translator(string input, TranslateKind kind)
@@ -320,6 +319,7 @@ namespace Grandcypher
 		Naver,
 		Google,
 		InfoSeek,
+		Raw,
 	}
 	public class LimitedValue
 	{
