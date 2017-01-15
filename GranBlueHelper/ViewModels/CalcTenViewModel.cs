@@ -163,7 +163,7 @@ namespace GranBlueHelper.ViewModels
 		public CalcTenViewModel()
 		{
 			this.ElementKind = new List<string>(ElementTable.Keys.ToList());
-			if (Settings.Current.ElementSetting == null) Settings.Current.ElementSetting = "화";
+			if (Settings.Current.ElementSetting == null) Settings.Current.ElementSetting = this.ElementKind.FirstOrDefault();
 			this.SelectedElement = Settings.Current.ElementSetting;
 
 			this.Proto = Settings.Current.Proto;

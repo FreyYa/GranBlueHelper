@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -60,7 +61,15 @@ namespace Grandcypher
 					ItemID = image
 				};
 
-				CurrentTreasureList.Add(name, temp);
+				try
+				{
+					CurrentTreasureList.Add(name, temp);
+				}
+				catch (ArgumentException ex)
+				{
+					Debug.WriteLine(ex);
+				}
+				
 			}
 			this.TreasureReadEnd();
 			LoadingEnd = true;
